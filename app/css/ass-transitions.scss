@@ -5,7 +5,7 @@
  */
 
 
-[ass-transition-direction=fade] {
+[ass-transition-direction=fade] [ass-transition-element] {
   transition: opacity 1s linear;
   opacity:1;
   &.ng-enter {
@@ -22,15 +22,15 @@
   }
 }
 
-[ass-transition-direction=ltr],
-[ass-transition-direction=rtl],
-[ass-transition-direction=ttb],
-[ass-transition-direction=btt],
+[ass-transition-direction=ltr] [ass-transition-element],
+[ass-transition-direction=rtl] [ass-transition-element],
+[ass-transition-direction=ttb] [ass-transition-element],
+[ass-transition-direction=btt] [ass-transition-element],
 {
   transition: transform 0.33s linear;
 }
 
-[ass-transition-direction=ltr] {
+[ass-transition-direction=ltr] [ass-transition-element] {
   transform:translateX(0%);
   &.ng-enter {
     transform:translateX(100%);
@@ -46,8 +46,7 @@
   }
 }
 
-[ass-transition-direction=rtl] {
-  transition: transform 0.33s linear;
+[ass-transition-direction=rtl] [ass-transition-element] {
   transform:translateX(0%);
   &.ng-enter {
     transform:translateX(-100%);
@@ -63,7 +62,7 @@
   }
 }
 
-[ass-transition-direction=ttb] {
+[ass-transition-direction=ttb] [ass-transition-element] {
   transform:translateY(0%);
   &.ng-enter {
     transform:translateY(-100%);
@@ -79,7 +78,7 @@
   }
 }
 
-[ass-transition-direction=btt] {
+[ass-transition-direction=btt] [ass-transition-element] {
   transform:translateY(0%);
   &.ng-enter {
     transform:translateY(-100%);

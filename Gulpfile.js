@@ -1,5 +1,5 @@
 var gulp = require('gulp'),
-    gulpUtil = require('gulp-util'),
+    gutil = require('gulp-util'),
     concat = require('gulp-concat'),
     clean = require('gulp-clean'),
     argv = require('yargs').argv;
@@ -20,7 +20,8 @@ var jshint = require('gulp-jshint');
 gulp.task('lint', function() {
   return gulp.src(target.dirs.src + '/*.js')
   .pipe(jshint())
-  .pipe(jshint.reporter('default'));
+  .pipe(jshint.reporter('default'))
+  .on('error', gutil.log);
 });
 
 
@@ -30,7 +31,8 @@ gulp.task('browserify', ['lint'], function() {
   var stream = gulp.src([target.dirs.src + '/main.js'])
   .pipe(browserify())
   .pipe(concat('main.js'))
-  .pipe(gulp.dest(target.dirs.dist));
+  .pipe(gulp.dest(target.dirs.dist))
+  .on('error', gutil.log);
   if ( target.server.enableLiveReload ) {
     stream.pipe(liveReload(liveReloadServer));
   }
@@ -97,8 +99,8 @@ server.use(express.static(target.dirs.dist));
 
 // Enable API
 server.use('/api/:method/:data?', function(req, res) {
-  var dataFileName = req.params.method.replace(/[^a-z]/g,'')
-    + ( req.params.data ? '/' + req.params.data.replace(/[^a-z]/g,'') : '' )
+  var dataFileName = req.params.method.replace(/[^a-z_-]/g,'')
+    + ( req.params.data ? '/' + req.params.data.replace(/[^a-z_-]/g,'') : '' )
     + '.json';
   res.sendFile(dataFileName, {root: target.dirs.api}, function(err) {
     if ( err ) {

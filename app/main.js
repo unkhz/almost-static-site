@@ -1,6 +1,6 @@
 'use strict';
 
-var angular =     require('angular');
+var angular = require('angular');
 require('angular-route');
 require('angular-animate');
 require('angular-sanitize');
@@ -8,30 +8,37 @@ require('angular-sanitize');
 var MenuCtrl =    require('./controllers/menu');
 var PageCtrl =    require('./controllers/page');
 
-var assDemoControllers = angular.module('assDemoControllers', []);
+var assDemoCtrls = angular.module('assDemoCtrls', []);
 
-var assDemoApp = angular.module('assDemo', [
+var assDemoApp = angular.module('assDemoApp', [
   'ngRoute',
   'ngAnimate',
   'ngSanitize',
-  'assDemoControllers'
+  'assDemoCtrls'
 ]);
 
 
-assDemoControllers.controller('MenuCtrl', ['$scope', '$http', '$sce', MenuCtrl]);
-assDemoControllers.controller('PageCtrl', ['$scope', '$routeParams', '$http', '$sce', PageCtrl]);
+assDemoCtrls.controller('MenuCtrl', MenuCtrl);
+assDemoCtrls.controller('PageCtrl', PageCtrl);
 
 
-assDemoApp.config(['$routeProvider', '$locationProvider',
-  function($routeProvider, $locationProvider) {
-    $locationProvider.html5Mode(true);
-    $routeProvider.
-      when('/:page', {
-        templateUrl: 'views/page.html',
-        controller: 'PageCtrl'
-      }).
-      otherwise({
-        redirectTo: '/synopsis'
-      });
-  }
-]);
+assDemoApp.config(function($routeProvider, $locationProvider) {
+  $locationProvider.html5Mode(true);
+  $routeProvider.
+    when('/:page', {
+      templateUrl: 'views/page.html',
+      controller: 'PageCtrl'
+    }).
+    otherwise({
+      redirectTo: '/synopsis'
+    });
+}).run(function($rootScope){
+  // TODO Refactor
+  $rootScope.routeData = {
+    newPageId:0,
+    oldPageId:0,
+    getContentTransitionDirection: function() {
+      return this.newPageId < this.oldPageId ? 'ltr' : 'rtl';
+    }
+  };
+});

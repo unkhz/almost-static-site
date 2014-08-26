@@ -1,0 +1,37 @@
+
+$ass-menu-padding: 1em;
+
+.ass-menu ul {
+  list-style-type: none;
+  margin:0;
+  padding:0;
+}
+
+.ass-menu li {
+  display:inline-block;
+  box-sizing:border-box;
+  margin:0;
+  padding:0 2px;
+  a {
+    transition: background-color 0.2s ease;
+    display:block;
+    background-color: #eee;
+    box-sizing:border-box;
+    width:100%;
+    padding: $ass-menu-padding;
+    text-decoration: none;
+    height:auto;
+    color:#000;
+  }
+  a:visited {
+    text-decoration: none;
+    color:#000;
+  }
+  &.ass-is-active a {
+    background-color: #ccc;
+  }
+}
+
+@for $i from 1 through 10 {
+  .ass-menu ul[ass-item-count='#{$i}'] li { width: 100% / $i;}
+}

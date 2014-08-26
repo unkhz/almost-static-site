@@ -1,7 +1,10 @@
 items:
   -
     title: Synopsis
-    url: /synopsis
+    page: synopsis
   -
     title: Details
-    url: /details
+    page: details
+  -
+    title: Oh Yeah!
+    page: oh-yeah
