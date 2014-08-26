@@ -10,7 +10,7 @@ var PageCtrl = function($rootScope, $scope, $routeParams, $http, $sce, $filter) 
     content:''
   }
 
-  $http.get('/api/' + $sce.trustAsUrl($routeParams.page)).success(function(res){
+  $http.get('/api/pages/' + $sce.trustAsUrl($routeParams.page) + '.json').success(function(res){
     $scope.data = res;
   });
 };

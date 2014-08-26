@@ -30,6 +30,7 @@ assDemoApp.config(function($routeProvider, $locationProvider) {
       controller: 'PageCtrl'
     }).
     otherwise({
+      // TODO Refactor, data specific
       redirectTo: '/synopsis'
     });
 }).run(function($rootScope){
@@ -38,7 +39,7 @@ assDemoApp.config(function($routeProvider, $locationProvider) {
     newPageId:0,
     oldPageId:0,
     getContentTransitionDirection: function() {
-      return this.newPageId < this.oldPageId ? 'ltr' : 'rtl';
+      return this.newPageId > this.oldPageId ? 'ltr' : 'rtl';
     }
   };
 });

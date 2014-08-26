@@ -47,7 +47,6 @@ gulp.task('watch', ['lint'], function() {
 
 // Views
 gulp.task('views', function() {
-  // Get our index.html
   var stream = gulp.src(['**/*.html'], {cwd:target.dirs.src})
   .pipe(gulp.dest(target.dirs.dist));
   if ( target.server.enableLiveReload ) {
@@ -95,20 +94,6 @@ if ( target.server.enableLiveReload ) {
   server.use(connectLiveReload({port: target.liveReloadPort}));
 }
 server.use(express.static(target.dirs.dist));
-
-
-// Enable API
-server.use('/api/:method/:data?', function(req, res) {
-  var dataFileName = req.params.method.replace(/[^a-z_-]/g,'')
-    + ( req.params.data ? '/' + req.params.data.replace(/[^a-z_-]/g,'') : '' )
-    + '.json';
-  res.sendFile(dataFileName, {root: target.dirs.api}, function(err) {
-    if ( err ) {
-      // no file = bad request
-      res.status(400).end();
-    }
-  });
-});
 
 // Enable pushstate
 server.all('/*', function(req, res) {

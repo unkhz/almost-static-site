@@ -5,6 +5,8 @@ var MenuCtrl = function($rootScope, $scope, $http, $filter) {
 
   // Change active menu button when route changes
   $scope.setActive = function(page) {
+    if ( !$scope.items ) { return; }
+
     var oldPageId, newPageId;
     $scope.items.forEach(function(item, id){
       if ( item.isActive ) {
@@ -26,7 +28,7 @@ var MenuCtrl = function($rootScope, $scope, $http, $filter) {
   });
 
   // Fill menu
-  $http.get('/api/menu').success(function(res){
+  $http.get('/api/menu.json').success(function(res){
     $rootScope.menuItems = res.items;
     $scope.items = res.items;
     $scope.activeClass = "ass-is-active";
