@@ -1,0 +1,11 @@
+.ass-content {
+  position:relative;
+  .ass-content-inner {
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+  }
+}
+
+@import 'ass-transitions.scss';

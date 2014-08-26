@@ -1,0 +1,96 @@
+/*
+ * Transitions are defined by adding ass-transition-direction attribute
+ * to the element to be transitioned upon change. Angular handles the
+ * state classes ng-enter and ng-leave
+ */
+
+
+[ass-transition-direction=fade] {
+  transition: opacity 1s linear;
+  opacity:1;
+  &.ng-enter {
+    opacity:0;
+  }
+  &.ng-enter-active {
+    opacity:1;
+  }
+  &.ng-leave {
+    opacity:1;
+  }
+  &.ng-leave-active {
+    opacity:0;
+  }
+}
+
+[ass-transition-direction=ltr],
+[ass-transition-direction=rtl],
+[ass-transition-direction=ttb],
+[ass-transition-direction=btt],
+{
+  transition: transform 0.33s linear;
+}
+
+[ass-transition-direction=ltr] {
+  transform:translateX(0%);
+  &.ng-enter {
+    transform:translateX(100%);
+  }
+  &.ng-enter-active {
+    transform:translateX(0%);
+  }
+  &.ng-leave {
+    transform:translateX(0%);
+  }
+  &.ng-leave-active {
+    transform:translateX(-100%);
+  }
+}
+
+[ass-transition-direction=rtl] {
+  transition: transform 0.33s linear;
+  transform:translateX(0%);
+  &.ng-enter {
+    transform:translateX(-100%);
+  }
+  &.ng-enter-active {
+    transform:translateX(0%);
+  }
+  &.ng-leave {
+    transform:translateX(0%);
+  }
+  &.ng-leave-active {
+    transform:translateX(100%);
+  }
+}
+
+[ass-transition-direction=ttb] {
+  transform:translateY(0%);
+  &.ng-enter {
+    transform:translateY(-100%);
+  }
+  &.ng-enter-active {
+    transform:translateY(0%);
+  }
+  &.ng-leave {
+    transform:translateY(0%);
+  }
+  &.ng-leave-active {
+    transform:translateY(100%);
+  }
+}
+
+[ass-transition-direction=btt] {
+  transform:translateY(0%);
+  &.ng-enter {
+    transform:translateY(-100%);
+  }
+  &.ng-enter-active {
+    transform:translateY(0%);
+  }
+  &.ng-leave {
+    transform:translateY(0%);
+  }
+  &.ng-leave-active {
+    transform:translateY(100%);
+  }
+}

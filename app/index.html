@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en" ng-app="assDemo">
+<head>
+  <title>Almost Static Site Demo</title>
+  <link href="/main.css" rel="stylesheet" type="text/css">
+  <script src="/main.js"></script>
+</head>
+<body>
+  <h1>Almost Static Site Demo</h1>
+  <nav classDemo="ass-menu {{activeClass}}" ng-controller="MenuCtrl" ng-include="template"></nav>
+  <section class="ass-content">
+    <div class="ass-content-inner" ass-transition-direction="ltr" ng-view ng-controller="PageCtrl"></div>
+  </section>
+</body>
+</html>

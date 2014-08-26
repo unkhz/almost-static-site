@@ -1,0 +1,4 @@
+title: Synopsis
+content: |
+  Almost Static Site is my boilerplate for creating quick and dirty
+  (M)EAN sites that use static YAML files instead of MongoDB as a database.
