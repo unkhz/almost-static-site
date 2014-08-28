@@ -4,6 +4,8 @@
  * state classes ng-enter and ng-leave
  */
 
+$ass-transition-duration-quick: 0.167s;
+$ass-transition-duration-smooth: 0.33s;
 
 [ass-transition-direction=fade] [ass-transition-element] {
   transition: opacity 1s linear;

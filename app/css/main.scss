@@ -1,5 +1,33 @@
 // Include boilerplate styles
 @import 'ass-main.scss';
 
+$ass-footer-height: 8rem;
+
 // Import app components
 @import 'menu.scss';
+@import 'footer.scss';
+
+html {
+  height:100%;
+  overflow:visible;
+}
+body {
+  margin:0;
+  padding:0;
+  position:relative;
+  padding-bottom: $ass-footer-height;
+  min-height:100%;
+  transition: min-height 1s ease;
+  box-sizing: border-box;
+}
+
+.ass-content-inner {
+  padding:1rem;
+}
+
+.ass-header {
+  padding:1rem;
+  nav {
+    margin:0 -1rem;
+  }
+}

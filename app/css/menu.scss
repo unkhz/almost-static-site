@@ -30,6 +30,12 @@ $ass-menu-padding: 1em;
   &.ass-is-active a {
     background-color: #ccc;
   }
+  &:first-child {
+    padding-left:0;
+  }
+  &:last-child {
+    padding-right:0;
+  }
 }
 
 @for $i from 1 through 10 {

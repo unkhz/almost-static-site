@@ -6,18 +6,23 @@
   <script src="/main.js"></script>
 </head>
 <body>
-  <h1>Almost Static Site Demo</h1>
-  <nav
-    class="ass-menu {{activeClass}}"
-    ng-controller="MenuCtrl"
-    ng-include="template"
-    ass-transition-direction="fade"
-  ></nav>
-  <section class="ass-content"
+  <header id="header" class="ass-header">
+    <h1>Almost Static Site Demo</h1>
+    <nav
+      class="ass-menu {{activeClass}}"
+      ng-controller="MenuCtrl"
+      ng-include="template"
+      ass-transition-direction="fade"
+    ></nav>
+  </header>
+  <section id="content" class="ass-content"
     ass-transition-direction="{{routeData.getContentTransitionDirection()}}"
     ng-controller="PageCtrl"
   >
-    <div class="ass-content-inner" ng-view ass-transition-element></div>
+    <div class="ass-content-inner" ng-view ass-transition-element ass-broadcast-long-page></div>
   </section>
+  <footer id="footer" class="ass-footer" ng-controller="FooterCtrl" ass-move-away-on-long-page>
+    EOC
+  </footer>
 </body>
 </html>

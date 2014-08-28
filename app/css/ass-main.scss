@@ -1,10 +1,13 @@
 .ass-content {
   position:relative;
-  .ass-content-inner {
+  transition: height 1s ease-in;
+  .ass-content-inner.ng-animate {
     position:absolute;
     top:0;
     left:0;
     right:0;
+    min-height:100%;
+    box-sizing:border-box;
   }
 }
 
