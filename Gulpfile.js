@@ -2,11 +2,20 @@ var gulp = require('gulp'),
     gutil = require('gulp-util'),
     concat = require('gulp-concat'),
     clean = require('gulp-clean'),
-    argv = require('yargs').argv;
+    argv = require('yargs').argv,
+    notifier = new require('node-notifier')();
 
 // Require target specific configuration
 var target = require('./config/' + (argv.target || 'dev') + '.js' )
 
+function logErrorAndNotify(e) {
+  notifier.notify({
+    title:'Error on ' + e.plugin,
+    message: e.message
+  });
+  gutil.log('Error running task', e.plugin, e.message);
+  gutil.log(e.stack);
+}
 
 // Clean
 gulp.task('clean', function() {
@@ -20,8 +29,8 @@ var jshint = require('gulp-jshint');
 gulp.task('lint', function() {
   return gulp.src(target.dirs.src + '/*.js')
   .pipe(jshint())
-  .pipe(jshint.reporter('default'))
-  .on('error', gutil.log);
+  .on('error', logErrorAndNotify)
+  .pipe(jshint.reporter('default'));
 });
 
 
@@ -30,9 +39,10 @@ var browserify = require('gulp-browserify');
 gulp.task('browserify', ['lint'], function() {
   var stream = gulp.src([target.dirs.src + '/main.js'])
   .pipe(browserify())
+  .on('error', logErrorAndNotify)
   .pipe(concat('main.js'))
+  .on('error', logErrorAndNotify)
   .pipe(gulp.dest(target.dirs.dist))
-  .on('error', gutil.log);
   if ( target.server.enableLiveReload ) {
     stream.pipe(liveReload(liveReloadServer));
   }
@@ -48,6 +58,7 @@ gulp.task('watch', ['lint'], function() {
 // Views
 gulp.task('views', function() {
   var stream = gulp.src(['**/*.html'], {cwd:target.dirs.src})
+  .on('error', logErrorAndNotify)
   .pipe(gulp.dest(target.dirs.dist));
   if ( target.server.enableLiveReload ) {
     stream.pipe(liveReload(liveReloadServer));
@@ -66,7 +77,9 @@ var autoprefixer = require('gulp-autoprefixer');
 gulp.task('styles', function() {
   var stream = gulp.src(target.dirs.src + '/css/main.scss')
   // The onerror handler prevents Gulp from crashing when you make a mistake in your SASS
-  .pipe(sass({onError: function(e) { console.log(e); } }))
+  .pipe(sass({
+    onError: logErrorAndNotify
+  }))
   .pipe(autoprefixer("last 2 versions", "> 1%", "ie 8"))
   .pipe(gulp.dest(target.dirs.dist));
   if ( target.server.enableLiveReload ) {
