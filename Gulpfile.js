@@ -137,6 +137,7 @@ gulp.task('yaml', function(done){
   }
   return stream;
 });
+gulp.watch([target.dirs.src + '/api/**/*.yaml'], ['yaml']);
 
 // Generic tasks
 gulp.task('build', ['yaml', 'styles', 'views', 'browserify'])
