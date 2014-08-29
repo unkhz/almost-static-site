@@ -2,36 +2,43 @@
 
 var MenuCtrl = function($rootScope, $scope, $http, $filter) {
   $scope.template = "views/menu.html";
+  $rootScope.menu = {
+    pages: []
+  };
 
   // Change active menu button when route changes
-  $scope.setActive = function(page) {
-    if ( !$scope.items ) { return; }
+  $scope.setActive = function(toPageId) {
+    var rootPageId = $rootScope.menu.rootPageId,
+        pages = $rootScope.menu.pages;
+    if ( !pages.length ) { return; }
 
-    var oldPageId, newPageId;
-    $scope.items.forEach(function(item, id){
-      if ( item.isActive ) {
-        oldPageId = id;
-      }
-      if ( item.page === page ) {
-        item.isActive = true;
-        newPageId = id;
+    angular.forEach(pages, function(page, ord){
+      if ( page.id === toPageId || ( !toPageId && page.isRoot ) ) {
+        page.isActive = true;
+        $rootScope.menu.activePage = page;
       } else {
-        item.isActive = false;
+        page.isActive = false;
       }
     });
-    $rootScope.routeData.newPageId = newPageId;
-    $rootScope.routeData.oldPageId = oldPageId;
   }
 
   $scope.$on("$routeChangeSuccess", function(event,toState) {
-    $scope.setActive(toState.params.page);
+    $scope.setActive(toState.params.pageId);
   });
 
   // Fill menu
   $http.get('/api/menu.json').success(function(res){
-    $rootScope.menuItems = res.items;
-    $scope.items = res.items;
-    $scope.activeClass = "ass-is-active";
+    if ( res && res.pages ) {
+      angular.forEach(res.pages, function(page, ord){
+        page.ord = ord;
+        if ( page.isRoot ) {
+          res.rootPage = page;
+        }
+        angular.extend($rootScope.menu, res);
+      });
+    } else {
+      throw new Error('ASS Error: Invalid menu model received from API', res);
+    }
   });
 };
 

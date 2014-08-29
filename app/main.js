@@ -17,28 +17,18 @@ angular.module('assDemoApp', [
 
 .directive('assBroadcastLongPage', require('./directives/assBroadcastLongPage'))
 .directive('assMoveAwayOnLongPage', require('./directives/assMoveAwayOnLongPage'))
+.directive('assPageTransition', require('./directives/assPageTransition'))
 
 
 .config(function($routeProvider, $locationProvider) {
   $locationProvider.html5Mode(true);
-  $routeProvider.
-    when('/:page', {
-      templateUrl: 'views/page.html',
-      controller: 'PageCtrl'
-    }).
-    otherwise({
-      // TODO Refactor, data specific
-      redirectTo: '/synopsis'
-    });
-})
-
-.run(function($rootScope){
-  // TODO Refactor
-  $rootScope.routeData = {
-    newPageId:0,
-    oldPageId:0,
-    getContentTransitionDirection: function() {
-      return this.newPageId > this.oldPageId ? 'ltr' : 'rtl';
-    }
-  };
+  $routeProvider
+  .when('/:pageId', {
+    templateUrl: 'views/page.html',
+    controller: 'PageCtrl'
+  })
+  .otherwise({
+    templateUrl: 'views/page.html',
+    controller: 'PageCtrl'
+  });
 });

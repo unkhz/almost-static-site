@@ -1,5 +1,5 @@
-<ul ass-item-count="{{items.length}}">
-<li ng-repeat="item in items" ass-transition-element ng-class="{'ass-is-active':item.isActive}">
-  <a ng-href="/{{item.page}}">{{item.title}}</a>
+<ul ass-item-count="{{menu.pages.length}}">
+<li ng-repeat="page in menu.pages" ass-transition-element ng-class="{'ass-is-active':page.isActive}">
+  <a ng-href="/{{page.isRoot ? '' : page.id}}">{{page.title}}</a>
 </li>
 </ul>

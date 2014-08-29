@@ -1,10 +1,11 @@
-items:
+pages:
   -
+    id: synopsis
     title: Synopsis
-    page: synopsis
+    isRoot: true
   -
+    id: details
     title: Details
-    page: details
   -
+    id: oh-yeah
     title: Oh Yeah!
-    page: oh-yeah

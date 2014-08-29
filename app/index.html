@@ -15,10 +15,7 @@
       ass-transition-direction="fade"
     ></nav>
   </header>
-  <section id="content" class="ass-content"
-    ass-transition-direction="{{routeData.getContentTransitionDirection()}}"
-    ng-controller="PageCtrl"
-  >
+  <section id="content" class="ass-content" ass-page-transition ng-controller="PageCtrl">
     <div class="ass-content-inner" ng-view ass-transition-element ass-broadcast-long-page></div>
   </section>
   <footer id="footer" class="ass-footer" ng-controller="FooterCtrl" ass-move-away-on-long-page>
