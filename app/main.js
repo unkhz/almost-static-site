@@ -5,7 +5,7 @@ require('angular-route');
 require('angular-animate');
 require('angular-sanitize');
 
-var assDemoApp = angular.module('assDemoApp', [
+angular.module('assDemoApp', [
   'ngRoute',
   'ngAnimate',
   'ngSanitize'
