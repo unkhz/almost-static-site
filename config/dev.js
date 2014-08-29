@@ -1,8 +1,23 @@
-var target = {
+var runtimeConfig = {
+  title:'Almost Static Site'
+};
+
+var buildtimeConfig = {
   dirs: {
     src: './app',
     api: './dist/api',
     dist: './dist'
+  },
+  index: {
+    stylesheets: [
+      '/main.css'
+    ],
+    scripts: [
+      '/main.js'
+    ],
+    bootstraps: {
+      runtimeConfig: runtimeConfig
+    }
   },
   server: {
     enableLiveReload: true,
@@ -18,4 +33,4 @@ var target = {
   }
 };
 
-module.exports = target;
+module.exports = buildtimeConfig;

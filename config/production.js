@@ -1,4 +1,19 @@
-var target = {
+var runtimeConfig = {
+  title:'Almost Static Site'
+};
+
+var buildtimeConfig = {
+  index: {
+    stylesheets: [
+      '/main.min.css'
+    ],
+    scripts: [
+      '/main.min.js'
+    ],
+    bootstraps: {
+      runtimeConfig: runtimeConfig
+    }
+  },
   dirs: {
     src: './app',
     api: './dist/api',
@@ -18,4 +33,4 @@ var target = {
   }
 };
 
-module.exports = target;
+module.exports = buildtimeConfig;

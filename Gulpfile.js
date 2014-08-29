@@ -3,7 +3,8 @@ var gulp = require('gulp'),
     concat = require('gulp-concat'),
     clean = require('gulp-clean'),
     argv = require('yargs').argv,
-    notifier = new require('node-notifier')();
+    notifier = new require('node-notifier')(),
+    template = require('gulp-template');
 
 // Require target specific configuration
 var target = require('./config/' + (argv.target || 'dev') + '.js' )
@@ -54,10 +55,10 @@ gulp.task('watch', ['lint'], function() {
   ]);
 });
 
-
-// Views
-gulp.task('views', function() {
-  var stream = gulp.src(['**/*.html'], {cwd:target.dirs.src})
+// Index template
+gulp.task('index', function() {
+  var stream = gulp.src([target.dirs.src + '/index.html'])
+  .pipe(template(target))
   .on('error', logErrorAndNotify)
   .pipe(gulp.dest(target.dirs.dist));
   if ( target.server.enableLiveReload ) {
@@ -65,7 +66,21 @@ gulp.task('views', function() {
   }
   return stream;
 });
-gulp.watch([target.dirs.src + '/index.html', target.dirs.src + '/views/**/*.html'], [
+gulp.watch([target.dirs.src + '/index.html'], [
+  'index'
+]);
+
+// Views
+gulp.task('views', function() {
+  var stream = gulp.src(['views/**/*.html'], {cwd:target.dirs.src})
+  .on('error', logErrorAndNotify)
+  .pipe(gulp.dest(target.dirs.dist + '/views'));
+  if ( target.server.enableLiveReload ) {
+    stream.pipe(liveReload(liveReloadServer));
+  }
+  return stream;
+});
+gulp.watch([target.dirs.src + '/views/**/*.html'], [
   'views'
 ]);
 
@@ -140,7 +155,7 @@ gulp.task('yaml', function(done){
 gulp.watch([target.dirs.src + '/api/**/*.yaml'], ['yaml']);
 
 // Generic tasks
-gulp.task('build', ['yaml', 'styles', 'views', 'browserify'])
+gulp.task('build', ['yaml', 'styles', 'index', 'views', 'browserify'])
 
 // Target specific tasks
 Object.keys(target.tasks).forEach(function(name){

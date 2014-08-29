@@ -2,8 +2,16 @@
 <html lang="en" ng-app="assDemoApp">
 <head>
   <title>Almost Static Site Demo</title>
-  <link href="/main.css" rel="stylesheet" type="text/css">
-  <script src="/main.js"></script>
+  <%for ( i in index.stylesheets ) {
+  %><link href="<%=index.stylesheets[i]%>" rel="stylesheet" type="text/css"><%
+  }%>
+  <script>var ASS_BOOTSTRAP={};<%for ( key in index.bootstraps ) {
+     %>ASS_BOOTSTRAP['<%=key%>']=<%=
+      JSON.stringify(index.bootstraps[key]) ||  "null" %>;<%
+  }%></script>
+  <%for ( i in index.scripts ) {
+  %><script src="<%=index.scripts[i]%>"></script><%
+  }%>
 </head>
 <body>
   <header id="header" class="ass-header">
