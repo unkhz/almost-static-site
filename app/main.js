@@ -11,12 +11,13 @@ var assDemoApp = angular.module('assDemoApp', [
   'ngSanitize'
 ])
 
-.directive('BroadcastLongPage', require('./directives/BroadcastLongPage'))
-.directive('MoveAwayOnLongPage', require('./directives/MoveAwayOnLongPage'))
-
 .controller('MenuCtrl', require('./controllers/menu'))
 .controller('PageCtrl', require('./controllers/page'))
 .controller('FooterCtrl', require('./controllers/footer'))
+
+.directive('assBroadcastLongPage', require('./directives/assBroadcastLongPage'))
+.directive('assMoveAwayOnLongPage', require('./directives/assMoveAwayOnLongPage'))
+
 
 .config(function($routeProvider, $locationProvider) {
   $locationProvider.html5Mode(true);
