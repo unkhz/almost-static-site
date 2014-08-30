@@ -94,7 +94,7 @@ gulp.task('styles', function() {
   .pipe(sass({
     onError: logErrorAndNotify
   }))
-  .pipe(autoprefixer("last 2 versions", "> 1%", "ie 8"))
+  .pipe(autoprefixer("last 2 versions", "> 1%", "ie 8", "Android"))
   .pipe(gulp.dest(target.dirs.dist));
   if ( target.server.enableLiveReload ) {
     stream.pipe(liveReload(liveReloadServer));

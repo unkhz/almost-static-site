@@ -10,13 +10,15 @@ $ass-menu-padding: 1em;
 .ass-menu li {
   display:inline-block;
   box-sizing:border-box;
+  -webkit-box-sizing: border-box;
   margin:0;
-  padding:0 2px;
+  padding:0;
   a {
     transition: background-color 0.2s ease;
     display:block;
     background-color: #eee;
     box-sizing:border-box;
+    -webkit-box-sizing: border-box;
     width:100%;
     padding: $ass-menu-padding;
     text-decoration: none;
@@ -41,3 +43,8 @@ $ass-menu-padding: 1em;
 @for $i from 1 through 10 {
   .ass-menu ul[ass-item-count='#{$i}'] li { width: 100% / $i;}
 }
+.ass-menu ul[ass-item-count='3'] li { width: 33%;}
+.ass-menu ul[ass-item-count='3'] li:last-child { width: 34%;}
+.ass-menu ul[ass-item-count='6'] li { width: 16.7%;}
+.ass-menu ul[ass-item-count='6'] li:last-child { width: 16.5%;}
+
