@@ -1,4 +1,5 @@
 var runtimeConfig = {
+  baseUrl:'/',
   title:'Almost Static Site'
 };
 
@@ -10,16 +11,17 @@ var buildtimeConfig = {
   },
   index: {
     stylesheets: [
-      '/main.css'
+      runtimeConfig.baseUrl + 'main.css'
     ],
     scripts: [
-      '/main.js'
+      runtimeConfig.baseUrl + 'main.js'
     ],
     bootstraps: {
       runtimeConfig: runtimeConfig
     }
   },
   server: {
+    baseUrl:runtimeConfig.baseUrl,
     enableLiveReload: true,
     liveReloadPort: 35729,
     port: 5000,

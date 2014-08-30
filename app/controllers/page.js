@@ -1,14 +1,14 @@
 'use strict';
 
-var PageCtrl = function($rootScope, $scope, $routeParams, $http, $sce, $filter, $timeout) {
-
+var PageCtrl = function(config, $rootScope, $scope, $routeParams, $http, $sce, $filter, $timeout) {
   $scope.data = {
     title:'',
     content:''
   }
 
   function loadPage(pageId) {
-    $http.get('/api/pages/' + $sce.trustAsUrl(pageId) + '.json').success(function(res){
+    var url = config.url('api/pages/' + $sce.trustAsUrl(pageId) + '.json');
+    $http.get(url).success(function(res){
       $scope.data = res;
       // Wait after the digest so that
       $timeout(function(){
@@ -21,9 +21,10 @@ var PageCtrl = function($rootScope, $scope, $routeParams, $http, $sce, $filter, 
     if ( $rootScope.menu && $rootScope.menu.rootPage ) {
       loadPage($rootScope.menu.rootPage.id);
     } else {
-      $rootScope.$watch('menu.rootPage', function(page){
+      var unbindWatch = $rootScope.$watch('menu.rootPage', function(page){
         if ( page ) {
           loadPage(page.id);
+          unbindWatch();
         }
       });
     }

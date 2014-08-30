@@ -4,7 +4,10 @@ var gulp = require('gulp'),
     clean = require('gulp-clean'),
     argv = require('yargs').argv,
     notifier = new require('node-notifier')(),
-    template = require('gulp-template');
+    template = require('gulp-template'),
+    glob = require('glob'),
+    fs = require('fs')
+    Q = require('q');
 
 // Require target specific configuration
 var target = require('./config/' + (argv.target || 'dev') + '.js' )
@@ -55,9 +58,21 @@ gulp.task('watch', ['lint'], function() {
   ]);
 });
 
-// Index template
-gulp.task('index', function() {
-  var stream = gulp.src([target.dirs.src + '/index.html'])
+// View partials
+gulp.task('templates', function() {
+  return Q.nfcall(glob, 'views/**/*.html', {cwd: target.dirs.src})
+  .then(function(files){
+    target.index.bootstraps.templates = files.reduce(function(m,file){
+      m[file] = fs.readFileSync(target.dirs.src+'/'+file).toString();
+      return m;
+    }, {});
+  });
+});
+gulp.watch([target.dirs.src + '/views/**/*.html'], ['index']);
+
+// Index template and partials
+gulp.task('index', ['templates'], function() {
+  stream = gulp.src([target.dirs.src + '/index.html'])
   .pipe(template(target))
   .on('error', logErrorAndNotify)
   .pipe(gulp.dest(target.dirs.dist));
@@ -66,23 +81,7 @@ gulp.task('index', function() {
   }
   return stream;
 });
-gulp.watch([target.dirs.src + '/index.html'], [
-  'index'
-]);
-
-// Views
-gulp.task('views', function() {
-  var stream = gulp.src(['views/**/*.html'], {cwd:target.dirs.src})
-  .on('error', logErrorAndNotify)
-  .pipe(gulp.dest(target.dirs.dist + '/views'));
-  if ( target.server.enableLiveReload ) {
-    stream.pipe(liveReload(liveReloadServer));
-  }
-  return stream;
-});
-gulp.watch([target.dirs.src + '/views/**/*.html'], [
-  'views'
-]);
+gulp.watch([target.dirs.src + '/index.html'], ['index']);
 
 
 // SASS
@@ -121,10 +120,10 @@ var server = express();
 if ( target.server.enableLiveReload ) {
   server.use(connectLiveReload({port: target.liveReloadPort}));
 }
-server.use(express.static(target.dirs.dist));
+server.use(target.server.baseUrl, express.static(target.dirs.dist));
 
 // Enable pushstate
-server.all('/*', function(req, res) {
+server.all(target.server.baseUrl + '*', function(req, res) {
   res.sendFile('index.html', {
     root: target.dirs.dist
   });
@@ -155,7 +154,7 @@ gulp.task('yaml', function(done){
 gulp.watch([target.dirs.src + '/api/**/*.yaml'], ['yaml']);
 
 // Generic tasks
-gulp.task('build', ['yaml', 'styles', 'index', 'views', 'browserify'])
+gulp.task('build', ['yaml', 'styles', 'templates', 'index', 'browserify'])
 
 // Target specific tasks
 Object.keys(target.tasks).forEach(function(name){
