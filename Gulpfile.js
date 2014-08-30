@@ -23,8 +23,8 @@ function logErrorAndNotify(e) {
 }
 
 // Clean
-gulp.task('clean', function(done) {
-  rimraf(target.dirs.dist, done);
+gulp.task('clean', function() {
+  rimraf.sync(target.dirs.dist);
 });
 
 
@@ -51,7 +51,7 @@ gulp.task('browserify', ['lint'], function() {
     stream.pipe(liveReload(liveReloadServer));
   }
 });
-gulp.task('watch', ['lint'], function() {
+gulp.task('watch', function() {
   gulp.watch([target.dirs.src + '/*.js', target.dirs.src + '/**/*.js'],[
     'lint',
     'browserify'
@@ -181,7 +181,7 @@ gulp.task('markdown', function() {
 gulp.watch([target.dirs.data + '/**/*.md'], ['markdown']);
 
 // Generic tasks
-gulp.task('build', ['yaml', 'markdown', 'styles', 'templates', 'index', 'browserify'])
+gulp.task('build', ['clean', 'yaml', 'markdown', 'styles', 'templates', 'index', 'browserify'])
 
 // Target specific tasks
 Object.keys(target.tasks).forEach(function(name){
