@@ -6,15 +6,24 @@ var PageCtrl = function(config, $rootScope, $scope, $routeParams, $http, $sce, $
     content:''
   }
 
-  function loadPage(pageId) {
-    var url = config.url('api/pages/' + $sce.trustAsUrl(pageId) + '.json');
-    $http.get(url).success(function(res){
-      $scope.data = res;
-      // Wait after the digest so that
+  function applyPageData(pageId) {
+      $scope.data = $rootScope.menu.pagesById[pageId].data;
+      // Wait after the digest to emit
       $timeout(function(){
         $scope.$emit("ass-page-data-applied")
       },0);
-    });
+  }
+
+  function loadPage(pageId) {
+    var menu = $rootScope.menu;
+    if ( menu && menu.pagesById[pageId] && menu.pagesById[pageId].data ) {
+      applyPageData(pageId);
+    } else {
+      var rm = $rootScope.$on('page-loaded:'+pageId, function(){
+        applyPageData(pageId);
+        rm();
+      });
+    }
   }
 
   if ( !$routeParams.pageId ) {
