@@ -32,7 +32,7 @@ $ass-transition-duration-smooth: 0.33s;
   transition: transform 0.33s linear;
 }
 
-[ass-transition-direction=ltr] [ass-transition-element] {
+[ass-transition-direction=rtl] [ass-transition-element] {
   transform:translateX(0%);
   &.ng-enter {
     transform:translateX(100%);
@@ -48,7 +48,7 @@ $ass-transition-duration-smooth: 0.33s;
   }
 }
 
-[ass-transition-direction=rtl] [ass-transition-element] {
+[ass-transition-direction=ltr] [ass-transition-element] {
   transform:translateX(0%);
   &.ng-enter {
     transform:translateX(-100%);

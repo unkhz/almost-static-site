@@ -6,10 +6,13 @@ var BroadcastLongPage = function($rootScope, $window, $timeout) {
     link: function($scope, el, attrs) {
       $rootScope.isWaitingForPageHeight = true;
       $scope.$on('ass-page-data-applied', function(complete) {
-        var h = el[0].offsetHeight,
-            containerH = $window.outerHeight - document.getElementById('header').offsetHeight;
-        $rootScope.isLongPage = h > containerH;
-        $rootScope.isWaitingForPageHeight = false;
+        // Wait for the reflow
+        $timeout(function(){
+          var h = el[0].offsetHeight,
+              containerH = $window.outerHeight - document.getElementById('header').offsetHeight;
+          $rootScope.isLongPage = h > containerH;
+          $rootScope.isWaitingForPageHeight = false;
+        },0);
       });
     }
   };

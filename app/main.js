@@ -24,6 +24,8 @@ app
   });
 })
 
+.factory('menu', require('./services/menu'))
+
 .controller('MenuCtrl', require('./controllers/menu'))
 .controller('PageCtrl', require('./controllers/page'))
 .controller('FooterCtrl', require('./controllers/footer'))
