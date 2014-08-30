@@ -3,15 +3,15 @@
 var angular = require('angular');
 require('angular-route');
 require('angular-animate');
-require('angular-sanitize');
 
 var
   bootstrapData = window && window.ASS_BOOTSTRAP ? window.ASS_BOOTSTRAP : {},
   app = angular.module('assDemoApp', [
   'ngRoute',
   'ngAnimate'
-])
+]);
 
+app
 .constant('config', angular.extend(bootstrapData.runtimeConfig,{
   url:function(suffix) {
     return this.baseUrl.replace(/\/?$/,'/') + suffix.replace(/^\//,'');
