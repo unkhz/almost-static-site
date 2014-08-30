@@ -1,6 +1,11 @@
+
+.ass-app {
+  max-width:96rem;
+  margin:auto;
+}
+
 .ass-content {
   position:relative;
-  transition: height 1s ease-in;
   .ass-content-inner.ng-animate {
     position:absolute;
     top:0;
