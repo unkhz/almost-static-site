@@ -1,6 +1,6 @@
 'use strict';
 
-var MenuCtrl = [
+module.exports = [
   'config', 'menu', '$scope',
   function MenuCtrl(config, menu, $scope) {
     $scope.template = 'views/menu.html';
@@ -9,5 +9,3 @@ var MenuCtrl = [
     });
   }
 ];
-
-module.exports = MenuCtrl;

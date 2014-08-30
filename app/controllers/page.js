@@ -1,6 +1,6 @@
 'use strict';
 
-var PageCtrl = [
+module.exports = [
   'config', 'menu', '$scope', '$routeParams',
   function PageCtrl(config, menu, $scope, $routeParams) {
     $scope.data = {
@@ -14,5 +14,3 @@ var PageCtrl = [
     });
   }
 ];
-
-module.exports = PageCtrl;

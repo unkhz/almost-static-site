@@ -30,9 +30,9 @@ app
 .controller('PageCtrl', require('./controllers/page'))
 .controller('FooterCtrl', require('./controllers/footer'))
 
-.directive('assBroadcastLongPage', require('./directives/assBroadcastLongPage'))
-.directive('assMoveAwayOnLongPage', require('./directives/assMoveAwayOnLongPage'))
-.directive('assPageTransition', require('./directives/assPageTransition'))
+.directive('assBroadcastLongPage', require('./directives/broadcastLongPage'))
+.directive('assMoveAwayOnLongPage', require('./directives/moveAwayOnLongPage'))
+.directive('assPageTransition', require('./directives/pageTransition'))
 
 .config(function($routeProvider, $locationProvider, config) {
   $locationProvider.html5Mode(true);

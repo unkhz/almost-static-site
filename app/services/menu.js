@@ -1,4 +1,4 @@
-var MenuService = [
+module.exports = [
   'config', '$rootScope', '$q', '$http', '$sce', '$log',
   function MenuService(config, $rootScope, $q, $http, $sce, $log) {
 
@@ -110,5 +110,3 @@ var MenuService = [
     });
   }
 ];
-
-module.exports = MenuService;
