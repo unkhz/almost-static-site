@@ -1,13 +1,14 @@
 var gulp = require('gulp'),
     gutil = require('gulp-util'),
     concat = require('gulp-concat'),
-    clean = require('gulp-clean'),
+    rimraf = require('rimraf'),
     argv = require('yargs').argv,
     notifier = new require('node-notifier')(),
     template = require('gulp-template'),
     glob = require('glob'),
     fs = require('fs')
-    Q = require('q');
+    Q = require('q'),
+    _ = require('lodash');
 
 // Require target specific configuration
 var target = require('./config/' + (argv.target || 'dev') + '.js' )
@@ -22,9 +23,8 @@ function logErrorAndNotify(e) {
 }
 
 // Clean
-gulp.task('clean', function() {
-  return gulp.src(target.dirs.dist + '/**/*', {read: false, force:true})
-  .pipe(clean());
+gulp.task('clean', function(done) {
+  rimraf(target.dirs.dist, done);
 });
 
 
@@ -94,7 +94,7 @@ gulp.task('styles', function() {
   .pipe(sass({
     onError: logErrorAndNotify
   }))
-  .pipe(autoprefixer("last 2 versions", "> 1%", "ie 8", "Android"))
+  .pipe(autoprefixer("last 2 versions", "> 1%", "ie 8"))
   .pipe(gulp.dest(target.dirs.dist));
   if ( target.server.enableLiveReload ) {
     stream.pipe(liveReload(liveReloadServer));
@@ -143,18 +143,45 @@ gulp.task('server', ['build'], function() {
 var yaml = require('gulp-yaml');
 
 gulp.task('yaml', function(done){
-  var stream = gulp.src('api/**/*.yaml', {cwd:target.dirs.src})
+  var stream = gulp.src('**/*.yaml', {cwd:target.dirs.data})
   .pipe(yaml())
-  .pipe(gulp.dest(target.dirs.api));
+  .pipe(gulp.dest(target.dirs.dist + '/api'));
   if ( target.server.enableLiveReload ) {
     stream.pipe(liveReload(liveReloadServer));
   }
   return stream;
 });
-gulp.watch([target.dirs.src + '/api/**/*.yaml'], ['yaml']);
+gulp.watch([target.dirs.data + '/**/*.yaml'], ['yaml']);
+
+var markdown = require('gulp-markdown');
+var frontMatter = require('gulp-front-matter');
+var entityConvert = require('gulp-entity-convert');
+var through = require('through2');
+
+gulp.task('markdown', function() {
+  var stream = gulp.src('**/*.md', {cwd:target.dirs.data})
+  .pipe(frontMatter({
+    property: 'frontMatterData',
+    remove: true
+  }))
+  .pipe(entityConvert())
+  .pipe(markdown({}))
+  // Frontmatter + contents -> JSON
+  .pipe(through.obj(function (file, enc, next) {
+    if ( file.isBuffer() ) {
+      file.frontMatterData.content = file.contents.toString();
+      file.contents = new Buffer(JSON.stringify(file.frontMatterData));
+      file.path = file.path.replace(/\.html$/, '.json');
+    }
+    this.push(file);
+    return next();
+  }))
+  .pipe(gulp.dest(target.dirs.dist + '/api'));
+});
+gulp.watch([target.dirs.data + '/**/*.md'], ['markdown']);
 
 // Generic tasks
-gulp.task('build', ['yaml', 'styles', 'templates', 'index', 'browserify'])
+gulp.task('build', ['yaml', 'markdown', 'styles', 'templates', 'index', 'browserify'])
 
 // Target specific tasks
 Object.keys(target.tasks).forEach(function(name){

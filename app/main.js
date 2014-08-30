@@ -3,12 +3,14 @@
 var angular = require('angular');
 require('angular-route');
 require('angular-animate');
+require('angular-sanitize');
 
 var
   bootstrapData = window && window.ASS_BOOTSTRAP ? window.ASS_BOOTSTRAP : {},
   app = angular.module('assDemoApp', [
   'ngRoute',
-  'ngAnimate'
+  'ngAnimate',
+  'ngSanitize'
 ]);
 
 app

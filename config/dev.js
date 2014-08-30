@@ -6,7 +6,7 @@ var runtimeConfig = {
 var buildtimeConfig = {
   dirs: {
     src: './app',
-    api: './dist/api',
+    data: './app/api',
     dist: './dist'
   },
   index: {

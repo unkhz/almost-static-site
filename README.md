@@ -1,6 +1,6 @@
 # Almost Static Site
 
-Almost Static Site is my boilerplate for creating quick and dirty (M)EAN sites that use static YAML files instead of MongoDB as a database. Gulp build converts the YAML files into JSON that are served with Express for the web application.
+Almost Static Site is my boilerplate for creating quick and dirty (M)EAN sites that use static YAML/Markdown files instead of MongoDB as a database. Gulp build converts the YAML files into JSON that are served with Express for the web application.
 
 ## Main Ingredients
 
@@ -10,6 +10,7 @@ Almost Static Site is my boilerplate for creating quick and dirty (M)EAN sites t
   * Browserify
   * Angular
   * YAML
+  * Markdown w/ front matter YAML
   * SASS
   * LiveReload
 
@@ -33,7 +34,7 @@ You may want to use another configuration. The targets are defined as individual
 ## Structure
 
     app             Sources
-      api           YAML source files
+      api           YAML and Markdown source files
       css           SASS source files
       controllers   Angular controller source files
       views         Angular view source files
