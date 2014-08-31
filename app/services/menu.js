@@ -84,7 +84,7 @@ module.exports = [
           angular.forEach(res.pages, function(pageData, ord){
             var page = new Page(angular.extend(pageData,{
               ord: ord,
-              url: config.url(pageData.isRoot ? '' : pageData.id),
+              url: config.href(pageData.isRoot ? '' : pageData.id),
               apiUrl: config.url('api/pages/' + $sce.trustAsUrl(pageData.id) + '.json')
             }));
 

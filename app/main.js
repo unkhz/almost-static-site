@@ -15,8 +15,15 @@ var
 
 app
 .constant('config', angular.extend(bootstrapData.runtimeConfig,{
+  // Generate url for navigation link href
+  href:function(suffix) {
+    if ( suffix.match(/^([a-z]*:?\d*)\/\//) ) { return suffix; }
+    var base =  this.enablePushState ? this.baseUrl : '#/';
+    return  base + suffix.replace(/^\//,'');
+  },
   url:function(suffix) {
-    return this.baseUrl.replace(/\/?$/,'/') + suffix.replace(/^\//,'');
+    if ( suffix.match(/^([a-z]*:?\d*)\/\//) ) { return suffix; }
+    return  this.baseUrl + suffix.replace(/^\//,'');
   }
 }))
 
@@ -37,9 +44,9 @@ app
 .directive('assPageTransition', require('./directives/pageTransition'))
 
 .config(function($routeProvider, $locationProvider, config) {
-  $locationProvider.html5Mode(true);
+  $locationProvider.html5Mode(config.enablePushState);
   $routeProvider
-  .when(config.url(':pageId'), {
+  .when(config.url(':pageId').replace(/^\/?/, '/'), {
     templateUrl: 'views/page.html',
     controller: 'PageCtrl'
   })

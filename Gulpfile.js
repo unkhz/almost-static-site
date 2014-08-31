@@ -72,6 +72,9 @@ gulp.watch([target.dirs.src + '/views/**/*.html'], ['index']);
 
 // Index template and partials
 gulp.task('index', ['templates'], function() {
+  target.index.url = function(suffix) {
+    return  target.server.baseUrl + suffix.replace(/^\//,'');
+  };
   stream = gulp.src([target.dirs.src + '/index.html'])
   .pipe(template(target))
   .on('error', logErrorAndNotify)
@@ -113,24 +116,20 @@ var liveReload = require('gulp-livereload'),
     express = require('express');
 
 var server = express();
+server.use(target.server.baseUrl, express.static(target.dirs.dist));
 
-// Setup
-
-// Enable APP
 if ( target.server.enableLiveReload ) {
   server.use(connectLiveReload({port: target.liveReloadPort}));
 }
-server.use(target.server.baseUrl, express.static(target.dirs.dist));
 
-// Enable pushstate
-server.all(target.server.baseUrl + '*', function(req, res) {
-  res.sendFile('index.html', {
-    root: target.dirs.dist
+if ( target.server.enablePushState ) {
+  server.all(target.server.baseUrl + '*', function(req, res) {
+    res.sendFile('index.html', {
+      root: target.dirs.dist
+    });
   });
-});
+}
 
-
-// Start
 gulp.task('server', ['build'], function() {
   server.listen(target.server.port);
   if ( target.server.enableLiveReload ) {

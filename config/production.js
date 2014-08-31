@@ -1,6 +1,7 @@
 var runtimeConfig = {
   baseUrl: '/',
-  title:'Almost Static Site'
+  title:'Almost Static Site',
+  enablePushState: true
 };
 
 var buildtimeConfig = {
@@ -25,6 +26,7 @@ var buildtimeConfig = {
     enableLiveReload: false,
     liveReloadPort: 35729,
     port: 8080,
+    enablePushState: runtimeConfig.enablePushState
   },
   browserify: {
     detectGlobals: true,

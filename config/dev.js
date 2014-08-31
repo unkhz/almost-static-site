@@ -1,6 +1,7 @@
 var runtimeConfig = {
-  baseUrl:'/',
-  title:'Almost Static Site'
+  baseUrl: '/',
+  title:'Almost Static Site',
+  enablePushState: true
 };
 
 var buildtimeConfig = {
@@ -11,10 +12,10 @@ var buildtimeConfig = {
   },
   index: {
     stylesheets: [
-      runtimeConfig.baseUrl + 'main.css'
+      'main.css'
     ],
     scripts: [
-      runtimeConfig.baseUrl + 'main.js'
+      'main.js'
     ],
     bootstraps: {
       runtimeConfig: runtimeConfig
@@ -25,6 +26,7 @@ var buildtimeConfig = {
     enableLiveReload: true,
     liveReloadPort: 35729,
     port: 5000,
+    enablePushState: runtimeConfig.enablePushState
   },
   browserify: {
     insertGlobals: true,
