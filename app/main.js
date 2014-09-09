@@ -46,6 +46,10 @@ app
 .config(function($routeProvider, $locationProvider, config) {
   $locationProvider.html5Mode(config.enablePushState);
   $routeProvider
+  .when(config.url(':pageId/:subPageId').replace(/^\/?/, '/'), {
+    templateUrl: 'views/page.html',
+    controller: 'PageCtrl'
+  })
   .when(config.url(':pageId').replace(/^\/?/, '/'), {
     templateUrl: 'views/page.html',
     controller: 'PageCtrl'

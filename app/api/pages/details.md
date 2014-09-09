@@ -1,4 +1,5 @@
 ---
+id: details
 title: Details
 ---
 ## Lorem ipsum dolor sit amet

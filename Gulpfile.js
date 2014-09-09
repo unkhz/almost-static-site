@@ -8,7 +8,8 @@ var gulp = require('gulp'),
     glob = require('glob'),
     fs = require('fs')
     Q = require('q'),
-    _ = require('lodash');
+    _ = require('lodash'),
+    path = require('path');
 
 // Require target specific configuration
 var target = require('./config/' + (argv.target || 'dev') + '.js' )
@@ -140,22 +141,24 @@ gulp.task('server', ['build'], function() {
 
 // API
 var yaml = require('gulp-yaml');
-
 gulp.task('yaml', function(done){
   var stream = gulp.src('**/*.yaml', {cwd:target.dirs.data})
   .pipe(yaml())
+  .on('error', logErrorAndNotify)
   .pipe(gulp.dest(target.dirs.dist + '/api'));
   if ( target.server.enableLiveReload ) {
     stream.pipe(liveReload(liveReloadServer));
   }
   return stream;
 });
-gulp.watch([target.dirs.data + '/**/*.yaml'], ['yaml']);
+gulp.watch([target.dirs.data + '/**/*.yaml'], ['menu']);
 
 var markdown = require('gulp-markdown');
 var frontMatter = require('gulp-front-matter');
 var entityConvert = require('gulp-entity-convert');
 var through = require('through2');
+var reduceStream = require('through2-reduce');
+var File = require('vinyl');
 
 gulp.task('markdown', function() {
   var stream = gulp.src('**/*.md', {cwd:target.dirs.data})
@@ -165,6 +168,7 @@ gulp.task('markdown', function() {
   }))
   .pipe(entityConvert())
   .pipe(markdown({}))
+  .on('error', logErrorAndNotify)
   // Frontmatter + contents -> JSON
   .pipe(through.obj(function (file, enc, next) {
     if ( file.isBuffer() ) {
@@ -177,10 +181,51 @@ gulp.task('markdown', function() {
   }))
   .pipe(gulp.dest(target.dirs.dist + '/api'));
 });
-gulp.watch([target.dirs.data + '/**/*.md'], ['markdown']);
+gulp.watch([target.dirs.data + '/**/*.md'], ['menu']);
+
+// Gather basic info of all individual pages into a collection json file
+gulp.task('menu', ['yaml', 'markdown'], function(done){
+  var stream = gulp.src('**/*.json', {cwd:target.dirs.dist + '/api'})
+  // Convert a stream of files into a menu collection object
+  .pipe(reduceStream({objectMode: true}, function (menu, file) {
+    var input={};
+    if ( file.isBuffer() && file.contents ) {
+      input = JSON.parse(file.contents.toString());
+    }
+    input.url = '/api/'+ path.relative(file.base, file.path);
+    menu.pages.push(['id','url','title','parentId','isFrontPage'].reduce(function(out,key){
+      if ( input[key] !== undefined ) {
+        out[key] = input[key];
+      }
+      return out;
+    },{}));
+    if ( input.isFrontPage && !menu.frontPageId ) {
+      menu.frontPageId = input.id;
+    }
+    return menu;
+  }, {
+    pages:[],
+    frontPageId:null
+  }))
+  // Convert reduced object into a json file
+  .pipe(through.obj(function(data, enc, next){
+    this.push(new File({
+      path: process.cwd() + "/menu.json",
+      contents: new Buffer(JSON.stringify(data))
+    }));
+    return next();
+  }))
+  .on('error', logErrorAndNotify)
+  .pipe(gulp.dest(target.dirs.dist + '/api/'));
+  if ( target.server.enableLiveReload ) {
+    stream.pipe(liveReload(liveReloadServer));
+  }
+  return stream;
+});
+gulp.watch([target.dirs.data + '/**/*.yaml'], ['yaml']);
 
 // Generic tasks
-gulp.task('build', ['clean', 'yaml', 'markdown', 'styles', 'templates', 'index', 'browserify'])
+gulp.task('build', ['clean', 'yaml', 'markdown', 'menu', 'styles', 'templates', 'index', 'browserify'])
 
 // Target specific tasks
 Object.keys(target.tasks).forEach(function(name){

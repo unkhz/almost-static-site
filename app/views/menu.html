@@ -1,5 +1,10 @@
 <ul ass-item-count="{{pages.length}}">
-  <li ng-repeat="page in pages" ass-transition-element ng-class="{'ass-is-active':page.isActive}">
+  <li ng-repeat="page in pages" ass-transition-element ng-class="{'ass-is-active':page.isActive || page.hasActiveChild}">
+    <a ng-href="{{page.url}}">{{page.title}}</a>
+  </li>
+</ul>
+<ul class="ass-submenu" ass-item-count="{{subPages.length}}">
+  <li ng-repeat="page in subPages" ng-class="{'ass-is-active':page.isActive || page.hasActiveChild}">
     <a ng-href="{{page.url}}">{{page.title}}</a>
   </li>
 </ul>

@@ -1,10 +1,22 @@
 
 $ass-menu-padding: 1em;
+$ass-menu-submenu-padding: 0.5em;
 
 .ass-menu ul {
   list-style-type: none;
   margin:0;
   padding:0;
+}
+
+.ass-menu ul.ass-submenu {
+  min-height: 1.2em + $ass-menu-submenu-padding*2;
+  li a {
+    background-color:#f8f8f8;
+    padding: $ass-menu-submenu-padding $ass-menu-padding;
+  }
+  li.ass-is-active a {
+    background-color:#ddd;
+  }
 }
 
 .ass-menu li {
@@ -29,15 +41,22 @@ $ass-menu-padding: 1em;
     text-decoration: none;
     color:#000;
   }
-  &.ass-is-active a {
-    background-color: #ccc;
-  }
   &:first-child {
     padding-left:0;
   }
   &:last-child {
     padding-right:0;
   }
+}
+
+.ass-menu ul li a {
+  background-color: #eee;
+}
+.ass-menu ul.ass-submenu li a {
+  background-color: #f8f8f8;
+}
+.ass-menu ul li.ass-is-active a {
+  background-color: #ccc;
 }
 
 @for $i from 1 through 10 {

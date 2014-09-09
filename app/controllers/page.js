@@ -10,6 +10,7 @@ module.exports = [
 
     $scope.$on('activate:page', function(page, lastPage){
       $scope.data = menu.activePage.data;
+      $scope.children = menu.activePage.children;
       $scope.$emit("ass-page-data-applied")
     });
   }

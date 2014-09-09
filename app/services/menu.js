@@ -11,14 +11,17 @@ module.exports = [
         ord:0,
         url:'',
         apiUrl:'',
-        isRoot:false,
+        isFrontPage:false,
         isActive:false,
-        promises:{}
+        promises:{},
+        parent: null,
+        children: [],
+        childrenById: {},
+        rootPage: null
       },data);
       angular.forEach(page._dfds, function(dfd, id){
         page.promises[id] = dfd.promise;
       });
-      page.fetch();
     }
 
     Page.prototype.fetch = function() {
@@ -26,9 +29,15 @@ module.exports = [
       $http.get(page.apiUrl)
       .success(function(res){
         page.data = res;
+        page.parent = page.menu.pagesById[page.data.parentId];
+        if ( page.parent ) {
+          page.parent.children.push(page);
+          page.parent.childrenById[page.id] = page;
+        }
         page.isReady = true;
         page._dfds.ready.resolve(page);
       });
+      return page.promises.ready;
     }
 
     var Menu = function(data){
@@ -38,9 +47,10 @@ module.exports = [
           ready: $q.defer()
         },
         apiUrl:'',
+        rootPages:[],
         pages:[],
         pagesById:{},
-        rootPage:null,
+        frontPage:null,
         activePage:null,
         isReady:false,
         promises:{}
@@ -50,21 +60,27 @@ module.exports = [
       });
       menu.fetch();
       $rootScope.$on('$routeChangeSuccess', function(event,toState) {
-        menu._setActivePage(toState.params.pageId);
+        menu._setActivePage(toState.params.pageId, toState.params.subPageId);
       });
     }
 
-    Menu.prototype._setActivePage = function(id) {
+    Menu.prototype._setActivePage = function(id, subId) {
       // Make sure service is ready
       var menu=this,
           dfd = $q.defer();
       menu.promises.ready.then(function(){
-        var page = menu.pagesById[id] || menu.rootPage;
+        var page = menu.pagesById[subId] || menu.pagesById[id] || menu.frontPage;
         if ( page ) {
           if ( menu.activePage ) {
             menu.activePage.isActive = false;
+            if ( menu.activePage.rootPage ) {
+              menu.activePage.rootPage.hasActiveChild = false;
+            }
           }
           page.isActive = true;
+          if ( page.rootPage ) {
+            page.rootPage.hasActiveChild = true;
+          }
           var oldPage = menu.activePage;
           menu.activePage = page;
           menu.activePage.promises.ready.then(function(){
@@ -81,28 +97,61 @@ module.exports = [
       $http.get(menu.apiUrl)
       .success(function(res){
         if ( res && res.pages ) {
+          // 1st pass, get all pages
           angular.forEach(res.pages, function(pageData, ord){
             var page = new Page(angular.extend(pageData,{
               ord: ord,
-              url: config.href(pageData.isRoot ? '' : pageData.id),
-              apiUrl: config.url('api/pages/' + $sce.trustAsUrl(pageData.id) + '.json')
+              url: config.href(pageData.isFrontPage ? '' : pageData.id),
+              apiUrl: config.url(pageData.url),
+              menu:menu
             }));
 
-            if ( page.isRoot ) {
-              res.rootPage = page;
+            if ( page.isFrontPage ) {
+              res.frontPage = page;
             }
 
             menu.pagesById[page.id] = page;
             menu.pages.push(page);
           });
+
           delete res.pages;
           angular.extend(menu, res);
+
+          // 2nd pass, fetch page data
+          var fetches = [];
+          angular.forEach(menu.pages, function(page){
+            page.fetch();
+            fetches.push(page.promises.ready);
+          });
+
+          $q.all(fetches).then(function(){
+            // 3rd pass, define 1st level pages
+            var fetches = [];
+            angular.forEach(menu.pages, function(page){
+              if ( !page.parent ) {
+                page.rootPage = page;
+                menu.rootPages.push(page);
+              } else if ( !page.isFrontPage ) {
+                var url = page.id,
+                    p = page;
+                while ( p.parent ) {
+                  url = p.parent.id + '/' + url;
+                  p = p.parent;
+                }
+                page.rootPage = p;
+                page.url = config.href(url);
+              }
+              console.log(page);
+            });
+          });
+
           menu.isReady = true;
           menu._dfds.ready.resolve();
         } else {
           throw new Error('ASS Error: Invalid menu model received from API', res);
         }
       });
+      return menu.promises.ready;
     }
 
     return new Menu({
