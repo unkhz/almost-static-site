@@ -1,5 +1,6 @@
 id: baz
 title: BaZ
 parentId: oh-yeah
+ord: 2.2
 content: |
   Oolala BaZ

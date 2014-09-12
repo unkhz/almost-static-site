@@ -28,8 +28,8 @@ module.exports = [
       var page=this;
       $http.get(page.apiUrl)
       .success(function(res){
-        page.data = res;
-        page.parent = page.menu.pagesById[page.data.parentId];
+        page.content = res.content;
+        page.parent = page.menu.pagesById[page.parentId];
         if ( page.parent ) {
           page.parent.children.push(page);
           page.parent.childrenById[page.id] = page;
@@ -100,7 +100,7 @@ module.exports = [
           // 1st pass, get all pages
           angular.forEach(res.pages, function(pageData, ord){
             var page = new Page(angular.extend(pageData,{
-              ord: ord,
+              ord: pageData.ord !== undefined ? pageData.ord : ord,
               url: config.href(pageData.isFrontPage ? '' : pageData.id),
               apiUrl: config.url(pageData.url),
               menu:menu
@@ -141,7 +141,9 @@ module.exports = [
                 page.rootPage = p;
                 page.url = config.href(url);
               }
-              console.log(page);
+            });
+            menu.rootPages.sort(function(a,b){
+              return a.ord > b.ord;
             });
           });
 

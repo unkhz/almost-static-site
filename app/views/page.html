@@ -1,2 +1,13 @@
 <h1>{{data.title}}</h1>
+<aside>
+  <ul ass-item-count="{{data.children.length}}">
+    <li ng-repeat="child in data.children" ng-class="{'ass-is-active':child.isActive}">
+      <a ng-href="#{{child.url}}">{{child.title}}</a>
+    </li>
+  </ul>
+</aside>
 <div ng-bind-html="data.content"></div>
+<div ng-repeat="child in data.children">
+  <a id="{{child.url}}" />
+  <div ng-bind-html="child.content"></div>
+</div>

@@ -9,7 +9,8 @@ var gulp = require('gulp'),
     fs = require('fs')
     Q = require('q'),
     _ = require('lodash'),
-    path = require('path');
+    path = require('path'),
+    filter = require('gulp-filter');
 
 // Require target specific configuration
 var target = require('./config/' + (argv.target || 'dev') + '.js' )
@@ -139,20 +140,8 @@ gulp.task('server', ['build'], function() {
 });
 
 
-// API
+// MENU
 var yaml = require('gulp-yaml');
-gulp.task('yaml', function(done){
-  var stream = gulp.src('**/*.yaml', {cwd:target.dirs.data})
-  .pipe(yaml())
-  .on('error', logErrorAndNotify)
-  .pipe(gulp.dest(target.dirs.dist + '/api'));
-  if ( target.server.enableLiveReload ) {
-    stream.pipe(liveReload(liveReloadServer));
-  }
-  return stream;
-});
-gulp.watch([target.dirs.data + '/**/*.yaml'], ['menu']);
-
 var markdown = require('gulp-markdown');
 var frontMatter = require('gulp-front-matter');
 var entityConvert = require('gulp-entity-convert');
@@ -160,16 +149,27 @@ var through = require('through2');
 var reduceStream = require('through2-reduce');
 var File = require('vinyl');
 
-gulp.task('markdown', function() {
-  var stream = gulp.src('**/*.md', {cwd:target.dirs.data})
+gulp.task('menu', function(done){
+  var mdFilter = filter('**/*.md');
+  var yamlFilter = filter('**/*.yaml');
+  var stream = gulp.src(['**/*.yaml', '**/*.md'], {cwd:target.dirs.data})
+
+  // YAML -> JSON
+  .pipe(yamlFilter)
+  .pipe(yaml())
+  .on('error', logErrorAndNotify)
+  .pipe(yamlFilter.restore())
+
+  // Markdown -> HTML
+  .pipe(mdFilter)
   .pipe(frontMatter({
     property: 'frontMatterData',
     remove: true
   }))
   .pipe(entityConvert())
   .pipe(markdown({}))
-  .on('error', logErrorAndNotify)
-  // Frontmatter + contents -> JSON
+
+  // Frontmatter + HTML -> JSON
   .pipe(through.obj(function (file, enc, next) {
     if ( file.isBuffer() ) {
       file.frontMatterData.content = file.contents.toString();
@@ -179,21 +179,31 @@ gulp.task('markdown', function() {
     this.push(file);
     return next();
   }))
-  .pipe(gulp.dest(target.dirs.dist + '/api'));
-});
-gulp.watch([target.dirs.data + '/**/*.md'], ['menu']);
+  .on('error', logErrorAndNotify)
+  .pipe(mdFilter.restore())
 
-// Gather basic info of all individual pages into a collection json file
-gulp.task('menu', ['yaml', 'markdown'], function(done){
-  var stream = gulp.src('**/*.json', {cwd:target.dirs.dist + '/api'})
+  // JSON -> api/pages/*.json
+  .pipe(gulp.dest(target.dirs.dist + '/api/'))
+
+  // menu.json
+  .pipe(through.obj(function (file, enc, next) {
+    this.push(file);
+    return next();
+  }))
   // Convert a stream of files into a menu collection object
   .pipe(reduceStream({objectMode: true}, function (menu, file) {
     var input={};
-    if ( file.isBuffer() && file.contents ) {
-      input = JSON.parse(file.contents.toString());
-    }
-    input.url = '/api/'+ path.relative(file.base, file.path);
-    menu.pages.push(['id','url','title','parentId','isFrontPage'].reduce(function(out,key){
+    input = JSON.parse(file.contents.toString());
+    input.url = path.relative(target.dirs.dist, file.path);
+    menu.pages.push([
+      'id',
+      'ord',
+      'url',
+      'title',
+      'parentId',
+      'isFrontPage',
+      'includesChildren'
+    ].reduce(function(out,key){
       if ( input[key] !== undefined ) {
         out[key] = input[key];
       }
@@ -222,10 +232,10 @@ gulp.task('menu', ['yaml', 'markdown'], function(done){
   }
   return stream;
 });
-gulp.watch([target.dirs.data + '/**/*.yaml'], ['yaml']);
+gulp.watch([target.dirs.data + '/**/*.*'], ['menu']);
 
 // Generic tasks
-gulp.task('build', ['clean', 'yaml', 'markdown', 'menu', 'styles', 'templates', 'index', 'browserify'])
+gulp.task('build', ['clean', 'styles', 'templates', 'index', 'menu', 'browserify'])
 
 // Target specific tasks
 Object.keys(target.tasks).forEach(function(name){

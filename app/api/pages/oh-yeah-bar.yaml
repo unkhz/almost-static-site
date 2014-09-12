@@ -1,5 +1,6 @@
 id: bar
 title: Bar
 parentId: oh-yeah
+ord: 2.1
 content: |
   Oolala Bar

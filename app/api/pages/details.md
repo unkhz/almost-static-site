@@ -1,6 +1,7 @@
 ---
 id: details
 title: Details
+ord: 1
 ---
 ## Lorem ipsum dolor sit amet
 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod

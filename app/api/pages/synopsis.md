@@ -2,6 +2,7 @@
 id: synopsis
 title: Synopsis
 isFrontPage: true
+ord: 0
 ---
 ## Almost Static Site
 
