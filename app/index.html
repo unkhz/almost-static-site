@@ -9,7 +9,7 @@
   }%>
   <script>var ASS_BOOTSTRAP={};<%for ( key in index.bootstraps ) {
      %>ASS_BOOTSTRAP['<%=key%>']=<%=
-      JSON.stringify(index.bootstraps[key]) ||  "null" %>;<%
+      JSON.stringify(index.bootstraps[key]).replace(/</g, '\\x3C') ||  "null" %>;<%
   }%></script>
   <%for ( i in index.scripts ) {
   %><script src="<%=index.url(index.scripts[i])%>"></script><%
