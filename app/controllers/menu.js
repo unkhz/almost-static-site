@@ -3,18 +3,28 @@
 module.exports = [
   'config', 'menu', '$scope',
   function MenuCtrl(config, menu, $scope) {
-    $scope.template = 'views/menu.html';
-    $scope.$on('activate:page', function(e, page, lastPage){
-      $scope.pages = menu.rootPages;
-      var children = [];
-      if ( page.includesChildren ) {
-        // included children have their own menu
-      } else if ( page.children && page.children.length ) {
-        children = page.children;
-      } else if ( page.rootPage && page.rootPage.children && page.rootPage.children.length ) {
-        children = page.rootPage.children;
+
+    function updateScope(){
+      // Create an array of all subpage levels that should show menus
+      var levels = [];
+      if ( menu.activePage ) {
+        menu.activePage.recurseParents(function(page){
+          if ( !page.includesChildren && page.children && page.children.length ) {
+            levels[page.level] = {
+              id: page.level,
+              pages: page.children
+            };
+          }
+        });
       }
-      $scope.subPages = children;
-    });
+      $scope.subLevels = levels;
+      $scope.pages = menu.rootPages;
+    }
+
+    $scope.template = 'views/menu.html';
+
+    // Make sure that scope is updated on all menu updates
+    menu.promises.isComplete.then(updateScope);
+    $scope.$on('activate:page', updateScope);
   }
 ];

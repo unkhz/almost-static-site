@@ -1,0 +1,6 @@
+id: byz
+title: ByZ
+parentId: baz
+ord: 2.22
+content: |
+  This is a 3rd level page called ByZ.

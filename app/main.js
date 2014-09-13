@@ -7,7 +7,7 @@ require('angular-sanitize');
 
 var
   bootstrapData = window && window.ASS_BOOTSTRAP ? window.ASS_BOOTSTRAP : {},
-  app = angular.module('assDemoApp', [
+  app = window.app = angular.module('assDemoApp', [
   'ngRoute',
   'ngAnimate',
   'ngSanitize'
@@ -46,14 +46,6 @@ app
 .config(function($routeProvider, $locationProvider, config) {
   $locationProvider.html5Mode(config.enablePushState);
   $routeProvider
-  .when(config.url(':pageId/:subPageId').replace(/^\/?/, '/'), {
-    templateUrl: 'views/page.html',
-    controller: 'PageCtrl'
-  })
-  .when(config.url(':pageId').replace(/^\/?/, '/'), {
-    templateUrl: 'views/page.html',
-    controller: 'PageCtrl'
-  })
   .otherwise({
     templateUrl: 'views/page.html',
     controller: 'PageCtrl'
