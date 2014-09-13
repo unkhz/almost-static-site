@@ -85,7 +85,6 @@ module.exports = [
           dfd = $q.defer(),
           path = pageUrl ? pageUrl.replace(/^\//,'').split('/') : [];
       menu.promises.isReady.then(function(){
-        console.log('_setActivePage', pageUrl, path);
         var page = menu.pagesById[path[path.length-1]] || menu.frontPage;
         if ( page ) {
           if ( menu.activePage ) {

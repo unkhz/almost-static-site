@@ -31,6 +31,9 @@ $ass-transition-duration-smooth: 0.33s;
 {
   transition: transform 0.33s linear;
 }
+[ass-transition-direction=none] [ass-transition-element] {
+  transition: none 0;
+}
 
 [ass-transition-direction=rtl] [ass-transition-element] {
   transform:translateX(0%);

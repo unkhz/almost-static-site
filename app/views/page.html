@@ -1,4 +1,4 @@
-<h1>{{title}}</h1>
-<aside ng-init="next=this" ng-include="tocTemplate"></aside>
+<h2 ng-show="children">Table of contents</h2>
+<aside ng-init="next=this" ng-include="templates.toc"></aside>
 <div ng-bind-html="content"></div>
-<div ng-init="next=this" ng-include="includeTemplate"></div>
+<div ng-init="next=this" ng-include="templates.include"></div>
