@@ -37,6 +37,7 @@ app
 
 .controller('MenuCtrl', require('./controllers/menu'))
 .controller('PageCtrl', require('./controllers/page'))
+.controller('HeaderCtrl', require('./controllers/header'))
 .controller('FooterCtrl', require('./controllers/footer'))
 
 .directive('assBroadcastLongPage', require('./directives/broadcastLongPage'))

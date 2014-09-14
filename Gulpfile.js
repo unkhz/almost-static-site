@@ -14,6 +14,7 @@ var gulp = require('gulp'),
 
 // Require target specific configuration
 var target = require('./config/' + (argv.target || 'dev') + '.js' )
+var db = {};
 
 function logErrorAndNotify(e) {
   notifier.notify({
@@ -73,10 +74,17 @@ gulp.task('templates', function() {
 gulp.watch([target.dirs.src + '/views/**/*.html'], ['index']);
 
 // Index template and partials
-gulp.task('index', ['templates'], function() {
+gulp.task('index', ['templates', 'menu'], function() {
   target.index.url = function(suffix) {
     return  target.server.baseUrl + suffix.replace(/^\//,'');
   };
+
+  // Get bootstrapped content from DB
+  target.index.index = db.index;
+  target.index.footer = db.footer;
+  target.index.header = db.header;
+
+  // Process
   stream = gulp.src([target.dirs.src + '/index.html'])
   .pipe(template(target))
   .on('error', logErrorAndNotify)
@@ -195,28 +203,25 @@ gulp.task('menu', function(done){
     var input={};
     input = JSON.parse(file.contents.toString());
     input.url = path.relative(target.dirs.dist, file.path);
-    menu.pages.push([
-      'id',
-      'ord',
-      'url',
-      'title',
-      'parentId',
-      'isFrontPage',
-      'includesChildren'
-    ].reduce(function(out,key){
-      if ( input[key] !== undefined ) {
-        out[key] = input[key];
+    delete input.content;
+    input.id = input.id || 'page-'+menu.pages.length;
+    menu.pages.forEach(function(p){
+      if ( p.id === input.id ) {
+        throw new gutil.PluginError("menu", "Duplicate id in Page datatabase when parsing page " + file.path);
       }
-      return out;
-    },{}));
+    });
+    menu.pages.push(input);
     if ( input.isFrontPage && !menu.frontPageId ) {
       menu.frontPageId = input.id;
     }
+    // Store for other tasks
+    db[input.id] = input;
     return menu;
   }, {
     pages:[],
     frontPageId:null
   }))
+  .on('error', logErrorAndNotify)
   // Convert reduced object into a json file
   .pipe(through.obj(function(data, enc, next){
     this.push(new File({

@@ -5,4 +5,4 @@ ord: 2
 ---
 ## Child pages as separate pages (Subpages)
 
-This page contains subpages that are shown as separate pages with their own sub menu below the main menu.
+This page contains subpages that are shown as separate pages with their own sub menu below the main menu. Each of the subpages are defined in individual YAML/Markdown files.

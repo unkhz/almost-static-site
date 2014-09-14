@@ -11,6 +11,7 @@ module.exports = [
         && menu.activePage.children.length
         && menu.activePage.includesChildren
         ? menu.activePage.children : [];
+      $scope.children.sort(function(a,b){ return a.ord > b.ord; });
       $scope.$emit("ass-page-data-applied")
     }
 

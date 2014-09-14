@@ -142,7 +142,9 @@ module.exports = [
               if ( !page.parent ) {
                 page.rootPage = page;
                 page.level = 0;
-                menu.rootPages.push(page);
+                if ( !page.isNotDisplayedInMenu ) {
+                  menu.rootPages.push(page);
+                }
               } else {
                 var url = page.id,
                     p = page,
