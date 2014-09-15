@@ -2,6 +2,9 @@ id: foo
 title: Foo
 parentId: oh-yeah
 ord: 2.3
-includesChildren: true
+features:
+  - toc
+  - content
+  - includes
 content: |
   This is a subpage that contains one included child:

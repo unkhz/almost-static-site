@@ -1,0 +1,5 @@
+<ul class="ass-submenu ass-submenu-feature-{{feature.level}}" ass-item-count="{{feature.pages.length}}">
+  <li ng-repeat="page in feature.pages" ng-class="{'ass-is-active':page.isActive || page.hasActiveChild()}">
+    <a ng-href="{{page.url}}">{{page.title}}</a>
+  </li>
+</ul>

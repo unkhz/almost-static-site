@@ -2,6 +2,9 @@
 id: oh-yeah
 title: Subpages
 ord: 2
+features:
+  - content
+  - submenu
 ---
 ## Child pages as separate pages (Subpages)
 

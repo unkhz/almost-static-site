@@ -63,7 +63,7 @@ gulp.task('watch', function() {
 
 // View partials
 gulp.task('templates', function() {
-  return Q.nfcall(glob, 'views/**/*.html', {cwd: target.dirs.src})
+  return Q.nfcall(glob, '**/*.html', {cwd: target.dirs.src})
   .then(function(files){
     target.index.bootstraps.templates = files.reduce(function(m,file){
       m[file] = fs.readFileSync(target.dirs.src+'/'+file).toString();
@@ -71,7 +71,7 @@ gulp.task('templates', function() {
     }, {});
   });
 });
-gulp.watch([target.dirs.src + '/views/**/*.html'], ['index']);
+gulp.watch([target.dirs.src + '/**/*.html'], ['index']);
 
 // Index template and partials
 gulp.task('index', ['templates', 'menu'], function() {
@@ -240,7 +240,7 @@ gulp.task('menu', function(done){
 gulp.watch([target.dirs.data + '/**/*.*'], ['menu']);
 
 // Generic tasks
-gulp.task('build', ['clean', 'styles', 'templates', 'index', 'menu', 'browserify'])
+gulp.task('build', ['clean', 'styles', 'templates', 'menu', 'index', 'browserify'])
 
 // Target specific tasks
 Object.keys(target.tasks).forEach(function(name){

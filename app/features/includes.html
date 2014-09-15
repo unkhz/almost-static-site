@@ -1,5 +1,5 @@
 <div ng-repeat="current in next.children">
   <a id="{{current.id}}"></a>
   <div ng-bind-html="current.content"></div>
-  <div ng-init="next=current" ng-include="templates.include"></div>
+  <div ng-init="next=current" ng-include="template"></div>
 </div>

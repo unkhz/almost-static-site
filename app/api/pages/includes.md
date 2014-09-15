@@ -1,8 +1,11 @@
 ---
 id: inc
 title: Includes
-includesChildren: true
 ord: 3
+features:
+  - toc
+  - content
+  - includes
 ---
 ## Child pages inside parent (Includes)
 

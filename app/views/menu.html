@@ -3,8 +3,8 @@
     <a ng-href="{{page.url}}">{{page.title}}</a>
   </li>
 </ul>
-<ul ng-repeat="level in subLevels" class="ass-submenu ass-submenu-level-{{level.id}}" ass-item-count="{{level.pages.length}}">
-  <li ng-repeat="page in level.pages" ng-class="{'ass-is-active':page.isActive || page.hasActiveChild()}">
-    <a ng-href="{{page.url}}">{{page.title}}</a>
-  </li>
-</ul>
+<div class="ass-menu-feature"
+  ng-repeat="feature in features"
+  ng-controller="feature.controller"
+  ng-include="template"
+></div>

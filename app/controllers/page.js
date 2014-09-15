@@ -4,22 +4,32 @@ module.exports = [
   'config', 'menu', '$scope', '$rootScope', '$routeParams',
   function PageCtrl(config, menu, $scope, $rootScope, $routeParams) {
 
+    var featureControllers = {
+      toc: require('../features/toc'),
+      content: require('../features/content'),
+      includes: require('../features/includes')
+    }
+
     function updateScope() {
-      $scope.title = menu.activePage.title;
-      $scope.content = menu.activePage.content;
-      $scope.children = menu.activePage.children
-        && menu.activePage.children.length
-        && menu.activePage.includesChildren
-        ? menu.activePage.children : [];
-      $scope.children.sort(function(a,b){ return a.ord > b.ord; });
+      if ( menu.activePage && menu.activePage.features && menu.activePage.features.length ) {
+        var features = [];
+        angular.forEach(menu.activePage.features, function(featureId) {
+          if ( featureControllers[featureId] ) {
+            features.push({
+              controller: featureControllers[featureId]
+            });
+          }
+        });
+        $scope.features = features;
+      }
       $scope.$emit("ass-page-data-applied")
     }
 
     angular.extend($scope, {
-      templates: {
-        toc: 'views/page-toc.html',
-        include: 'views/page-include.html'
-      },
+      level:0,
+      features: [{
+        controller: featureControllers.content
+      }],
       title:'',
       content:'',
       children:[]

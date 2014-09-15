@@ -1,4 +1,6 @@
-<h2 ng-show="children">Table of contents</h2>
-<aside ng-init="next=this" ng-include="templates.toc"></aside>
-<div ng-bind-html="content"></div>
-<div ng-init="next=this" ng-include="templates.include"></div>
+<div class="ass-page-feature"
+  ng-init="next=this"
+  ng-repeat="feature in features"
+  ng-controller="feature.controller"
+  ng-include="template"
+></div>
