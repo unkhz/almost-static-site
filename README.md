@@ -74,5 +74,7 @@ Each YAML and Markdown file inside the db directory defines one page in the site
     toc             Display table of contents on top of the content area
     submenu         Display child pages of this page in a submenu below the main menu
     includes        Include child pages in the content area below this page (with anchors)
+    filter          Like includes, but with tag cloud filter selection menu
+    filter.params   Params array defines the parameters to create tag cloud filters for
 
 

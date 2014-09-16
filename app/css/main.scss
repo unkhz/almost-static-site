@@ -6,6 +6,7 @@ $ass-footer-height: 20rem;
 // Import app components
 @import 'menu.scss';
 @import 'footer.scss';
+@import '../features/filter.scss';
 
 html {
   font-size:62.5%;

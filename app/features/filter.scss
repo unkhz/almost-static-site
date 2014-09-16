@@ -1,0 +1,30 @@
+.ass-feature-filter-menu {
+  display:inline-block;
+  vertical-align:top;
+  width:32%;
+}
+
+.ass-feature-filter-selected {
+  min-height:3rem;
+}
+
+.ass-feature-filter-selected a,
+.ass-feature-filter-menu a {
+  display:inline-block;
+  padding:0.4rem 0.8rem;
+  border-radius: 0.4rem;
+  margin: 0.2rem;
+  background: #ddd;
+  text-decoration: none;
+  &,
+  &:active,
+  &:visited {
+    background-color: #ccddee;
+    color: #446688;
+  }
+}
+.ass-feature-filter-content {
+  display:inline-block;
+  vertical-align:top;
+  width:67%;
+}

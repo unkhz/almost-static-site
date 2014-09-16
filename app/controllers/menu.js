@@ -8,24 +8,13 @@ module.exports = [
       submenu: require('../features/submenu')
     };
 
+    var _ = require('lodash');
+
     function updateScope(){
       if ( menu.activePage ) {
-        var features = [],
-            levels = [];
+        var features = [];
         menu.activePage.recurseParents(function(page){
-          // Menu features are repeated once per each sublevel
-          if ( page.features && page.features.length ) {
-            angular.forEach(page.features, function(featureId) {
-              if ( featureControllers[featureId] ) {
-                features.unshift({
-                  id: featureId + '-' + page.level,
-                  level:page.level,
-                  pages: page.children,
-                  controller: featureControllers[featureId]
-                });
-              }
-            });
-          }
+          features = features.concat(page.getFeatures(featureControllers));
         });
         $scope.features = features;
       }

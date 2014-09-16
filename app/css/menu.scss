@@ -11,6 +11,7 @@ $ass-menu-submenu-padding: 0.5em;
 .ass-menu ul.ass-submenu {
   min-height: 1.2em + $ass-menu-submenu-padding*2;
   li a {
+    transition: background-color 0.33s ease;
     background-color:#f8f8f8;
     padding: $ass-menu-submenu-padding $ass-menu-padding;
   }
@@ -26,7 +27,7 @@ $ass-menu-submenu-padding: 0.5em;
   margin:0;
   padding:0;
   a {
-    transition: background-color 0.2s ease;
+    transition: background-color 0.33s ease;
     display:block;
     background-color: #eee;
     box-sizing:border-box;

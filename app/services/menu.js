@@ -2,6 +2,12 @@ module.exports = [
   'config', '$rootScope', '$q', '$http', '$sce', '$log', '$location',
   function MenuService(config, $rootScope, $q, $http, $sce, $log, $location) {
 
+    var _ = require('lodash');
+
+    function Feature(opts) {
+      angular.extend(this, opts);
+    }
+
     function Page(data) {
       var page=this;
       angular.extend(this,{
@@ -16,6 +22,7 @@ module.exports = [
         promises:{},
         parent: null,
         children: [],
+        features: ['content'],
         childrenById: {},
         rootPage: null
       },data);
@@ -48,11 +55,31 @@ module.exports = [
       }
     }
 
+    Page.prototype.recurseChildren = function recurseChildren(fn) {
+      fn(this);
+      if ( this.children && this.children.length ) {
+        angular.forEach(this.children, function(p){
+          p.recurseChildren(fn);
+        });
+      }
+    }
+
     Page.prototype.hasActiveChild = function hasActiveChild() {
       return this.children && this.children.length ? this.children.reduce(function(foundOne, p){
         return foundOne || p.isActive || p.hasActiveChild();
       },false) : false;
     }
+
+    // Get a filtered set of features from the specified set of feature controllers
+    Page.prototype.getFeatures = function(featureControllers) {
+      return _.reduce(this.features, function(filtered, f){
+        if ( featureControllers[f.featureId] ) {
+          f.controller = featureControllers[f.featureId];
+          filtered.push(f);
+        }
+        return filtered;
+      }, []);
+    };
 
     function Menu(data){
       var menu=this;
@@ -83,7 +110,7 @@ module.exports = [
       // Make sure service isReady before setting active page, so that it's actually available
       var menu=this,
           dfd = $q.defer(),
-          path = pageUrl ? pageUrl.replace(/^\//,'').split('/') : [];
+          path = $location.path().replace(/^\//, '').replace(/\/$/, '').split('/');
       menu.promises.isReady.then(function(){
         var page = menu.pagesById[path[path.length-1]] || menu.frontPage;
         if ( page ) {
@@ -157,6 +184,20 @@ module.exports = [
                 page.level = level;
                 page.rootPage = p;
                 page.url = page.isFrontPage ? '' : config.href(url);
+              }
+              // Convert menu features (String) into Feature instances
+              var features = [];
+              if ( page.features && page.features.length ) {
+                angular.forEach(page.features, function(feature, ord) {
+                  feature = typeof feature === "string" ? {id:feature} : feature;
+                  features.push(new Feature(angular.extend(feature, {
+                    id: feature.id + '-' + page.level,
+                    featureId: feature.id,
+                    ord: page.level + (ord/100),
+                    pages: page.children
+                  })));
+                  page.features = features;
+                });
               }
             });
             menu.rootPages.sort(function(a,b){

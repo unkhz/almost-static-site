@@ -7,29 +7,20 @@ module.exports = [
     var featureControllers = {
       toc: require('../features/toc'),
       content: require('../features/content'),
+      filter: require('../features/filter'),
       includes: require('../features/includes')
     }
 
     function updateScope() {
-      if ( menu.activePage && menu.activePage.features && menu.activePage.features.length ) {
-        var features = [];
-        angular.forEach(menu.activePage.features, function(featureId) {
-          if ( featureControllers[featureId] ) {
-            features.push({
-              controller: featureControllers[featureId]
-            });
-          }
-        });
-        $scope.features = features;
+      if ( menu.activePage ) {
+        $scope.features = menu.activePage.getFeatures(featureControllers);
       }
       $scope.$emit("ass-page-data-applied")
     }
 
     angular.extend($scope, {
       level:0,
-      features: [{
-        controller: featureControllers.content
-      }],
+      features: [],
       title:'',
       content:'',
       children:[]

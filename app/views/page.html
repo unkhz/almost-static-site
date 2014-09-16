@@ -1,6 +1,7 @@
-<div class="ass-page-feature"
+<div
   ng-init="next=this"
   ng-repeat="feature in features"
   ng-controller="feature.controller"
   ng-include="template"
+  class="ass-page-feature ass-feature-{{feature.featureId}}"
 ></div>

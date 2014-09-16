@@ -6,9 +6,10 @@
 
 $ass-transition-duration-quick: 0.167s;
 $ass-transition-duration-smooth: 0.33s;
+$ass-transition-duration-slow: 0.66s;
 
 [ass-transition-direction=fade] [ass-transition-element] {
-  transition: opacity 1s linear;
+  transition: opacity $ass-transition-duration-slow linear;
   opacity:1;
   &.ng-enter {
     opacity:0;
@@ -31,6 +32,11 @@ $ass-transition-duration-smooth: 0.33s;
 {
   transition: transform 0.33s linear;
 }
+
+[ass-transition-speed=slow] [ass-transition-element] { transition-duration: $ass-transition-duration-slow; }
+[ass-transition-speed=smooth] [ass-transition-element] { transition-duration: $ass-transition-duration-smooth; }
+[ass-transition-speed=quick] [ass-transition-element] { transition-duration: $ass-transition-duration-quick; }
+
 [ass-transition-direction=none] [ass-transition-element] {
   transition: none 0;
 }

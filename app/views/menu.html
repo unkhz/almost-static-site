@@ -1,10 +1,12 @@
-<ul ass-item-count="{{pages.length}}">
+<ul ass-item-count="{{pages.length}}" ass-transition-direction="fade">
   <li ng-repeat="page in pages" ass-transition-element ng-class="{'ass-is-active':page.isActive || page.hasActiveChild()}">
     <a ng-href="{{page.url}}">{{page.title}}</a>
   </li>
 </ul>
-<div class="ass-menu-feature"
-  ng-repeat="feature in features"
+<div
+  ng-init="next=this"
+  ng-repeat="feature in features | orderBy:'ord'"
   ng-controller="feature.controller"
   ng-include="template"
+  class="ass-menu-feature ass-feature-{{feature.featureId}}"
 ></div>

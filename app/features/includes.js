@@ -5,10 +5,16 @@ module.exports = [
   function IncludeCtrl(config, menu, $scope, $rootScope, $routeParams) {
 
     function updateScope() {
-      $scope.children = menu.activePage.children
-        && menu.activePage.children.length
-        ? menu.activePage.children : [];
-      $scope.children.sort(function(a,b){ return a.ord > b.ord; });
+      var includes = [];
+      if ( menu.activePage ) {
+        menu.activePage.recurseChildren(function(p){
+          if ( p.id !== menu.activePage.id ) {
+            includes.push(p);
+          }
+        });
+      }
+      includes.sort(function(a,b){ return a.ord > b.ord; });
+      $scope.includes = includes;
     }
 
     angular.extend($scope, {
