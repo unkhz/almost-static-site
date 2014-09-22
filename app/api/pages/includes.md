@@ -2,6 +2,8 @@
 id: inc
 title: Includes
 ord: 3
+styles:
+  - example
 features:
   - toc
   - content

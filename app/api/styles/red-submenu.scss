@@ -1,0 +1,10 @@
+.ass-style-red-submenu {
+  > .ass-submenu {
+    li a {
+      background-color:#f8d8d8;
+    }
+    li.ass-is-active a {
+      background-color:#bb8888;
+    }
+  }
+}

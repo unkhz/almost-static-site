@@ -1,0 +1,9 @@
+.ass-style-example {
+  .l-test {
+    color:red;
+  }
+  &.ass-footer {
+    background:#eee;
+    text-align:center;
+  }
+}

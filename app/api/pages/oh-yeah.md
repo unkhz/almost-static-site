@@ -2,6 +2,9 @@
 id: oh-yeah
 title: Subpages
 ord: 2
+styles:
+  - example
+  - green-submenu
 features:
   - content
   - submenu

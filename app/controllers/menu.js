@@ -12,17 +12,22 @@ module.exports = [
 
     function updateScope(){
       if ( menu.activePage ) {
-        var features = [];
+        var levels = [];
         menu.activePage.recurseParents(function(page){
-          features = features.concat(page.getFeatures(featureControllers));
+          levels.push({
+            id: page.level,
+            features: page.getFeatures(featureControllers),
+            styles: page.styles ? "ass-style-" + page.styles.join(" ass-style-") : ""
+          });
         });
-        $scope.features = features;
+        $scope.levels = levels;
+        $scope.styles = menu.activePage.styles ? "ass-style-" + menu.activePage.styles.join(" ass-style-") : "";
       }
       $scope.pages = menu.rootPages;
     }
 
     $scope.template = 'views/menu.html'
-    $scope.features = [];
+    $scope.levels = [];
 
     // Make sure that scope is updated on all menu updates
     menu.promises.isComplete.then(updateScope);

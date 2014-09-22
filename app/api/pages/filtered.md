@@ -2,6 +2,8 @@
 id: filtered
 title: Filters
 ord: 4
+styles:
+  - example
 features:
   - content
   - id: filter

@@ -18,7 +18,8 @@ var buildtimeConfig = {
   },
   dirs: {
     src: './app',
-    api: './dist/api',
+    pages: './app/api',
+    styles: './app/api/styles',
     dist: './dist'
   },
   server: {

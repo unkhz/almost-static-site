@@ -1,11 +1,9 @@
 // Include boilerplate styles
 @import 'ass-main.scss';
 
-$ass-footer-height: 20rem;
-
 // Import app components
-@import 'menu.scss';
 @import 'footer.scss';
+@import 'menu.scss';
 @import '../features/filter.scss';
 
 html {
@@ -38,6 +36,8 @@ body {
 }
 
 .ass-header {
+  transition: background-color 0.33s ease;
+  background-color:transparent;
   box-sizing:border-box;
   -webkit-box-sizing: border-box;
   padding:1rem;
@@ -46,6 +46,17 @@ body {
   }
 }
 
+.ass-header-inner {
+  max-width:96rem;
+  margin:auto;
+}
+
+.ass-footer-inner {
+  transition: background-color 0.33s ease;
+  background-color:#eeeeee;
+  width:100%;
+  height:100%;
+}
 
 .ass-split-right {
   float:right;

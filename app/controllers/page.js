@@ -14,6 +14,7 @@ module.exports = [
     function updateScope() {
       if ( menu.activePage ) {
         $scope.features = menu.activePage.getFeatures(featureControllers);
+        $scope.styles = menu.activePage.styles ? "ass-style-" + menu.activePage.styles.join(" ass-style-") : "";
       }
       $scope.$emit("ass-page-data-applied")
     }
@@ -23,7 +24,8 @@ module.exports = [
       features: [],
       title:'',
       content:'',
-      children:[]
+      children:[],
+      styles: []
     });
 
     // Make sure that toc is updated on all menu updates

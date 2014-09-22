@@ -2,6 +2,8 @@ id: baz
 title: BaZ
 parentId: oh-yeah
 ord: 2.2
+styles:
+  - red-submenu
 features:
   - submenu
   - content

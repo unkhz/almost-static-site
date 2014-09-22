@@ -1,4 +1,4 @@
-<ul class="ass-submenu ass-submenu-feature-{{feature.level}}" ass-item-count="{{feature.pages.length}}" ass-transition-direction="fade">
+<ul class="ass-submenu" ass-item-count="{{feature.pages.length}}" ass-transition-direction="fade">
   <li ng-repeat="page in feature.pages" ass-transition-element ng-class="{'ass-is-active':page.isActive || page.hasActiveChild()}">
     <a ng-href="{{page.url}}">{{page.title}}</a>
   </li>

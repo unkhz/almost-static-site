@@ -3,6 +3,8 @@ id: synopsis
 title: Synopsis
 isFrontPage: true
 ord: 0
+styles:
+  - example
 features:
   - content
 ---

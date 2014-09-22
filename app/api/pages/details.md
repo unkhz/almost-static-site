@@ -2,6 +2,8 @@
 id: details
 title: Details
 ord: 1
+styles:
+  - example
 features:
   - content
 ---

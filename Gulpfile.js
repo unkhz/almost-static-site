@@ -10,7 +10,8 @@ var gulp = require('gulp'),
     Q = require('q'),
     _ = require('lodash'),
     path = require('path'),
-    filter = require('gulp-filter');
+    filter = require('gulp-filter'),
+    concat = require('gulp-concat');
 
 // Require target specific configuration
 var target = require('./config/' + (argv.target || 'dev') + '.js' )
@@ -102,19 +103,23 @@ var sass = require('gulp-sass');
 var autoprefixer = require('gulp-autoprefixer');
 // Styles task
 gulp.task('styles', function() {
-  var stream = gulp.src(target.dirs.src + '/css/main.scss')
+  var stream = gulp.src([
+    target.dirs.src + '/css/main.scss',
+    target.dirs.styles + '/*.scss',
+  ])
   // The onerror handler prevents Gulp from crashing when you make a mistake in your SASS
   .pipe(sass({
     onError: logErrorAndNotify
   }))
   .pipe(autoprefixer("last 2 versions", "> 1%", "ie 8"))
+  .pipe(concat('main.css'))
   .pipe(gulp.dest(target.dirs.dist));
   if ( target.server.enableLiveReload ) {
     stream.pipe(liveReload(liveReloadServer));
   }
   return stream;
 });
-gulp.watch([target.dirs.src + '/**/*.scss'], [
+gulp.watch([target.dirs.src + '/**/*.scss', target.dirs.styles + '/**/*.scss'], [
   'styles'
 ]);
 
@@ -160,7 +165,7 @@ var File = require('vinyl');
 gulp.task('menu', function(done){
   var mdFilter = filter('**/*.md');
   var yamlFilter = filter('**/*.yaml');
-  var stream = gulp.src(['**/*.yaml', '**/*.md'], {cwd:target.dirs.data})
+  var stream = gulp.src(['**/*.yaml', '**/*.md'], {cwd:target.dirs.pages})
 
   // YAML -> JSON
   .pipe(yamlFilter)
@@ -237,7 +242,7 @@ gulp.task('menu', function(done){
   }
   return stream;
 });
-gulp.watch([target.dirs.data + '/**/*.*'], ['menu']);
+gulp.watch([target.dirs.pages + '/**/*.*'], ['menu']);
 
 // Generic tasks
 gulp.task('build', ['clean', 'styles', 'templates', 'menu', 'index', 'browserify'])

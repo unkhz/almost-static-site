@@ -17,16 +17,20 @@
 </head>
 <body>
   <section id="app" class="ass-app">
-    <header id="header" class="ass-header" ng-controller="HeaderCtrl" ng-bind-html="content"></header>
+    <header id="header" class="ass-header {{styles}}" ng-controller="HeaderCtrl">
+      <div class="ass-header-inner" ng-bind-html="content"></div>
+    </header>
     <nav id="menu"
-      class="ass-menu {{activeClass}}"
       ng-controller="MenuCtrl"
+      class="ass-menu {{activeClass}} {{styles}}"
       ng-include="template"
     ></nav>
     <section id="content" class="ass-content" ass-page-transition>
-      <div class="ass-content-inner" ng-view ass-transition-element ass-broadcast-long-page></div>
+      <div class="ass-content-inner {{styles}}" ng-view ass-transition-element ass-broadcast-long-page></div>
     </section>
-    <footer id="footer" class="ass-footer" ng-controller="FooterCtrl" ass-move-away-on-long-page ng-bind-html="content"></footer>
+    <footer id="footer" class="ass-footer {{styles}}" ng-controller="FooterCtrl" ass-move-away-on-long-page>
+      <div class="ass-footer-inner" ng-bind-html="content"></div>
+    </footer>
   </section>
 </body>
 </html>

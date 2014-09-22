@@ -1,6 +1,11 @@
+$ass-footer-height: 20rem;
 .ass-footer {
-  background:#eee;
-  text-align:center;
+  box-sizing:border-box;
+  -webkit-box-sizing: border-box;
+  .ass-footer-inner {
+    padding:1rem;
+  }
+  transition: background-color 0.33s ease;
   position:absolute;
   bottom:0;
   left:0;
