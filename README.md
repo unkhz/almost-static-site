@@ -68,10 +68,8 @@ isFrontPage     | If true, this page will be the front page i.e. displayed when 
 isNotDisplayedInMenu | If true, this page will not be available in main menu or submenus
 ord             | Numeric order priority of the page, smaller number means higher priority
 features        | Features array contains all the enabled features for the current page
-content         | Main content of the page, only relevant in YAML files, Markdown files
-                  define content outside front matter definition block.
-styles          | Styles array contains dynamic styles that are defined in separate SASS files.
-                  The default place for those files is api/styles/*.scss.
+content         | Main content of the page, only relevant in YAML files, Markdown files define content outside front matter definition block.
+styles          | Styles array contains dynamic styles that are defined in separate SASS files. The default place for those files is api/styles/*.scss.
 
 
 ## Page Features
