@@ -17,14 +17,12 @@
 </head>
 <body>
   <section id="app" class="ass-app">
-    <header id="header" class="ass-header {{styles}}" ng-controller="HeaderCtrl">
+    <header id="header" class="page-header ass-header {{styles}}" ng-controller="HeaderCtrl">
       <div class="ass-header-inner" ng-bind-html="content"></div>
     </header>
-    <nav id="menu"
-      ng-controller="MenuCtrl"
-      class="ass-menu {{activeClass}} {{styles}}"
-      ng-include="template"
-    ></nav>
+    <nav id="menu" ng-controller="MenuCtrl" class="ass-menu {{activeClass}} {{styles}}">
+      <div class="ass-menu-inner" ng-include="template"></div>
+    </nav>
     <section id="content" class="ass-content" ass-page-transition>
       <div class="ass-content-inner {{styles}}" ng-view ass-transition-element ass-broadcast-long-page></div>
     </section>

@@ -1,6 +1,6 @@
 id: baz
 title: BaZ
-parentId: oh-yeah
+parentId: subpages
 ord: 2.2
 styles:
   - red-submenu

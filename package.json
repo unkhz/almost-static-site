@@ -33,6 +33,7 @@
     "gulp-markdown": "^1.0.0",
     "through2-reduce": "^0.2.3",
     "vinyl": "^0.4.3",
-    "gulp-filter": "^1.0.2"
+    "gulp-filter": "^1.0.2",
+    "zurb-foundation-scss-npm": "0.0.1"
   }
 }

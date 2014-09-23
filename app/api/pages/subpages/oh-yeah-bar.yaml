@@ -1,6 +1,6 @@
 id: bar
 title: Bar
-parentId: oh-yeah
+parentId: subpages
 ord: 2.1
 content: |
   Oolala Bar

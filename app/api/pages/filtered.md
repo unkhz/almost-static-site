@@ -1,5 +1,6 @@
 ---
 id: filtered
+parentId: features
 title: Filters
 ord: 4
 styles:

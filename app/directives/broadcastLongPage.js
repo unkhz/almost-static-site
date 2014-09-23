@@ -14,7 +14,7 @@ module.exports = [
                 containerH = $window.outerHeight - document.getElementById('header').offsetHeight;
             $rootScope.isLongPage = h > containerH;
             $rootScope.isWaitingForPageHeight = false;
-          },0);
+          },200);
         });
       }
     };

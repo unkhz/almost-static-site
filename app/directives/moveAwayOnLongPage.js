@@ -24,7 +24,7 @@ module.exports = [
             el.addClass("is-invisible is-away");
             $timeout(function(){
               el.removeClass("is-invisible is-away");
-            },200);
+            },1000);
           }
         });
       }

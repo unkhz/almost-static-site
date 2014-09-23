@@ -1,0 +1,36 @@
+
+// default content area centered 960px
+.ass-header-inner,
+.ass-menu-inner,
+.ass-content-inner {
+  max-width: rem-calc(960);
+  margin: auto;
+}
+
+
+@media #{$small-up} {
+  .ass-header-inner {
+    padding: rem-calc(20) rem-calc(8);
+  }
+  .ass-content-inner,
+  .ass-footer-inner {
+    padding: 0 rem-calc(8);
+  }
+
+}
+
+@media #{$medium-up} {
+  .ass-header-inner {
+    padding: rem-calc(40);
+  }
+  .ass-content-inner,
+  .ass-footer-inner {
+    padding: rem-calc(40);
+  }
+}
+
+@media #{$large-up} {
+  .ass-header-inner {
+    padding: rem-calc(120) rem-calc(40) rem-calc(40) rem-calc(40);
+  }
+}

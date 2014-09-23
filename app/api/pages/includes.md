@@ -1,7 +1,8 @@
 ---
 id: inc
+parentId: features
 title: Includes
-ord: 3
+ord: 1
 styles:
   - example
 features:

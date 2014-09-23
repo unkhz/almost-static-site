@@ -1,13 +1,15 @@
+@import '../../node_modules/zurb-foundation-scss-npm/scss/foundation';
+
 // Include boilerplate styles
-@import 'ass-main.scss';
+@import 'ass-main';
 
 // Import app components
-@import 'footer.scss';
-@import 'menu.scss';
-@import '../features/filter.scss';
+@import 'grid';
+@import 'footer';
+@import 'menu';
+@import '../features/filter';
 
 html {
-  font-size:62.5%;
   margin:0;
   padding:0;
   height:100%;
@@ -15,13 +17,12 @@ html {
   overflow-x:hidden;
 }
 body {
-  font-size:160%;
   margin:0;
   padding:0;
   position:relative;
   padding-bottom: $ass-footer-height;
   min-height:100%;
-  transition: min-height 1s ease;
+  height:auto;
   box-sizing: border-box;
   -webkit-box-sizing: border-box;
 }
@@ -29,26 +30,15 @@ body {
 .ass-app {
 }
 
-.ass-content-inner {
-  padding:1rem;
-  box-sizing:border-box;
-  -webkit-box-sizing: border-box;
-}
-
 .ass-header {
   transition: background-color 0.33s ease;
-  background-color:transparent;
+  background-color:white;
   box-sizing:border-box;
   -webkit-box-sizing: border-box;
-  padding:1rem;
-  nav {
-    margin:0 -1rem;
+  * {
+    margin-top:0;
+    margin-bottom:0;
   }
-}
-
-.ass-header-inner {
-  max-width:96rem;
-  margin:auto;
 }
 
 .ass-footer-inner {
@@ -70,4 +60,10 @@ body {
 
 pre {
   white-space: pre-wrap;
+  @include panel();
+  color:black;
+  code {
+    background-color:transparent;
+    border:0 none;
+  }
 }

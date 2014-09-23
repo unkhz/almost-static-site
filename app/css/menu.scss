@@ -2,10 +2,10 @@
 $ass-menu-padding: 1em;
 $ass-menu-submenu-padding: 0.5em;
 
-.ass-menu {
-  max-width:96rem;
-  margin:auto;
-}
+$ass-mainmenu-background-color: #f8f8f8;
+$ass-mainmenu-background-color-active: #cccccc;
+$ass-submenu-background-color: #fcfcfc;
+$ass-submenu-background-color-active: #eeeeee;
 
 .ass-menu ul {
   list-style-type: none;
@@ -28,9 +28,9 @@ $ass-menu-submenu-padding: 0.5em;
   margin:0;
   padding:0;
   a {
+    text-align:center;
     transition: background-color 0.33s ease;
     display:block;
-    background-color: #eee;
     box-sizing:border-box;
     -webkit-box-sizing: border-box;
     width:100%;
@@ -51,14 +51,21 @@ $ass-menu-submenu-padding: 0.5em;
   }
 }
 
-.ass-menu .ass-mainmenu li a {
-  background-color: #eee;
+.ass-menu .ass-mainmenu li {
+  a {
+    background-color: $ass-mainmenu-background-color;
+  }
+  &.active a {
+    background-color: $ass-mainmenu-background-color-active;
+  }
 }
-.ass-menu .ass-submenu li a {
-  background-color: #f8f8f8;
-}
-.ass-menu li.ass-is-active a {
-  background-color: #ccc;
+.ass-menu .ass-submenu li {
+  a {
+    background-color: $ass-submenu-background-color;
+  }
+  &.active a {
+    background-color: $ass-submenu-background-color-active;
+  }
 }
 
 @for $i from 1 through 10 {

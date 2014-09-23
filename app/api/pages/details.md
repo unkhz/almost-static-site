@@ -7,6 +7,75 @@ styles:
 features:
   - content
 ---
+## Usage
+
+    npm install -g gulp
+    npm install
+
+Build and server are run with default gulp task.
+
+    gulp
+
+Target configuration defaults to 'dev', so the site is running on the port defined in config/dev.js.
+
+    open http://localhost:5000/
+
+You may want to use another configuration. The targets are defined as individual files inside config/.
+
+    gulp --target=production
+
+## Folder Structure
+
+    app             Sources
+      api           YAML and Markdown source files
+        styles      Dynamic SASS source files
+      css           SASS source files
+      controllers   Angular controller source files
+      views         Angular view source files
+    config          Target configuration files
+    dist            Generated files go here when Gulp build is run
+
+## Default DOM Structure
+
+    index.html      Main SPA HTML file. Content template is defined in
+                    app/index.html, data in config/*.json.
+      #app          App container, data is defined in api/app.md
+        #header     Header, data and content is defined in api/header.md
+        #menu       Navigation menus, content is automatically built based
+                    on the pages in database.
+        #content    Page content container, page specific data is defined in
+                    api/pages/**/*.md. Content templates can vary depending
+                    on page.
+        #footer     Footer, data and content is defined in api/footer.md
+
+## Page Parameters
+
+Each YAML and Markdown file inside the db directory defines one page in the site. The following configuration parameters can be used:
+
+Page Parameter  | Description
+--------------- | ------------
+id              | The slug that is used in the url and as a general reference to this page
+parentId        | This page will be a child of the defined page
+title           | Display name of the page
+isFrontPage     | If true, this page will be the front page i.e. displayed when path is empty
+isNotDisplayedInMenu | If true, this page will not be available in main menu or submenus
+ord             | Numeric order priority of the page, smaller number means higher priority
+features        | Features array contains all the enabled features for the current page
+content         | Main content of the page, only relevant in YAML files, Markdown files define content outside front matter definition block.
+styles          | Styles array contains dynamic styles that are defined in separate SASS files. The default place for those files is api/styles/*.scss.
+
+
+## Page Features
+
+Page Feature    | Description
+--------------- | ------------
+content         | Display page content in the content area, enabled by default
+toc             | Display table of contents on top of the content area
+submenu         | Display child pages of this page in a submenu below the main menu
+includes        | Include child pages in the content area below this page (with anchors)
+filter          | Like includes, but with tag cloud filter selection menu
+filter.params   | Params array defines the parameters to create tag cloud filters for
+
 ## Lorem ipsum dolor sit amet
 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
 tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
