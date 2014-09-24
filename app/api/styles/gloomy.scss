@@ -2,6 +2,9 @@
   &.ass-menu li {
     a {
       background-color:#e3e3f7;
+      &:hover {
+        background-color: darken(#e3e3f7, 3%);
+      }
     }
     &.active a {
       background-color:#c3c3e7;

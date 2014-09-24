@@ -2,6 +2,7 @@
 id: filtered
 parentId: features
 title: Filters
+abbr: FLT
 ord: 4
 styles:
   - example

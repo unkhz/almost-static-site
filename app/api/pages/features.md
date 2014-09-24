@@ -1,6 +1,7 @@
 ---
 id: features
 title: Features
+abbr: FEA
 ord: 2
 styles:
   - example

@@ -1,5 +1,7 @@
 @import '../../node_modules/zurb-foundation-scss-npm/scss/foundation';
 
+$ass-footer-height: 20rem;
+
 // Include boilerplate styles
 @import 'ass-main';
 
@@ -27,9 +29,6 @@ body {
   -webkit-box-sizing: border-box;
 }
 
-.ass-app {
-}
-
 .ass-header {
   transition: background-color 0.33s ease;
   background-color:white;
@@ -46,24 +45,4 @@ body {
   background-color:#eeeeee;
   width:100%;
   height:100%;
-}
-
-.ass-split-right {
-  float:right;
-  width:50%;
-}
-
-.ass-split-left {
-  float:left;
-  width:50%;
-}
-
-pre {
-  white-space: pre-wrap;
-  @include panel();
-  color:black;
-  code {
-    background-color:transparent;
-    border:0 none;
-  }
 }

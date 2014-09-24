@@ -1,6 +1,7 @@
 ---
 id: styles
 title: Styles
+abbr: STL
 ord: 5
 styles:
   - example

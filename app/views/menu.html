@@ -1,6 +1,9 @@
 <ul class="ass-mainmenu" ass-item-count="{{pages.length}}" ass-transition-direction="fade">
   <li ng-repeat="page in pages" ass-transition-element ng-class="{'active':page.isActive || page.hasActiveChild()}">
-    <a ng-href="{{page.url}}">{{page.title}}</a>
+    <a ng-href="{{page.url}}">
+      <span class="show-for-small-only">{{page.abbr}}</span>
+      <span class="show-for-medium-up">{{page.title}}</span>
+    </a>
   </li>
 </ul>
 <div ng-repeat="level in levels | orderBy:'id'">

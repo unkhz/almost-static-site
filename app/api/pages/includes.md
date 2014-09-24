@@ -2,6 +2,7 @@
 id: inc
 parentId: features
 title: Includes
+abbr: INC
 ord: 1
 styles:
   - example

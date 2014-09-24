@@ -14,7 +14,7 @@
   }
   .ass-content-inner,
   .ass-footer-inner {
-    padding: 0 rem-calc(8);
+    padding: rem-calc(10);
   }
 
 }
@@ -31,6 +31,6 @@
 
 @media #{$large-up} {
   .ass-header-inner {
-    padding: rem-calc(120) rem-calc(40) rem-calc(40) rem-calc(40);
+    padding: rem-calc(80) rem-calc(40) rem-calc(40) rem-calc(40);
   }
 }

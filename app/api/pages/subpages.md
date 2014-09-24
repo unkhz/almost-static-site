@@ -2,6 +2,7 @@
 id: subpages
 parentId: features
 title: Submenu
+abbr: SUB
 ord: 0
 styles:
   - example

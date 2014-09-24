@@ -1,6 +1,7 @@
 ---
 id: details
 title: Details
+abbr: DTL
 ord: 1
 styles:
   - example

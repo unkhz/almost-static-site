@@ -54,6 +54,9 @@ $ass-submenu-background-color-active: #eeeeee;
 .ass-menu .ass-mainmenu li {
   a {
     background-color: $ass-mainmenu-background-color;
+    &:hover {
+      background-color: darken($ass-mainmenu-background-color, 3%);
+    }
   }
   &.active a {
     background-color: $ass-mainmenu-background-color-active;
@@ -65,6 +68,9 @@ $ass-submenu-background-color-active: #eeeeee;
   }
   &.active a {
     background-color: $ass-submenu-background-color-active;
+    &:hover {
+      background-color: darken($ass-submenu-background-color, 3%);
+    }
   }
 }
 
