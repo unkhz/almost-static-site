@@ -22,7 +22,8 @@ function logErrorAndNotify(e) {
     title:'Error on ' + e.plugin,
     message: e.message
   });
-  gutil.log('Error running task', e.plugin, e.message);
+  gutil.log('Error running task', e.plugin);
+  gutil.log(e.message);
   gutil.log(e.stack);
 }
 
@@ -109,9 +110,12 @@ gulp.task('styles', function() {
   ])
   // The onerror handler prevents Gulp from crashing when you make a mistake in your SASS
   .pipe(sass({
-    onError: logErrorAndNotify
+    onError: function(err){
+      logErrorAndNotify({plugin:'sass', message: err});
+    }
   }))
   .pipe(autoprefixer("last 2 versions", "> 1%", "ie 8"))
+  .on('error', logErrorAndNotify)
   .pipe(concat('main.css'))
   .pipe(gulp.dest(target.dirs.dist));
   if ( target.server.enableLiveReload ) {
