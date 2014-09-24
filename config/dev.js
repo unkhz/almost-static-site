@@ -7,6 +7,7 @@ var runtimeConfig = {
 var buildtimeConfig = {
   dirs: {
     src: './app',
+    assets: './app/api/assets',
     pages: './app/api',
     styles: './app/api/styles',
     dist: './dist'

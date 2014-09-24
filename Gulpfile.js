@@ -98,6 +98,16 @@ gulp.task('index', ['templates', 'menu'], function() {
 });
 gulp.watch([target.dirs.src + '/index.html'], ['index']);
 
+gulp.task('assets', function() {
+  var stream = gulp.src([target.dirs.assets + '/**/*.*'])
+  .on('error', logErrorAndNotify)
+  .pipe(gulp.dest(target.dirs.dist));
+  if ( target.server.enableLiveReload ) {
+    stream.pipe(liveReload(liveReloadServer));
+  }
+  return stream;
+});
+
 
 // SASS
 var sass = require('gulp-sass');
@@ -108,15 +118,16 @@ gulp.task('styles', function() {
     target.dirs.src + '/css/main.scss',
     target.dirs.styles + '/*.scss',
   ])
-  // The onerror handler prevents Gulp from crashing when you make a mistake in your SASS
+  // Concat before compile, so that includes are available in dynamic styles
+  .pipe(concat('main.css'))
   .pipe(sass({
+    // The onerror handler prevents Gulp from crashing when you make a mistake in your SASS
     onError: function(err){
       logErrorAndNotify({plugin:'sass', message: err});
     }
   }))
   .pipe(autoprefixer("last 2 versions", "> 1%", "ie 8"))
   .on('error', logErrorAndNotify)
-  .pipe(concat('main.css'))
   .pipe(gulp.dest(target.dirs.dist));
   if ( target.server.enableLiveReload ) {
     stream.pipe(liveReload(liveReloadServer));
@@ -249,7 +260,7 @@ gulp.task('menu', function(done){
 gulp.watch([target.dirs.pages + '/**/*.*'], ['menu']);
 
 // Generic tasks
-gulp.task('build', ['clean', 'styles', 'templates', 'menu', 'index', 'browserify'])
+gulp.task('build', ['clean', 'assets', 'styles', 'templates', 'menu', 'index', 'browserify'])
 
 // Target specific tasks
 Object.keys(target.tasks).forEach(function(name){
