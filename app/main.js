@@ -40,6 +40,7 @@ app
 .controller('HeaderCtrl', require('./controllers/header'))
 .controller('FooterCtrl', require('./controllers/footer'))
 
+.directive('assCompileHtml', require('./directives/compileHtml'))
 .directive('assBroadcastLongPage', require('./directives/broadcastLongPage'))
 .directive('assMoveAwayOnLongPage', require('./directives/moveAwayOnLongPage'))
 .directive('assPageTransition', require('./directives/pageTransition'))

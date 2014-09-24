@@ -9,7 +9,7 @@
   <div ng-repeat="page in includes | filter:filterPageBySelectedTags | orderBy:orderSkillBy">
     <a id="{{page.id}}"></a>
     <h2>{{page.title}}</h2>
-    <div ng-bind-html="page.content"></div>
+    <div ass-compile-html="page.content"></div>
   </div>
 </div>
 
