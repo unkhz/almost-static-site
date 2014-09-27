@@ -1,8 +1,9 @@
+/*globals angular*/
 'use strict';
 
 module.exports = [
-  'config', 'menu', '$scope', '$rootScope', '$routeParams',
-  function IncludeCtrl(config, menu, $scope, $rootScope, $routeParams) {
+  'config', 'menu', '$scope',
+  function IncludeCtrl(config, menu, $scope) {
 
     function updateScope() {
       var includes = [];

@@ -1,11 +1,11 @@
 'use strict';
 
 module.exports = [
-  '$rootScope', '$window', '$timeout',
-  function PageTransitionDirective($rootScope, $window, $timeout) {
+  '$rootScope',
+  function PageTransitionDirective($rootScope) {
     return {
       restrict: 'A',
-      link: function($scope, el, attrs) {
+      link: function($scope, el) {
         $rootScope.$on('activate:page', function(e, newPage, oldPage) {
           if ( newPage === oldPage ) {
             // Page change isinstant inside same pager

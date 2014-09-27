@@ -13,9 +13,9 @@ var gulp = require('gulp'),
     filter = require('gulp-filter'),
     concat = require('gulp-concat');
 
-// Require target specific configuration
-var target = require('./config/' + (argv.target || 'dev') + '.js' )
+var site = argv.site || './examples/demo';
 var db = {};
+var target;
 
 function logErrorAndNotify(e) {
   notifier.notify({
@@ -27,81 +27,107 @@ function logErrorAndNotify(e) {
   gutil.log(e.stack);
 }
 
+// Build Configuration
+function initConfig() {
+  [site+'.js', site+'/config.js', site+'config.js', site].some(function(configFile) {
+    try {
+      var stat = fs.lstatSync(configFile);
+    } catch(err) {}
+    if ( stat && stat.isFile() ) {
+      target = require('./' + configFile);
+      target.configFile = './' + configFile;
+      gutil.log('Using configuration in ', target.configFile);
+      return true;
+    }
+  });
+  if ( !target || !target.paths ) {
+    gutil.log('Invalid site configuration in ', site);
+    process.exit(1);
+  }
+}
+initConfig();
+gulp.task('config', initConfig);
+gulp.watch([target.configFile], ['config']);
+
 // Clean
 gulp.task('clean', function() {
-  rimraf.sync(target.dirs.dist);
+  rimraf.sync(target.paths.dist);
 });
-
 
 // JSHint
 var jshint = require('gulp-jshint');
 gulp.task('lint', function() {
-  return gulp.src(target.dirs.src + '/*.js')
+  return gulp.src([
+    target.paths.mainModule + '/**/*.js',
+    target.paths.features + '/**/*.js'
+  ])
   .pipe(jshint())
   .on('error', logErrorAndNotify)
   .pipe(jshint.reporter('default'));
 });
 
-
 // Browserify
 var browserify = require('gulp-browserify');
 gulp.task('browserify', ['lint'], function() {
-  var stream = gulp.src([target.dirs.src + '/main.js'])
+  var stream = gulp.src([
+    target.paths.mainJS
+  ])
   .pipe(browserify())
   .on('error', logErrorAndNotify)
   .pipe(concat('main.js'))
   .on('error', logErrorAndNotify)
-  .pipe(gulp.dest(target.dirs.dist))
+  .pipe(gulp.dest(target.paths.dist))
+  .on('error', logErrorAndNotify)
   if ( target.server.enableLiveReload ) {
     stream.pipe(liveReload(liveReloadServer));
   }
 });
-gulp.task('watch', function() {
-  gulp.watch([target.dirs.src + '/*.js', target.dirs.src + '/**/*.js'],[
-    'lint',
-    'browserify'
-  ]);
-});
+gulp.watch([target.paths.mainModule + '/**/*.js', target.paths.features + '/**/*.js'],[
+  'lint',
+  'browserify'
+]);
 
 // View partials
 gulp.task('templates', function() {
-  return Q.nfcall(glob, '**/*.html', {cwd: target.dirs.src})
-  .then(function(files){
-    target.index.bootstraps.templates = files.reduce(function(m,file){
-      m[file] = fs.readFileSync(target.dirs.src+'/'+file).toString();
-      return m;
-    }, {});
-  });
+  target.client.bootstraps.templates = {};
+  return gulp.src([
+    target.paths.mainModule + '/**/*.html',
+    target.paths.features + '/**/*.html',
+  ])
+  .pipe(through.obj(function (file, enc, next) {
+    var fn = path.relative('./', file.path);
+    target.client.bootstraps.templates[fn] = file.contents.toString();
+    next();
+  }));
 });
-gulp.watch([target.dirs.src + '/**/*.html'], ['index']);
+gulp.watch([target.paths.mainModule + '/**/*.html', target.paths.features + '/**/*.html'], ['index']);
 
 // Index template and partials
 gulp.task('index', ['templates', 'menu'], function() {
-  target.index.url = function(suffix) {
+  target.client.url = function(suffix) {
     return  target.server.baseUrl + suffix.replace(/^\//,'');
   };
 
   // Get bootstrapped content from DB
-  target.index.index = db.index;
-  target.index.footer = db.footer;
-  target.index.header = db.header;
+  target.client.footer = db.footer;
+  target.client.header = db.header;
 
   // Process
-  stream = gulp.src([target.dirs.src + '/index.html'])
+  stream = gulp.src([target.paths.mainModule + '/index.html'])
   .pipe(template(target))
   .on('error', logErrorAndNotify)
-  .pipe(gulp.dest(target.dirs.dist));
+  .pipe(gulp.dest(target.paths.dist));
   if ( target.server.enableLiveReload ) {
     stream.pipe(liveReload(liveReloadServer));
   }
   return stream;
 });
-gulp.watch([target.dirs.src + '/index.html'], ['index']);
+gulp.watch([target.paths.mainModule + '/index.html'], ['index']);
 
 gulp.task('assets', function() {
-  var stream = gulp.src([target.dirs.assets + '/**/*.*'])
+  var stream = gulp.src([target.paths.assets + '/**/*.*'])
   .on('error', logErrorAndNotify)
-  .pipe(gulp.dest(target.dirs.dist));
+  .pipe(gulp.dest(target.paths.dist));
   if ( target.server.enableLiveReload ) {
     stream.pipe(liveReload(liveReloadServer));
   }
@@ -115,8 +141,9 @@ var autoprefixer = require('gulp-autoprefixer');
 // Styles task
 gulp.task('styles', function() {
   var stream = gulp.src([
-    target.dirs.src + '/css/main.scss',
-    target.dirs.styles + '/*.scss',
+    target.paths.mainModule + '/css/main.scss',
+    target.paths.features + '/**/*.scss',
+    target.paths.styles + '/**/*.scss',
   ])
   // Concat before compile, so that includes are available in dynamic styles
   .pipe(concat('main.css'))
@@ -128,13 +155,17 @@ gulp.task('styles', function() {
   }))
   .pipe(autoprefixer("last 2 versions", "> 1%", "ie 8"))
   .on('error', logErrorAndNotify)
-  .pipe(gulp.dest(target.dirs.dist));
+  .pipe(gulp.dest(target.paths.dist));
   if ( target.server.enableLiveReload ) {
     stream.pipe(liveReload(liveReloadServer));
   }
   return stream;
 });
-gulp.watch([target.dirs.src + '/**/*.scss', target.dirs.styles + '/**/*.scss'], [
+gulp.watch([
+  target.paths.mainModule + '/**/*.scss',
+  target.paths.features + '/**/*.scss',
+  target.paths.styles + '/**/*.scss',
+], [
   'styles'
 ]);
 
@@ -146,7 +177,7 @@ var liveReload = require('gulp-livereload'),
     express = require('express');
 
 var server = express();
-server.use(target.server.baseUrl, express.static(target.dirs.dist));
+server.use(target.server.baseUrl, express.static(target.paths.dist));
 
 if ( target.server.enableLiveReload ) {
   server.use(connectLiveReload({port: target.liveReloadPort}));
@@ -155,7 +186,7 @@ if ( target.server.enableLiveReload ) {
 if ( target.server.enablePushState ) {
   server.all(target.server.baseUrl + '*', function(req, res) {
     res.sendFile('index.html', {
-      root: target.dirs.dist
+      root: target.paths.dist
     });
   });
 }
@@ -180,7 +211,7 @@ var File = require('vinyl');
 gulp.task('menu', function(done){
   var mdFilter = filter('**/*.md');
   var yamlFilter = filter('**/*.yaml');
-  var stream = gulp.src(['**/*.yaml', '**/*.md'], {cwd:target.dirs.pages})
+  var stream = gulp.src(['**/*.yaml', '**/*.md'], {cwd:target.paths.pages})
 
   // YAML -> JSON
   .pipe(yamlFilter)
@@ -211,7 +242,7 @@ gulp.task('menu', function(done){
   .pipe(mdFilter.restore())
 
   // JSON -> api/pages/*.json
-  .pipe(gulp.dest(target.dirs.dist + '/api/'))
+  .pipe(gulp.dest(target.paths.dist + '/api/'))
 
   // menu.json
   .pipe(through.obj(function (file, enc, next) {
@@ -222,7 +253,7 @@ gulp.task('menu', function(done){
   .pipe(reduceStream({objectMode: true}, function (menu, file) {
     var input={};
     input = JSON.parse(file.contents.toString());
-    input.url = path.relative(target.dirs.dist, file.path);
+    input.url = path.relative(target.paths.dist, file.path);
     delete input.content;
     input.id = input.id || 'page-'+menu.pages.length;
     menu.pages.forEach(function(p){
@@ -251,20 +282,21 @@ gulp.task('menu', function(done){
     return next();
   }))
   .on('error', logErrorAndNotify)
-  .pipe(gulp.dest(target.dirs.dist + '/api/'));
+  .pipe(gulp.dest(target.paths.dist + '/api/'));
   if ( target.server.enableLiveReload ) {
     stream.pipe(liveReload(liveReloadServer));
   }
   return stream;
 });
-gulp.watch([target.dirs.pages + '/**/*.*'], ['menu']);
+gulp.watch([target.paths.pages + '/**/*.*'], ['menu']);
 
 // Generic tasks
 gulp.task('build', ['clean', 'assets', 'styles', 'templates', 'menu', 'index', 'browserify'])
+gulp.task('dist', ['build'], function(){
+  process.exit(0);
+});
 
 // Target specific tasks
 Object.keys(target.tasks).forEach(function(name){
   gulp.task(name, target.tasks[name]);
 });
-
-

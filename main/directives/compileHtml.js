@@ -6,7 +6,6 @@ module.exports = [
     return {
       restrict: 'A',
       link: function($scope, $el, attrs) {
-        console.log('compile');
         $scope.$watch(
           function($scope) {
             // watch the 'compile' expression for changes

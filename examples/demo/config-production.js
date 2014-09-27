@@ -5,22 +5,29 @@ var runtimeConfig = {
 };
 
 var buildtimeConfig = {
-  index: {
+  client: {
+    debug: false,
     stylesheets: [
-      runtimeConfig.baseUrl + 'main.min.css'
+      runtimeConfig.baseUrl + 'main.css'
     ],
     scripts: [
-      runtimeConfig.baseUrl + 'main.min.js'
+      runtimeConfig.baseUrl + 'main.js'
     ],
     bootstraps: {
       runtimeConfig: runtimeConfig
     }
   },
-  dirs: {
-    src: './app',
-    assets: './app/api/assets',
-    pages: './app/api',
-    styles: './app/api/styles',
+  paths: {
+    // ASS Sources
+    mainModule: './main',
+    mainHTML: './main/index.html',
+    features: './features',
+    // Demo App Sources
+    mainJS: './examples/demo/index.js',
+    assets: './examples/demo/assets',
+    pages: './examples/demo',
+    styles: './examples/demo/styles',
+    // Output
     dist: './dist'
   },
   server: {

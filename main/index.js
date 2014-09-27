@@ -7,13 +7,13 @@ require('angular-sanitize');
 
 var
   bootstrapData = window && window.ASS_BOOTSTRAP ? window.ASS_BOOTSTRAP : {},
-  app = window.app = angular.module('assDemoApp', [
+  mainModule = angular.module('assMain', [
   'ngRoute',
   'ngAnimate',
   'ngSanitize'
 ]);
 
-app
+mainModule
 .constant('config', angular.extend(bootstrapData.runtimeConfig,{
   // Generate url for navigation link href
   href:function(suffix) {
@@ -34,24 +34,35 @@ app
 })
 
 .factory('menu', require('./services/menu'))
+.factory('features', require('./services/features'))
 
-.controller('MenuCtrl', require('./controllers/menu'))
-.controller('PageCtrl', require('./controllers/page'))
-.controller('HeaderCtrl', require('./controllers/header'))
-.controller('FooterCtrl', require('./controllers/footer'))
+.controller('ass.ctrl.menu', require('./controllers/menu'))
+.controller('ass.ctrl.page', require('./controllers/page'))
+.controller('ass.ctrl.header', require('./controllers/header'))
+.controller('ass.ctrl.footer', require('./controllers/footer'))
 
 .directive('assCompileHtml', require('./directives/compileHtml'))
 .directive('assBroadcastLongPage', require('./directives/broadcastLongPage'))
 .directive('assMoveAwayOnLongPage', require('./directives/moveAwayOnLongPage'))
 .directive('assPageTransition', require('./directives/pageTransition'))
 
-.config(function($routeProvider, $locationProvider, config) {
-  $locationProvider.html5Mode(config.enablePushState);
-  $routeProvider
-  .otherwise({
-    templateUrl: 'views/page.html',
-    controller: 'PageCtrl'
-  });
-})
-
+.config(
+  ['$routeProvider', '$locationProvider', 'config',
+  function($routeProvider, $locationProvider, config) {
+    $locationProvider.html5Mode(config.enablePushState);
+    $routeProvider
+    .otherwise({
+      templateUrl: 'main/views/page.html',
+      controller: 'ass.ctrl.page'
+    });
+  }
+])
+.config(
+  ['$logProvider', 'config',
+  function($logProvider, config){
+    $logProvider.debugEnabled(true, !!config.debug);
+  }
+])
 ;
+
+module.exports = mainModule;

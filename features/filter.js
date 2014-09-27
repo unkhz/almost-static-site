@@ -1,3 +1,4 @@
+/*globals angular*/
 'use strict';
 
 module.exports = [
@@ -50,7 +51,7 @@ module.exports = [
         TagCloud.instances[name] = new TagCloud(name);
       }
       return TagCloud.instances[name];
-    }
+    };
 
     function updateScope() {
       var feature = $scope.feature,
@@ -70,7 +71,7 @@ module.exports = [
       }
 
       $scope.tagClouds = _.values(TagCloud.instances);
-      $scope.orderSkillBy = "-count";
+      $scope.orderSkillBy = '-count';
 
       var includes = [];
       if ( menu.activePage && !$scope.includes ) {
@@ -91,7 +92,7 @@ module.exports = [
           return _.intersection(pageTags, _.pluck(cloud.selected, 'name')).length === cloud.selected.length;
         });
       };
-      $scope.orderPageBy = "-startDate";
+      $scope.orderPageBy = '-startDate';
     }
 
     angular.extend($scope, {

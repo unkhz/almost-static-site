@@ -17,5 +17,6 @@
   "unused": true,
   "strict": true,
   "trailing": true,
-  "smarttabs": false
+  "smarttabs": false,
+  "browserify": true
 }

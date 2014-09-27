@@ -1,18 +1,13 @@
-var runtimeConfig = {
-  baseUrl: '/',
-  title:'Almost Static Site',
-  enablePushState: true
-};
+var
+  _ = require('lodash'),
+  prod = require('./config-production');
+
+var runtimeConfig = prod.client.bootstraps.runtimeConfig;
 
 var buildtimeConfig = {
-  dirs: {
-    src: './app',
-    assets: './app/api/assets',
-    pages: './app/api',
-    styles: './app/api/styles',
-    dist: './dist'
-  },
-  index: {
+  client: _.extend(prod.client, {
+    debug: true,
+    appModule: 'demoApp',
     stylesheets: [
       'main.css'
     ],
@@ -22,20 +17,21 @@ var buildtimeConfig = {
     bootstraps: {
       runtimeConfig: runtimeConfig
     }
-  },
-  server: {
+  }),
+  paths: prod.paths,
+  server: _.extend(prod.server, {
     baseUrl:runtimeConfig.baseUrl,
     enableLiveReload: true,
     liveReloadPort: 35729,
     port: 5000,
     enablePushState: runtimeConfig.enablePushState
-  },
-  browserify: {
+  }),
+  browserify: _.extend(prod.browserify, {
     insertGlobals: true,
     debug: true
-  },
+  }),
   tasks: {
-    default: ['build', 'server', 'watch']
+    default: ['build', 'server']
   }
 };
 

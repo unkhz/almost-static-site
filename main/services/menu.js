@@ -1,8 +1,11 @@
-module.exports = [
-  'config', '$rootScope', '$q', '$http', '$sce', '$log', '$location',
-  function MenuService(config, $rootScope, $q, $http, $sce, $log, $location) {
+/*globals angular*/
+'use strict';
 
-    var _ = require('lodash');
+module.exports = [
+  'config', 'features', '$rootScope', '$q', '$http', '$sce', '$log', '$location',
+  function MenuService(config, featureControllers, $rootScope, $q, $http, $sce, $log, $location) {
+
+    //var _ = require('lodash');
 
     function Feature(opts) {
       angular.extend(this, opts);
@@ -45,7 +48,7 @@ module.exports = [
         page._dfds.isReady.resolve(page);
       });
       return page.promises.isReady;
-    }
+    };
 
     Page.prototype.recurseParents = function recurseParents(fn) {
       var p = this;
@@ -53,7 +56,7 @@ module.exports = [
         fn(p);
         p = p.parent;
       }
-    }
+    };
 
     Page.prototype.recurseChildren = function recurseChildren(fn) {
       fn(this);
@@ -62,23 +65,12 @@ module.exports = [
           p.recurseChildren(fn);
         });
       }
-    }
+    };
 
     Page.prototype.hasActiveChild = function hasActiveChild() {
       return this.children && this.children.length ? this.children.reduce(function(foundOne, p){
         return foundOne || p.isActive || p.hasActiveChild();
       },false) : false;
-    }
-
-    // Get a filtered set of features from the specified set of feature controllers
-    Page.prototype.getFeatures = function(featureControllers) {
-      return _.reduce(this.features, function(filtered, f){
-        if ( featureControllers[f.featureId] ) {
-          f.controller = featureControllers[f.featureId];
-          filtered.push(f);
-        }
-        return filtered;
-      }, []);
     };
 
     function Menu(data){
@@ -101,12 +93,12 @@ module.exports = [
         menu.promises[id] = dfd.promise;
       });
       menu.fetch();
-      $rootScope.$on('$routeChangeSuccess', function(event,toState) {
+      $rootScope.$on('$routeChangeSuccess', function() {
         menu._setActivePage($location.path());
       });
     }
 
-    Menu.prototype._setActivePage = function _setActivePage(pageUrl) {
+    Menu.prototype._setActivePage = function _setActivePage() {
       // Make sure service isReady before setting active page, so that it's actually available
       var menu=this,
           dfd = $q.defer(),
@@ -122,13 +114,13 @@ module.exports = [
           var oldPage = menu.activePage;
           menu.activePage = page;
           menu.activePage.promises.isReady.then(function(){
-            $rootScope.$broadcast("activate:page", page, oldPage);
+            $rootScope.$broadcast('activate:page', page, oldPage);
           });
           dfd.resolve();
         }
       });
       return dfd.promise;
-    }
+    };
 
     Menu.prototype.fetch = function fetch() {
       var menu=this;
@@ -164,7 +156,6 @@ module.exports = [
 
           $q.all(fetches).then(function(){
             // 3rd pass, define 1st level pages
-            var fetches = [];
             angular.forEach(menu.pages, function(page){
               if ( !page.parent ) {
                 page.rootPage = page;
@@ -189,10 +180,11 @@ module.exports = [
               var features = [];
               if ( page.features && page.features.length ) {
                 angular.forEach(page.features, function(feature, ord) {
-                  feature = typeof feature === "string" ? {id:feature} : feature;
+                  feature = typeof feature === 'string' ? {id:feature} : feature;
                   features.push(new Feature(angular.extend(feature, {
                     id: feature.id + '-' + page.level,
                     featureId: feature.id,
+                    controller: featureControllers.get(feature.id).controller,
                     ord: page.level + (ord/100),
                     pages: page.children
                   })));
@@ -214,7 +206,7 @@ module.exports = [
         }
       });
       return menu.promises.isReady;
-    }
+    };
 
     return new Menu({
       apiUrl: config.url('api/menu.json')

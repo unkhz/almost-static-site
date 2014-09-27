@@ -20,30 +20,44 @@ Almost Static Site is my boilerplate for creating quick and dirty (M)EAN sites t
     npm install -g gulp
     npm install
 
-Build and server are run with default gulp task.
+Build and server are run with default gulp task. Only thing you have to define is the site configuration (and data) to be used for the build. That is done with --site option.
 
-    gulp
+    gulp --site example/demo
 
-Target configuration defaults to 'dev', so the site is running on the port defined in config/dev.js.
+The server port is configured in the configuration file of the specified site e.g. example/demo/config.js.
 
     open http://localhost:5000/
 
-You may want to use another configuration. The targets are defined as individual files inside config/.
+You may want to use another configuration. The site configuration defaults to config.js inside the site folder. If a file is specified instead of the folder, it will be used as the configuration module.
 
-    gulp --target=production
+    gulp --site example/demo/config-production.js
 
-## Folder Structure
 
-    app             Sources
-      api           YAML and Markdown source files
-        styles      Dynamic SASS source files
+## Folder structure
+
+    main            Sources for ASS Main module
+    dist            Output directory for generated files and the server root folder
+    examples        Sources for demo app modules, e.g. examples/demo
+
+## Modules
+
+### Main module
+
+Main module takes care of building the page frame and menus.
+
+#### Main module folder structure
+
+    main            Sources
+      index.html    Template file for building index.html
+      index.js      JavaScript file that defines the main angular module
       css           SASS source files
       controllers   Angular controller source files
+      directives    Angular directive source files
+      services      Angular service source files
       views         Angular view source files
-    config          Target configuration files
     dist            Generated files go here when Gulp build is run
 
-## Default DOM Structure
+#### Main module DOM Structure
 
     index.html      Main SPA HTML file. Content template is defined in
                     app/index.html, data in config/*.json.
@@ -56,7 +70,15 @@ You may want to use another configuration. The targets are defined as individual
                     on page.
         #footer     Footer, data and content is defined in api/footer.md
 
-## Page Parameters
+### Feature modules
+
+TBD
+
+## Page configuration
+
+Pages are configurable.
+
+### Page Parameters
 
 Each YAML and Markdown file inside the db directory defines one page in the site. The following configuration parameters can be used:
 
@@ -73,7 +95,7 @@ content         | Main content of the page, only relevant in YAML files, Markdow
 styles          | Styles array contains dynamic styles that are defined in separate SASS files. The default place for those files is api/styles/*.scss.
 
 
-## Page Features
+### Page Features
 
 Page Feature    | Description
 --------------- | ------------

@@ -1,3 +1,4 @@
+/*globals angular*/
 'use strict';
 
 module.exports = [
@@ -6,12 +7,12 @@ module.exports = [
     function updateScope(){
       angular.extend($scope, menu.pagesById.footer);
       if ( menu.activePage ) {
-        $scope.styles = menu.activePage.styles ? "ass-style-" + menu.activePage.styles.join(" ass-style-") : "";
+        $scope.styles = menu.activePage.styles ? 'ass-style-' + menu.activePage.styles.join(' ass-style-') : '';
       }
     }
 
-    $scope.template = 'views/menu.html';
-    $scope.styles = "";
+    $scope.template = 'main/views/menu.html';
+    $scope.styles = '';
 
     // Make sure that scope is updated on all menu updates
     menu.promises.isComplete.then(updateScope);

@@ -1,13 +1,14 @@
+/*globals angular*/
 'use strict';
 
 module.exports = [
-  'config', 'menu', '$scope', '$rootScope', '$routeParams',
-  function TocCtrl(config, menu, $scope, $rootScope, $routeParams) {
+  'config', 'menu', '$scope',
+  function TocCtrl(config, menu, $scope) {
 
     function updateScope() {
-      $scope.children = menu.activePage.children
-        && menu.activePage.children.length
-        ? menu.activePage.children : [];
+      $scope.children = menu.activePage.children &&
+        menu.activePage.children.length ?
+        menu.activePage.children : [];
     }
 
     angular.extend($scope, {

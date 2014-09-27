@@ -1,13 +1,14 @@
+/*globals angular*/
 'use strict';
 
 module.exports = [
-  'config', 'menu', '$scope', '$rootScope', '$routeParams', '$sce', '$compile',
-  function ContentCtrl(config, menu, $scope, $rootScope, $routeParams, $sce, $compile) {
+  'config', 'menu', '$scope', '$rootScope', '$routeParams', '$sce',
+  function ContentCtrl(config, menu, $scope, $rootScope, $routeParams, $sce) {
 
     function updateScope() {
       $scope.title = menu.activePage.title;
       $scope.content = $sce.trustAsHtml(menu.activePage.content);
-      $scope.$emit("ass-page-data-applied")
+      $scope.$emit('ass-page-data-applied');
     }
 
     angular.extend($scope, {

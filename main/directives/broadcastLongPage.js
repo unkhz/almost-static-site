@@ -5,9 +5,9 @@ module.exports = [
   function BroadcastLongPageDirective($rootScope, $window, $timeout) {
     return {
       restrict: 'A',
-      link: function($scope, el, attrs) {
+      link: function($scope, el) {
         $rootScope.isWaitingForPageHeight = true;
-        $scope.$on('ass-page-data-applied', function(complete) {
+        function updateScope() {
           // Wait for the reflow
           $timeout(function(){
             var h = el[0].offsetHeight,
@@ -15,7 +15,11 @@ module.exports = [
             $rootScope.isLongPage = h > containerH;
             $rootScope.isWaitingForPageHeight = false;
           },200);
-        });
+        }
+        $scope.$on('ass-page-data-applied', updateScope);
+        $window.addEventListener('resize', updateScope);
+        el.on('DOMSubtreeModified', updateScope);
+        el.on('DOMAttrModified', updateScope);
       }
     };
   }
