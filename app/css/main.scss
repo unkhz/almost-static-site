@@ -46,3 +46,16 @@ body {
   width:100%;
   height:100%;
 }
+
+.ass-content-inner {
+  pre {
+    @include panel();
+    code {
+      background: transparent none;
+      border:0 none;
+      margin:0;
+      padding:0;
+    }
+  }
+}
+
