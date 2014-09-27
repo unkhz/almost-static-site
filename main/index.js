@@ -27,14 +27,22 @@ mainModule
   }
 }))
 
-.run(function($templateCache) {
+.run(['$templateCache', function($templateCache) {
   angular.forEach(bootstrapData.templates||{}, function(t,url) {
     $templateCache.put(url, t);
   });
-})
+}])
 
 .factory('menu', require('./services/menu'))
 .factory('features', require('./services/features'))
+
+.run(['features', function(features) {
+  features.register('content', require('../features/content'));
+  features.register('filter', require('../features/filter'));
+  features.register('includes', require('../features/includes'));
+  features.register('submenu', require('../features/submenu'));
+  features.register('toc', require('../features/toc'));
+}])
 
 .controller('ass.ctrl.menu', require('./controllers/menu'))
 .controller('ass.ctrl.page', require('./controllers/page'))
