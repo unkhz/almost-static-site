@@ -127,7 +127,7 @@ gulp.watch([target.paths.mainModule + '/index.html'], ['index']);
 gulp.task('assets', function() {
   var stream = gulp.src([target.paths.assets + '/**/*.*'])
   .on('error', logErrorAndNotify)
-  .pipe(gulp.dest(target.paths.dist));
+  .pipe(gulp.dest(target.paths.dist + '/assets'));
   if ( target.server.enableLiveReload ) {
     stream.pipe(liveReload(liveReloadServer));
   }
@@ -254,7 +254,7 @@ gulp.task('menu', function(done){
     var input={};
     input = JSON.parse(file.contents.toString());
     input.url = path.relative(target.paths.dist, file.path);
-    delete input.content;
+    //delete input.content;
     input.id = input.id || 'page-'+menu.pages.length;
     menu.pages.forEach(function(p){
       if ( p.id === input.id ) {
