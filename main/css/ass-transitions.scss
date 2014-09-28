@@ -30,7 +30,7 @@ $ass-transition-duration-slow: 0.66s;
 [ass-transition-direction=ttb] [ass-transition-element],
 [ass-transition-direction=btt] [ass-transition-element],
 {
-  transition: transform 0.33s linear;
+  transition: transform $ass-transition-duration-smooth linear;
 }
 
 [ass-transition-speed=slow] [ass-transition-element] { transition-duration: $ass-transition-duration-slow; }
