@@ -1,6 +1,6 @@
 <div
   ng-init="next=this"
-  ng-repeat="feature in features"
+  ng-repeat="feature in features | orderBy:'ord'"
   ng-controller="feature.controller"
   ng-include="template"
   class="ass-page-feature ass-feature-{{feature.featureId}}"

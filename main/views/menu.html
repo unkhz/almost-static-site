@@ -1,14 +1,14 @@
 <ul class="ass-mainmenu" ass-item-count="{{pages.length}}" ass-transition-direction="fade">
-  <li ng-repeat="page in pages" ass-transition-element ng-class="{'active':page.isActive || page.hasActiveChild()}">
+  <li ng-repeat="page in pages | orderBy:'ord'" ass-transition-element ng-class="{'active':page.isActive || page.hasActiveChild()}">
     <a ng-href="{{page.url}}">
-      <span class="show-for-small-only">{{page.abbr}}</span>
-      <span class="show-for-medium-up">{{page.title}}</span>
+      <span class="show-for-small-only" ng-bind-html="page.abbr"></span>
+      <span class="show-for-medium-up" ng-bind-html="page.title"></span>
     </a>
   </li>
 </ul>
-<div ng-repeat="level in levels | orderBy:'id'">
+<div ng-repeat="level in levels | orderBy:orderLevelsBy">
   <div
-    ng-repeat="feature in level.features | orderBy:'ord'"
+    ng-repeat="feature in level.features | orderBy:orderFeaturesBy"
     ng-controller="feature.controller"
     ng-include="template"
     class="ass-menu-feature ass-feature-{{feature.featureId}} {{level.styles}}"

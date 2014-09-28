@@ -1,4 +1,4 @@
-<div ng-repeat="page in includes">
+<div ng-repeat="page in includes | orderBy:'ord'">
   <a id="{{page.id}}"></a>
   <h2>{{page.title}}</h2>
   <div ass-compile-html="page.content"></div>

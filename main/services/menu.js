@@ -29,6 +29,8 @@ module.exports = [
         childrenById: {},
         rootPage: null
       },data);
+      this.title = $sce.trustAsHtml(this.title);
+      this.abbr = $sce.trustAsHtml(this.abbr);
       angular.forEach(page._dfds, function(dfd, id){
         page.promises[id] = dfd.promise;
       });
@@ -36,9 +38,7 @@ module.exports = [
 
     Page.prototype.fetch = function fetch() {
       var page=this;
-      $http.get(page.apiUrl)
-      .success(function(res){
-        page.content = res.content;
+      function ready() {
         page.parent = page.menu.pagesById[page.parentId];
         if ( page.parent ) {
           page.parent.children.push(page);
@@ -46,7 +46,16 @@ module.exports = [
         }
         page.isReady = true;
         page._dfds.isReady.resolve(page);
-      });
+      }
+      if ( page.content === undefined ) {
+        $http.get(page.apiUrl)
+        .success(function(res){
+          page.content = res.content;
+          ready();
+        });
+      } else {
+        ready();
+      }
       return page.promises.isReady;
     };
 
@@ -185,7 +194,7 @@ module.exports = [
                     id: feature.id + '-' + page.level,
                     featureId: feature.id,
                     controller: featureControllers.get(feature.id).controller,
-                    ord: page.level + (ord/100),
+                    ord: (parseInt(page.level,10)*100) + parseInt(ord,10),
                     pages: page.children
                   })));
                   page.features = features;

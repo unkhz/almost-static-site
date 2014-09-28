@@ -1,6 +1,6 @@
 <h2 ng-show="next.level===0">Table of contents</h2>
 <ul ass-item-count="{{next.children.length}}">
-  <li ng-repeat="current in next.children" ng-class="{'active':current.isActive}">
+  <li ng-repeat="current in next.children | orderBy:'ord'" ng-class="{'active':current.isActive}">
     <a ng-href="#{{current.id}}">{{current.title}}</a>
     <div ng-init="next=current" ng-include="template"></div>
   </li>
