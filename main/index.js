@@ -37,11 +37,11 @@ mainModule
 .factory('features', require('./services/features'))
 
 .run(['features', function(features) {
-  features.register('content', require('../features/content'));
-  features.register('filter', require('../features/filter'));
-  features.register('includes', require('../features/includes'));
-  features.register('submenu', require('../features/submenu'));
-  features.register('toc', require('../features/toc'));
+  features.register('content', 'page', require('../features/content'));
+  features.register('filter', 'page', require('../features/filter'));
+  features.register('includes', 'page', require('../features/includes'));
+  features.register('submenu', 'menu', require('../features/submenu'));
+  features.register('toc', 'page', require('../features/toc'));
 }])
 
 .controller('ass.ctrl.menu', require('./controllers/menu'))

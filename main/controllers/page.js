@@ -6,17 +6,11 @@ module.exports = [
   function PageCtrl(config, menu, features, $scope) {
 
     var _ = require('lodash');
-    var supportedFeatures = [
-      'content',
-      'includes',
-      'filter',
-      'toc',
-    ];
 
     function updateScope() {
       if ( menu.activePage ) {
         $scope.features = _.filter(menu.activePage.features, function(f){
-          return _.contains(supportedFeatures, f.featureId);
+          return f.targetComponentId === 'page';
         });
         $scope.styles = menu.activePage.styles ? 'ass-style-' + menu.activePage.styles.join(' ass-style-') : '';
       }

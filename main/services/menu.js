@@ -7,7 +7,7 @@ module.exports = [
 
     //var _ = require('lodash');
 
-    function Feature(opts) {
+    function FeatureImplementation(opts) {
       angular.extend(this, opts);
     }
 
@@ -185,15 +185,17 @@ module.exports = [
                 page.rootPage = p;
                 page.url = page.isFrontPage ? '' : config.href(url);
               }
-              // Convert menu features (String) into Feature instances
+              // Convert menu features (String) into FeatureImplementation instances
               var features = [];
               if ( page.features && page.features.length ) {
-                angular.forEach(page.features, function(feature, ord) {
-                  feature = typeof feature === 'string' ? {id:feature} : feature;
-                  features.push(new Feature(angular.extend(feature, {
-                    id: feature.id + '-' + page.level,
-                    featureId: feature.id,
-                    controller: featureControllers.get(feature.id).controller,
+                angular.forEach(page.features, function(featureConfig, ord) {
+                  featureConfig = typeof featureConfig === 'string' ? {id:featureConfig} : featureConfig;
+                  var featureDefinition = featureControllers.get(featureConfig.id);
+                  features.push(new FeatureImplementation(angular.extend(featureConfig, {
+                    id: featureConfig.id + '-' + page.level,
+                    featureId: featureConfig.id,
+                    targetComponentId: featureDefinition.targetComponentId,
+                    controller: featureDefinition.controller,
                     ord: (parseInt(page.level,10)*100) + parseInt(ord,10),
                     pages: page.children
                   })));

@@ -20,12 +20,19 @@ module.exports = [
       return _.findWhere(coll.features, {id:id});
     };
 
-    FeatureCollection.prototype.register = function get(id, ctrl) {
+    FeatureCollection.prototype.isSupported = function isSupported(feature, componentId) {
+      var coll = this;
+      console.log('is supported', feature, componentId);
+      return !!_.findWhere(coll.features, {id:feature.featureId, targetComponentId:componentId});
+    };
+
+    FeatureCollection.prototype.register = function get(id, targetComponentId, ctrl) {
       var coll = this;
       var existing = _.pluck(coll.features, 'id');
       if ( !_.contains(existing, id) ) {
         coll.features.push(new Feature({
           id: id,
+          targetComponentId: targetComponentId,
           controller: ctrl
         }));
       }

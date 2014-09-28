@@ -5,9 +5,6 @@ module.exports = [
   function MenuCtrl(config, menu, features, $scope) {
 
     var _ = require('lodash');
-    var supportedFeatures = [
-      'submenu'
-    ];
 
     function updateScope(){
       if ( menu.activePage ) {
@@ -16,7 +13,7 @@ module.exports = [
           levels.push({
             id: page.level,
             features: _.filter(page.features, function(f){
-              return _.contains(supportedFeatures, f.featureId);
+              return f.targetComponentId === 'menu';
             }),
             styles: page.styles ? 'ass-style-' + page.styles.join(' ass-style-') : ''
           });
