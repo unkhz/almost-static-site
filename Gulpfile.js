@@ -13,7 +13,7 @@ var gulp = require('gulp'),
     filter = require('gulp-filter'),
     concat = require('gulp-concat');
 
-var site = argv.site || './examples/demo';
+var site = argv.site.replace(/\/$/, '') || './examples/demo';
 var db = {};
 var target;
 
@@ -82,7 +82,11 @@ gulp.task('browserify', ['lint'], function() {
     stream.pipe(liveReload(liveReloadServer));
   }
 });
-gulp.watch([target.paths.mainModule + '/**/*.js', target.paths.features + '/**/*.js'],[
+gulp.watch([
+  target.paths.mainModule + '/**/*.js',
+  target.paths.features + '/**/*.js',
+  site + '/**/*.js',
+],[
   'lint',
   'browserify'
 ]);
@@ -93,6 +97,7 @@ gulp.task('templates', function() {
   return gulp.src([
     target.paths.mainModule + '/**/*.html',
     target.paths.features + '/**/*.html',
+    site + '/**/*.html'
   ])
   .pipe(through.obj(function (file, enc, next) {
     var fn = path.relative('./', file.path);
@@ -100,7 +105,11 @@ gulp.task('templates', function() {
     next();
   }));
 });
-gulp.watch([target.paths.mainModule + '/**/*.html', target.paths.features + '/**/*.html'], ['index']);
+gulp.watch([
+  target.paths.mainModule + '/**/*.html',
+  target.paths.features + '/**/*.html',
+  site + '/**/*.html'
+], ['index']);
 
 // Index template and partials
 gulp.task('index', ['templates', 'menu'], function() {
@@ -113,7 +122,7 @@ gulp.task('index', ['templates', 'menu'], function() {
   target.client.header = db.header;
 
   // Process
-  stream = gulp.src([target.paths.mainModule + '/index.html'])
+  stream = gulp.src([target.paths.mainHTML])
   .pipe(template(target))
   .on('error', logErrorAndNotify)
   .pipe(gulp.dest(target.paths.dist));
@@ -122,7 +131,7 @@ gulp.task('index', ['templates', 'menu'], function() {
   }
   return stream;
 });
-gulp.watch([target.paths.mainModule + '/index.html'], ['index']);
+gulp.watch([target.paths.mainHTML], ['index']);
 
 gulp.task('assets', function() {
   var stream = gulp.src([target.paths.assets + '/**/*.*'])
@@ -133,6 +142,7 @@ gulp.task('assets', function() {
   }
   return stream;
 });
+gulp.watch([target.paths.assets + '/**/*.*'], ['assets']);
 
 
 // SASS
@@ -144,6 +154,7 @@ gulp.task('styles', function() {
     target.paths.mainModule + '/css/main.scss',
     target.paths.features + '/**/*.scss',
     target.paths.styles + '/**/*.scss',
+    site + '/**/*.scss',
   ])
   // Concat before compile, so that includes are available in dynamic styles
   .pipe(concat('main.css'))
@@ -165,6 +176,7 @@ gulp.watch([
   target.paths.mainModule + '/**/*.scss',
   target.paths.features + '/**/*.scss',
   target.paths.styles + '/**/*.scss',
+  site + '/**/*.scss',
 ], [
   'styles'
 ]);
@@ -184,7 +196,7 @@ if ( target.server.enableLiveReload ) {
 }
 
 if ( target.server.enablePushState ) {
-  server.all(target.server.baseUrl + '*', function(req, res) {
+  server.all(target.server.baseUrl + '[^.]+', function(req, res) {
     res.sendFile('index.html', {
       root: target.paths.dist
     });
