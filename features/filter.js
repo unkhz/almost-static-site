@@ -2,8 +2,8 @@
 'use strict';
 
 module.exports = [
-  'config', 'menu', '$scope', '$rootScope', '$routeParams', '$location',
-  function IncludeCtrl(config, menu, $scope, $rootScope, $routeParams, $location) {
+  'config', 'menu', '$scope',
+  function IncludeCtrl(config, menu, $scope) {
 
     var _ = require('lodash');
 
@@ -54,9 +54,7 @@ module.exports = [
     };
 
     function updateScope() {
-      var feature = $scope.feature,
-          search = $location.search()||{},
-          selected = search.name ? search.name.split(',') : [];
+      var feature = $scope.feature;
 
       if ( menu.activePage ) {
         menu.activePage.recurseChildren(function(page){
@@ -82,7 +80,6 @@ module.exports = [
         });
       }
       $scope.includes = includes;
-      $scope.selected = selected;
       $scope.filterSkillBySelected = function(skill) {
         return _.contains($scope.selected, skill.name);
       };
