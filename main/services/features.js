@@ -4,13 +4,14 @@ var angular = require('angular');
 var _ = require('lodash');
 
 
-// FeatureImplementation is instantiated for each page that implements a
-// Feature
+// FeatureImplementation is instantiated for
+// each page that implements a Feature
 function FeatureImplementation(opts) {
   angular.extend(this, opts);
 }
 
-// FeatureDefinition is instantiated once per each feature that the application supports
+// FeatureDefinition is instantiated once per
+// each feature that the application supports
 function FeatureDefinition(opts) {
   angular.extend(this, opts);
 }

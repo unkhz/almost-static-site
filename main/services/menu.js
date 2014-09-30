@@ -36,11 +36,6 @@ module.exports = [
     Page.prototype.fetch = function fetch() {
       var page=this;
       function ready() {
-        page.parent = page.menu.pagesById[page.parentId];
-        if ( page.parent ) {
-          page.parent.children.push(page);
-          page.parent.childrenById[page.id] = page;
-        }
         page.isReady = true;
         page._dfds.isReady.resolve(page);
       }
@@ -54,6 +49,39 @@ module.exports = [
         ready();
       }
       return page.promises.isReady;
+    };
+
+    Page.prototype.defineRelations = function() {
+      var page=this;
+
+      // Define tree structure
+      page.parent = page.menu.pagesById[page.parentId];
+      if ( page.parent ) {
+        page.parent.children.push(page);
+        page.parent.childrenById[page.id] = page;
+        var url = page.id,
+            p = page,
+            level = 0;
+        while ( p.parent ) {
+          url = p.parent.id + '/' + url;
+          p = p.parent;
+          level++;
+        }
+        page.level = level;
+        page.rootPage = p;
+        page.url = page.isFrontPage ? '' : config.href(url);
+      } else {
+        page.rootPage = page;
+        page.level = 0;
+      }
+    };
+
+    Page.prototype.initialize = function initialize() {
+      var page=this;
+      // Convert menu features (String) into FeatureImplementation instances
+      if ( page.features && page.features.length ) {
+        page.features = features.createImplementations(page, page.features);
+      }
     };
 
     Page.prototype.recurseParents = function recurseParents(fn) {
@@ -133,7 +161,7 @@ module.exports = [
       $http.get(menu.apiUrl)
       .success(function(res){
         if ( res && res.pages ) {
-          // 1st pass, get all pages
+          // 1st pass, get all page definitions
           angular.forEach(res.pages, function(pageData, ord){
             var page = new Page(angular.extend(pageData,{
               ord: pageData.ord !== undefined ? pageData.ord : ord,
@@ -143,7 +171,7 @@ module.exports = [
             }));
 
             if ( page.isFrontPage ) {
-              res.frontPage = page;
+              menu.frontPage = page;
             }
 
             menu.pagesById[page.id] = page;
@@ -153,7 +181,25 @@ module.exports = [
           delete res.pages;
           angular.extend(menu, res);
 
-          // 2nd pass, fetch page data
+          // 2nd pass, define page relations
+          angular.forEach(menu.pages, function(page){
+            page.defineRelations();
+            if ( page.level === 0 && !page.isNotDisplayedInMenu ) {
+              menu.rootPages.push(page);
+            }
+          });
+
+          // 3rd pass, initialize pages
+          angular.forEach(menu.pages, function(page){
+            page.initialize();
+          });
+
+          // Sort root pages
+          menu.rootPages.sort(function(a,b){
+            return a.ord > b.ord;
+          });
+
+          // 4th pass, fetch page content
           var fetches = [];
           angular.forEach(menu.pages, function(page){
             page.fetch();
@@ -161,41 +207,6 @@ module.exports = [
           });
 
           $q.all(fetches).then(function(){
-            // 3rd pass, define 1st level pages
-            angular.forEach(menu.pages, function(page){
-
-              // Define tree structure level for each page
-              if ( !page.parent ) {
-                page.rootPage = page;
-                page.level = 0;
-                if ( !page.isNotDisplayedInMenu ) {
-                  menu.rootPages.push(page);
-                }
-              } else {
-                var url = page.id,
-                    p = page,
-                    level = 0;
-                while ( p.parent ) {
-                  url = p.parent.id + '/' + url;
-                  p = p.parent;
-                  level++;
-                }
-                page.level = level;
-                page.rootPage = p;
-                page.url = page.isFrontPage ? '' : config.href(url);
-              }
-
-              // Convert menu features (String) into FeatureImplementation instances
-              if ( page.features && page.features.length ) {
-                page.features = features.createImplementations(page, page.features);
-              }
-            });
-
-            // Sort root pages
-            menu.rootPages.sort(function(a,b){
-              return a.ord > b.ord;
-            });
-
             // Complete
             menu.isComplete = true;
             menu._dfds.isComplete.resolve();
