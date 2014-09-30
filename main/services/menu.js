@@ -1,15 +1,12 @@
-/*globals angular*/
 'use strict';
+
+var angular = require('angular');
+//var _ = require('lodash');
+
 
 module.exports = [
   'config', 'features', '$rootScope', '$q', '$http', '$sce', '$log', '$location',
-  function MenuService(config, featureControllers, $rootScope, $q, $http, $sce, $log, $location) {
-
-    //var _ = require('lodash');
-
-    function FeatureImplementation(opts) {
-      angular.extend(this, opts);
-    }
+  function MenuService(config, features, $rootScope, $q, $http, $sce, $log, $location) {
 
     function Page(data) {
       var page=this;
@@ -166,6 +163,8 @@ module.exports = [
           $q.all(fetches).then(function(){
             // 3rd pass, define 1st level pages
             angular.forEach(menu.pages, function(page){
+
+              // Define tree structure level for each page
               if ( !page.parent ) {
                 page.rootPage = page;
                 page.level = 0;
@@ -185,27 +184,19 @@ module.exports = [
                 page.rootPage = p;
                 page.url = page.isFrontPage ? '' : config.href(url);
               }
+
               // Convert menu features (String) into FeatureImplementation instances
-              var features = [];
               if ( page.features && page.features.length ) {
-                angular.forEach(page.features, function(featureConfig, ord) {
-                  featureConfig = typeof featureConfig === 'string' ? {id:featureConfig} : featureConfig;
-                  var featureDefinition = featureControllers.get(featureConfig.id);
-                  features.push(new FeatureImplementation(angular.extend(featureConfig, {
-                    id: featureConfig.id + '-' + page.level,
-                    featureId: featureConfig.id,
-                    targetComponentId: featureDefinition.targetComponentId,
-                    controller: featureDefinition.controller,
-                    ord: (parseInt(page.level,10)*100) + parseInt(ord,10),
-                    pages: page.children
-                  })));
-                  page.features = features;
-                });
+                page.features = features.createImplementations(page, page.features);
               }
             });
+
+            // Sort root pages
             menu.rootPages.sort(function(a,b){
               return a.ord > b.ord;
             });
+
+            // Complete
             menu.isComplete = true;
             menu._dfds.isComplete.resolve();
           });
