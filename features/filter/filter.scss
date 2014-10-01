@@ -16,6 +16,15 @@
     background-color: #ccddee;
     color: #446688;
   }
+  &.is-selected {
+    background-color: #8899aa;
+    color:white;
+  }
+}
+
+.ass-feature-filter-loader {
+  padding:5rem;
+  font-size:200%;
 }
 
 @media print {

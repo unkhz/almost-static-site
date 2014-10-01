@@ -4,13 +4,15 @@ var angular = require('angular');
 require('angular-route');
 require('angular-animate');
 require('angular-sanitize');
+require('angular-bindonce');
 
 var
   bootstrapData = window && window.ASS_BOOTSTRAP ? window.ASS_BOOTSTRAP : {},
   mainModule = angular.module('assMain', [
   'ngRoute',
   'ngAnimate',
-  'ngSanitize'
+  'ngSanitize',
+  'pasvaz.bindonce'
 ]);
 
 mainModule
@@ -53,6 +55,7 @@ mainModule
 .directive('assBroadcastLongPage', require('./directives/broadcastLongPage'))
 .directive('assMoveAwayOnLongPage', require('./directives/moveAwayOnLongPage'))
 .directive('assPageTransition', require('./directives/pageTransition'))
+.directive('assBroadcastScrollPosition', require('./directives/broadcastScrollPosition'))
 
 .config(
   ['$routeProvider', '$locationProvider', 'config',

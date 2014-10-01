@@ -1,0 +1,27 @@
+
+<div  class="ass-feature-filter-selected">
+  <span ng-repeat="cloud in tagClouds" ass-transition-direction="ltr" ass-transition-speed="quick">
+    <a ng-repeat="tag in cloud.selected" class="ass-tag is-selected {{cloud.name}}" href="" ng-click="cloud.unselect(tag); updateFilter();" ass-transition-element>{{tag.name}} <span class="close">&times;</span></a>
+  </span>
+</div>
+
+<div ass-broadcast-scroll-position="document.body" class="ass-feature-filter-content">
+  <div ng-repeat="page in includes track by page.id">
+    <a id="{{page.id}}"></a>
+    <h2>{{page.title}}</h2>
+    <div ass-compile-html="page.content"></div>
+  </div>
+</div>
+
+<div ng-if="isNotFullyDisplayed" class="ass-feature-filter-loader">
+  <div class="ass-feature-filter-loader-spinner">
+    Loading...
+  </div>
+</div>
+
+<div class="ass-feature-filter-menu">
+  <div ng-repeat="cloud in tagClouds track by cloud.name" ass-transition-direction="rtl" ass-transition-speed="quick">
+    <h2>Filter by {{cloud.name}}</h2>
+    <a ng-repeat="tag in cloud.tags track by tag.id" href="" class="ass-tag {{cloud.name}}" ng-click="cloud.toggle(tag); updateFilter();" ass-transition-element ng-class="{'is-selected':tag.isSelected}">{{tag.name}}</a>
+  </div>
+</div>
