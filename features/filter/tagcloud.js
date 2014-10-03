@@ -19,12 +19,22 @@ Tag.prototype.link = function(linkedItem) {
   this.count++;
 };
 
+Tag.prototype.toggle = function(){
+  var tag = this;
+  this[tag.isSelected ? 'unselect' : 'select']();
+};
+
 Tag.prototype.select = function() {
   var tag=this;
+  if ( this.cloud.forceSingleSelectedValue ) {
+    this.cloud.clearSelected();
+  }
   this.isSelected = true;
   this.links.forEach(function(linkedItem){
     links[linkedItem.id + '-' + tag.name] = true;
   });
+  this.cloud.selected = _.union(this.cloud.selected, [tag]);
+  TagCloud.selectedTags = _.union(TagCloud.selectedTags, [tag]);
 };
 
 Tag.prototype.unselect = function() {
@@ -33,6 +43,8 @@ Tag.prototype.unselect = function() {
   this.links.forEach(function(linkedItem){
     links[linkedItem.id + '-' + tag.name] = false;
   });
+  this.cloud.selected = _.without(this.cloud.selected, tag);
+  TagCloud.selectedTags = _.without(TagCloud.selectedTags, tag);
 };
 
 
@@ -65,7 +77,7 @@ TagCloud.prototype.add = function(name, linkedItem){
 
 TagCloud.prototype.clearSelected = function(){
   _.each(this.selected, function(tag){
-    TagCloud.selectedTagNames = _.without(TagCloud.selectedTagNames, tag.name);
+    TagCloud.selectedTags = _.without(TagCloud.selectedTags, tag);
     tag.unselect();
   });
   this.selected = [];
@@ -73,24 +85,17 @@ TagCloud.prototype.clearSelected = function(){
 
 TagCloud.prototype.toggle = function(tag){
   tag = this.get(tag);
-  this[tag.isSelected ? 'unselect' : 'select'](tag);
+  tag.toggle();
 };
 
 TagCloud.prototype.select = function(tag){
   tag = this.get(tag);
-  if ( this.forceSingleSelectedValue ) {
-    this.clearSelected();
-  }
   tag.select();
-  this.selected = _.union(this.selected, [tag]);
-  TagCloud.selectedTagNames = _.union(TagCloud.selectedTagNames, [tag.name]);
 };
 
 TagCloud.prototype.unselect = function(tag){
   tag = this.get(tag);
   tag.unselect();
-  this.selected = _.without(this.selected, tag);
-  TagCloud.selectedTagNames = _.without(TagCloud.selectedTagNames, tag.name);
 };
 
 TagCloud.prototype.filterUnselected = function(tag){
@@ -112,7 +117,7 @@ TagCloud.prototype.isLinkSelected = function(linkedItem){
 // Static API
 
 TagCloud.instances = [];
-TagCloud.selectedTagNames = [];
+TagCloud.selectedTags = [];
 TagCloud.getInstance = function(name) {
   if ( !TagCloud.instances[name] ) {
     TagCloud.instances[name] = new TagCloud(name);
