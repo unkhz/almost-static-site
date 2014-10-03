@@ -26,7 +26,7 @@ function FilterCtrl(config, menu, $scope, $rootScope) {
 
     // Order
     allIncludes.sort(function(a,b){
-      return a.ord > b.ord ? -1 : 1;
+      return a.ord < b.ord ? -1 : 1;
     });
     filteredIncludes = allIncludes.concat();
 
