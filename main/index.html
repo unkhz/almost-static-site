@@ -15,7 +15,7 @@
   %><script src="<%=client.url(client.scripts[i])%>"></script><%
   }%>
 </head>
-<body>
+<body class="{{bodyStyles}}">
   <section id="app" class="ass-app">
     <header id="header" class="page-header ass-header {{styles}}" ng-controller="ass.ctrl.header">
       <div class="ass-header-inner" ng-bind-html="content"></div>

@@ -2,8 +2,8 @@
 'use strict';
 
 module.exports = [
-  'config', 'menu', 'features', '$scope',
-  function PageCtrl(config, menu, features, $scope) {
+  'config', 'menu', 'features', '$scope', '$rootScope',
+  function PageCtrl(config, menu, features, $scope, $rootScope) {
 
     var _ = require('lodash');
 
@@ -13,6 +13,7 @@ module.exports = [
           return f.targetComponentId === 'page';
         });
         $scope.styles = menu.activePage.styles ? 'ass-style-' + menu.activePage.styles.join(' ass-style-') : '';
+        $rootScope.bodyStyles = menu.activePage.styles ? 'ass-style-' + menu.activePage.styles.join(' ass-style-') : '';
       }
       $scope.$emit('ass-page-data-applied');
     }
