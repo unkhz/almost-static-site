@@ -13,7 +13,13 @@ var gulp = require('gulp'),
     filter = require('gulp-filter'),
     concat = require('gulp-concat');
 
-var site = argv.site.replace(/\/$/, '') || './examples/demo';
+if ( !argv.site ) {
+  gutil.log('Please define the site to be rendered with the --site option');
+  gutil.log('E.e gulp --site examples/demo');
+  process.exit(1);
+}
+
+var site = argv.site.replace(/\/$/, '');
 var db = {};
 var target;
 
