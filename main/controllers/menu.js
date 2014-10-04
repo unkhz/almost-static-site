@@ -15,7 +15,7 @@ module.exports = [
             features: _.filter(page.features, function(f){
               return f.targetComponentId === 'menu';
             }),
-            styles: page.styles ? 'ass-style-' + page.styles.join(' ass-style-') : ''
+            styles: page.stylesClassName
           });
         });
         $scope.levels = levels;

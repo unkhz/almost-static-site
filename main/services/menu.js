@@ -82,6 +82,11 @@ module.exports = [
       if ( page.features && page.features.length ) {
         page.features = features.createImplementations(page, page.features);
       }
+      if ( page.styles && page.styles.length ) {
+        page.stylesClassName = 'ass-style-' + page.styles.join(' ass-style-');
+      } else {
+        page.stylesClassName = '';
+      }
     };
 
     Page.prototype.recurseParents = function recurseParents(fn) {

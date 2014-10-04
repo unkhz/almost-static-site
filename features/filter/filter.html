@@ -6,7 +6,7 @@
 </div>
 
 <div ass-broadcast-scroll-position="document.body" class="ass-feature-filter-content">
-  <div ng-repeat="page in includes track by page.id">
+  <div ng-repeat="page in includes track by page.id" class="{{page.stylesClassName}}">
     <a id="{{page.id}}"></a>
     <h2>{{page.title}}</h2>
     <div ass-compile-html="page.content"></div>

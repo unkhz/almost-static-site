@@ -12,7 +12,7 @@ module.exports = [
         $scope.features = _.filter(menu.activePage.features, function(f){
           return f.targetComponentId === 'page';
         });
-        $scope.styles = menu.activePage.styles ? 'ass-style-' + menu.activePage.styles.join(' ass-style-') : '';
+        $scope.styles = menu.activePage.stylesClassName;
         $rootScope.bodyStyles = menu.activePage.styles ? 'ass-style-' + menu.activePage.styles.join(' ass-style-') : '';
       }
       $scope.$emit('ass-page-data-applied');
