@@ -31,11 +31,9 @@
   .ass-feature-filter-content {
     width:100%;
   }
-  .ass-feature-filter-menu {
-    display:none;
-  }
-
-  .ass-feature-filter-selected {
+  .ass-feature-filter-selected,
+  .ass-feature-filter-menu,
+  .ass-feature-filter-loader {
     display:none;
   }
 }
