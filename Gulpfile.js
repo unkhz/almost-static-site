@@ -140,7 +140,10 @@ gulp.task('index', ['templates', 'menu'], function() {
 gulp.watch([target.paths.mainHTML], ['index']);
 
 gulp.task('assets', function() {
-  var stream = gulp.src([target.paths.assets + '/**/*.*'])
+  var stream = gulp.src([
+    target.paths.assets + '/**/*.*',
+    'node_modules/font-awesome/fonts/*.*'
+  ])
   .on('error', logErrorAndNotify)
   .pipe(gulp.dest(target.paths.dist + '/assets'));
   if ( target.server.enableLiveReload ) {
@@ -170,7 +173,7 @@ gulp.task('styles', function() {
       logErrorAndNotify({plugin:'sass', message: err});
     }
   }))
-  .pipe(autoprefixer("last 2 versions", "> 1%", "ie 8"))
+  .pipe(autoprefixer('last 2 versions', '> 1%', 'ie 8'))
   .on('error', logErrorAndNotify)
   .pipe(gulp.dest(target.paths.dist));
   if ( target.server.enableLiveReload ) {
@@ -276,12 +279,28 @@ gulp.task('menu', function(done){
     input.id = input.id || 'page-'+menu.pages.length;
     menu.pages.forEach(function(p){
       if ( p.id === input.id ) {
-        throw new gutil.PluginError("menu", "Duplicate id in Page datatabase when parsing page " + file.path);
+        throw new gutil.PluginError('menu', 'Duplicate id in Page datatabase when parsing page ' + file.path);
       }
     });
     menu.pages.push(input);
     if ( input.isFrontPage && !menu.frontPageId ) {
       menu.frontPageId = input.id;
+    }
+
+    // Run feature builds
+    var builds = [];
+    if ( input.features ) {
+      input.features.forEach(function(f){
+        var feature = typeof f === 'string' ? {id:f} : f,
+            fn = './features/' + feature.id + '/build.js';
+        try {
+          var stat = fs.lstatSync(fn);
+        } catch(err) {}
+        if ( stat && stat.isFile() ) {
+          var build = require(fn);
+          builds.push(build(input));
+        }
+      });
     }
     // Store for other tasks
     db[input.id] = input;
@@ -294,7 +313,7 @@ gulp.task('menu', function(done){
   // Convert reduced object into a json file
   .pipe(through.obj(function(data, enc, next){
     this.push(new File({
-      path: process.cwd() + "/menu.json",
+      path: process.cwd() + '/menu.json',
       contents: new Buffer(JSON.stringify(data))
     }));
     return next();

@@ -1,4 +1,8 @@
 @import '../../node_modules/zurb-foundation-scss-npm/scss/foundation';
+$fa-font-path: 'assets';
+@import '../../node_modules/font-awesome/scss/font-awesome.scss';
+@import '../../node_modules/font-awesome/scss/_mixins.scss';
+@import '../../node_modules/font-awesome/scss/_variables.scss';
 
 $ass-footer-height: 20rem;
 

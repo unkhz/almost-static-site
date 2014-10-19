@@ -36,5 +36,6 @@
     "gulp-filter": "^1.0.2",
     "zurb-foundation-scss-npm": "0.0.1",
     "angular-bindonce": "^0.3.1"
+    "font-awesome": "git://github.com/FortAwesome/Font-Awesome"
   }
 }
