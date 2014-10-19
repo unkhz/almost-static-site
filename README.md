@@ -103,7 +103,8 @@ Page Feature    | Description
 content         | Display page content in the content area, enabled by default
 toc             | Display table of contents on top of the content area
 submenu         | Display child pages of this page in a submenu below the main menu
-includes        | Include child pages in the content area below this page (with anchors)
+subpages        | Include child pages with their own set of features
+includes        | Include the contents of child pages in the content area below this page (with anchors)
 filter          | Like includes, but with tag cloud filter selection menu
 filter.params   | Params array defines the parameters to create tag cloud filters for
 

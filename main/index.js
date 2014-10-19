@@ -44,7 +44,6 @@ mainModule
   features.register('submenu', 'menu', require('../features/submenu'));
   features.register('toc', 'page', require('../features/toc'));
   features.register('subpages', 'page', require('../features/subpages'));
-  features.register('links', 'page', require('../features/links'));
 }])
 
 .controller('ass.ctrl.menu', require('./controllers/menu'))

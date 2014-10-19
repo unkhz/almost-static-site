@@ -1,0 +1,16 @@
+.ass-feature-includes {
+
+  .ass-feature-includes-loader {
+    padding:5rem;
+    font-size:200%;
+  }
+
+  @media print {
+    .ass-feature-includes-content {
+      width:100%;
+    }
+    .ass-feature-includes-loader {
+      display:none;
+    }
+  }
+}

@@ -1,0 +1,17 @@
+<div ass-broadcast-scroll-position="document.body">
+  <div id="{{page.id}}" ng-repeat="page in includes track by page.id" class="ass-feature-subpages-page {{page.stylesClassName}}">
+    <h1 class="ass-feature-subpages-heading">{{page.title}}</h1>
+    <div
+      ng-init="next=this"
+      ng-repeat="feature in page.features | orderBy:'ord'"
+      ng-controller="feature.controller"
+      ng-include="template"
+      class="ass-page-feature ass-feature-{{feature.featureId}}"
+    ></div>
+  </div>
+  <div ng-if="isNotFullyDisplayed" class="ass-feature-includes-loader">
+    <div class="ass-feature-includes-loader-spinner">
+      Loading...
+    </div>
+  </div>
+</div>
