@@ -15,8 +15,10 @@ function Tag(name, linkedItem, cloud) {
 
 Tag.prototype.link = function(linkedItem) {
   links[linkedItem.id + '-' + this.name] = true;
-  this.links.push(linkedItem);
-  this.count++;
+  if ( !_.contains(_.pluck(this.links, 'id'), linkedItem.id) ) {
+    this.links.push(linkedItem);
+    this.count++;
+  }
 };
 
 Tag.prototype.toggle = function(){
