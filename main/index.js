@@ -1,10 +1,10 @@
+/*global angular*/
 'use strict';
 
-var angular = require('angular');
+require('angular');
 require('angular-route');
 require('angular-animate');
 require('angular-sanitize');
-require('angular-bindonce');
 
 var
   bootstrapData = window && window.ASS_BOOTSTRAP ? window.ASS_BOOTSTRAP : {},
@@ -12,7 +12,6 @@ var
   'ngRoute',
   'ngAnimate',
   'ngSanitize',
-  'pasvaz.bindonce'
 ]);
 
 mainModule
@@ -44,6 +43,8 @@ mainModule
   features.register('includes', 'page', require('../features/includes'));
   features.register('submenu', 'menu', require('../features/submenu'));
   features.register('toc', 'page', require('../features/toc'));
+  features.register('subpages', 'page', require('../features/subpages'));
+  features.register('links', 'page', require('../features/links'));
 }])
 
 .controller('ass.ctrl.menu', require('./controllers/menu'))

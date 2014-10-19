@@ -1,6 +1,7 @@
+/*global angular*/
 'use strict';
 
-var angular = require('angular');
+require('angular');
 var _ = require('lodash');
 
 

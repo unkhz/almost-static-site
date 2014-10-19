@@ -1,6 +1,7 @@
+/*global angular*/
 'use strict';
 
-var angular = require('angular');
+require('angular');
 var _ = require('lodash');
 var TagCloud = require('./TagCloud');
 
@@ -35,7 +36,7 @@ function FilterCtrl(config, menu, $scope, $rootScope) {
     filteredIncludes = allIncludes.concat();
 
     // Include only child page before transition
-    $scope.includes = _.first(allIncludes,1);
+    $scope.includes = _.first(allIncludes, isSubpage ? Infinity : 1);
   }
 
   // When user scrolls or view updates, we check if we need to add more content to the page
