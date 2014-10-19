@@ -6,9 +6,14 @@ module.exports = [
   function ContentCtrl(config, menu, $scope, $rootScope, $routeParams, $sce) {
 
     function updateScope() {
-      $scope.title = menu.activePage.title;
-      $scope.content = $sce.trustAsHtml(menu.activePage.content);
-      $scope.$emit('ass-page-data-applied');
+      // If this is a subpage, we use the page defined in parent scope
+      // Otherwise we use the active page
+      var page = $scope.$parent.page || menu.activePage;
+      if ( page ) {
+        $scope.title = page.title;
+        $scope.content = $sce.trustAsHtml(page.content);
+        $scope.$emit('ass-page-data-applied');
+      }
     }
 
     angular.extend($scope, {

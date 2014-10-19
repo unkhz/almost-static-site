@@ -54,7 +54,7 @@ module.exports = [
     Page.prototype.defineRelations = function() {
       var page=this;
 
-      // Define tree structure
+      // Define page family tree structure
       page.parent = page.menu.pagesById[page.parentId];
       if ( page.parent ) {
         page.parent.children.push(page);
@@ -73,6 +73,15 @@ module.exports = [
       } else {
         page.rootPage = page;
         page.level = 0;
+      }
+
+      // Possibly include child pages that really are not in the family tree
+      if ( page.bastards ) {
+        angular.forEach(page.bastards, function(childId, ord){
+          var child = page.menu.pagesById[childId];
+          page.children.push(child);
+          page.childrenById[child.id] = child;
+        });
       }
     };
 

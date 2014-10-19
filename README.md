@@ -93,6 +93,7 @@ ord             | Numeric order priority of the page, smaller number means highe
 features        | Features array contains all the enabled features for the current page
 content         | Main content of the page, only relevant in YAML files, Markdown files define content outside front matter definition block.
 styles          | Styles array contains dynamic styles that are defined in separate SASS files. The default place for those files is api/styles/*.scss.
+bastards        | Bastards array contains extra pages that are added as child pages of this page without modifying their real parentId. This allows linking a page to a multiple container pages.
 
 
 ### Page Features

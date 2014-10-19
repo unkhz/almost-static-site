@@ -14,10 +14,14 @@ function FilterCtrl(config, menu, $scope, $rootScope) {
     $scope.tagCloudInstances = TagCloud.instances;
     $scope.selected = TagCloud.selectedTagNames;
 
-    if ( menu.activePage ) {
-      menu.activePage.recurseChildren(function(page){
-        if ( page.id !== menu.activePage.id ) {
-          allIncludes.push(page);
+    // If this is a subpage, we use the page defined in parent scope
+    // Otherwise we use the active page
+    var isSubpage = !!$scope.$parent.page;
+    var page = $scope.$parent.page || menu.activePage;
+    if ( page ) {
+      page.recurseChildren(function(child){
+        if ( child.id !== page.id ) {
+          allIncludes.push(child);
         }
       });
     }

@@ -6,9 +6,14 @@ module.exports = [
   function TocCtrl(config, menu, $scope) {
 
     function updateScope() {
-      $scope.children = menu.activePage.children &&
-        menu.activePage.children.length ?
-        menu.activePage.children : [];
+      // If this is a subpage, we use the page defined in parent scope
+      // Otherwise we use the active page
+      var page = $scope.$parent.page || menu.activePage;
+      if ( page ) {
+        $scope.children = page.children &&
+          page.children.length ?
+          page.children : [];
+      }
     }
 
     angular.extend($scope, {

@@ -9,11 +9,12 @@ module.exports = [
 
     function updateScope() {
       if ( menu.activePage ) {
-        $scope.features = _.filter(menu.activePage.features, function(f){
+        var page = menu.activePage;
+        $scope.features = _.filter(page.features, function(f){
           return f.targetComponentId === 'page';
         });
-        $scope.styles = menu.activePage.stylesClassName;
-        $rootScope.bodyStyles = menu.activePage.styles ? 'ass-style-' + menu.activePage.styles.join(' ass-style-') : '';
+        $scope.styles = page.stylesClassName;
+        $rootScope.bodyStyles = page.stylesClassName;
       }
       $scope.$emit('ass-page-data-applied');
     }

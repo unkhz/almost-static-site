@@ -8,17 +8,21 @@ function IncludesCtrl(config, menu, $scope, $rootScope) {
 
   var allIncludes = [];
   function updateScope() {
-    if ( menu.activePage ) {
-      menu.activePage.recurseChildren(function(p){
-        if ( p.id !== menu.activePage.id ) {
-          allIncludes.push(p);
+    // If this is a subpage, we use the page defined in parent scope
+    // Otherwise we use the active page
+    var isSubpage = !!$scope.$parent.page;
+    var page = $scope.$parent.page || menu.activePage;
+    if ( page ) {
+      page.recurseChildren(function(child){
+        if ( child.id !== page.id ) {
+          allIncludes.push(child);
         }
       });
     }
     allIncludes.sort(function(a,b){
       return a.ord < b.ord ? -1 : 1;
     });
-    $scope.includes = _.first(allIncludes,1);
+    $scope.includes = _.first(allIncludes, isSubpage ? Infinity : 1);
   }
 
   // When user scrolls or view updates, we check if we need to add more content to the page
