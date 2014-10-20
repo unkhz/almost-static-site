@@ -1,5 +1,19 @@
 'use strict';
 
+// http://stackoverflow.com/a/872537
+function getScrollTop(){
+  if (typeof pageYOffset!= 'undefined') {
+    //most browsers except IE before #9
+    return pageYOffset;
+  }
+  else{
+    var B= document.body; //IE 'quirks'
+    var D= document.documentElement; //IE with doctype
+    D= (D.clientHeight)? D: B;
+    return D.scrollTop;
+  }
+}
+
 module.exports = [
   '$rootScope', '$window', '$timeout',
   function BroadcastScrollPositionDirective($rootScope, $window, $timeout) {
@@ -13,7 +27,7 @@ module.exports = [
           $timeout.cancel(p);
           p = $timeout(function(){
             $rootScope.$apply(function(){
-              $rootScope.assBroadcastScrollPosition = el.scrollTop - el.offsetHeight + window.innerHeight*2.5;
+              $rootScope.assBroadcastScrollPosition = getScrollTop() - el.offsetHeight + window.innerHeight*2.5;
             });
           });
         }
