@@ -31,6 +31,7 @@ module.exports = [
         }
         $window.addEventListener('scroll', updateScope);
         $window.addEventListener('touchstart', updateScope);
+        updateScope();
       }
     };
   }
