@@ -43,6 +43,7 @@ function initConfig() {
       target = require('./' + configFile);
       target.configFile = './' + configFile;
       gutil.log('Using configuration in ', target.configFile);
+      site = path.dirname(site);
       return true;
     }
   });
