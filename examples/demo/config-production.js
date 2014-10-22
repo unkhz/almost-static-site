@@ -37,9 +37,13 @@ var buildtimeConfig = {
     port: 8080,
     enablePushState: runtimeConfig.enablePushState
   },
+  styles: {
+    enableMinify: true
+  },
   browserify: {
     detectGlobals: true,
-    debug: false
+    debug: false,
+    enableUglify: true
   },
   tasks: {
     default: ['clean', 'build', 'server']

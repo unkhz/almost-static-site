@@ -26,9 +26,13 @@ var buildtimeConfig = {
     port: 5000,
     enablePushState: runtimeConfig.enablePushState
   }),
+  styles: {
+    enableMinify: false
+  },
   browserify: _.extend(prod.browserify, {
     insertGlobals: true,
-    debug: true
+    debug: true,
+    enableUglify: false
   }),
   tasks: {
     default: ['build', 'server']

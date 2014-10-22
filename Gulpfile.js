@@ -74,6 +74,7 @@ gulp.task('lint', function() {
 
 // Browserify
 var browserify = require('gulp-browserify');
+var uglify = require('gulp-uglify');
 gulp.task('browserify', ['lint'], function() {
   var stream = gulp.src([
     target.paths.mainJS
@@ -81,12 +82,19 @@ gulp.task('browserify', ['lint'], function() {
   .pipe(browserify())
   .on('error', logErrorAndNotify)
   .pipe(concat('main.js'))
-  .on('error', logErrorAndNotify)
-  .pipe(gulp.dest(target.paths.dist))
+  .on('error', logErrorAndNotify);
+
+  if ( target.browserify.enableUglify ) {
+    stream.pipe(uglify())
+    .on('error', logErrorAndNotify);
+  }
+
+  stream.pipe(gulp.dest(target.paths.dist))
   .on('error', logErrorAndNotify)
   if ( target.server.enableLiveReload ) {
     stream.pipe(liveReload(liveReloadServer));
   }
+  return stream;
 });
 gulp.watch([
   target.paths.mainModule + '/**/*.js',
@@ -157,6 +165,7 @@ gulp.watch([target.paths.assets + '/**/*.*'], ['assets']);
 // SASS
 var sass = require('gulp-sass');
 var autoprefixer = require('gulp-autoprefixer');
+var cssmin = require('gulp-cssmin');
 // Styles task
 gulp.task('styles', function() {
   var stream = gulp.src([
@@ -174,8 +183,14 @@ gulp.task('styles', function() {
     }
   }))
   .pipe(autoprefixer('last 2 versions', '> 1%', 'ie 8'))
-  .on('error', logErrorAndNotify)
-  .pipe(gulp.dest(target.paths.dist));
+  .on('error', logErrorAndNotify);
+
+  if ( target.styles.enableMinify ) {
+    stream.pipe(cssmin())
+    .on('error', logErrorAndNotify);
+  }
+
+  stream.pipe(gulp.dest(target.paths.dist));
   if ( target.server.enableLiveReload ) {
     stream.pipe(liveReload(liveReloadServer));
   }
