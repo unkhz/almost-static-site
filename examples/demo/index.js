@@ -1,6 +1,7 @@
+/*global angular*/
 'use strict';
 
-var angular = require('angular');
+require('angular');
 
 // Require the almost-static-site main module
 var mainModule = require('../../main');
