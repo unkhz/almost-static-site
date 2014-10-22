@@ -52,8 +52,7 @@ mainModule
 .controller('ass.ctrl.footer', require('./controllers/footer'))
 
 .directive('assCompileHtml', require('./directives/compileHtml'))
-.directive('assBroadcastLongPage', require('./directives/broadcastLongPage'))
-.directive('assMoveAwayOnLongPage', require('./directives/moveAwayOnLongPage'))
+.directive('assFixContainerHeight', require('./directives/fixContainerHeight'))
 .directive('assPageTransition', require('./directives/pageTransition'))
 .directive('assBroadcastScrollPosition', require('./directives/broadcastScrollPosition'))
 

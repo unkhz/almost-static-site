@@ -25,9 +25,9 @@
       <div class="ass-menu-inner" ng-include="template"></div>
     </nav>
     <section id="content" class="ass-content" ass-page-transition>
-      <div class="ass-content-inner {{styles}}" ng-view ass-transition-element ass-broadcast-long-page></div>
+      <div class="ass-content-inner {{styles}}" ng-view ass-transition-element ass-fix-container-height></div>
     </section>
-    <footer id="footer" class="ass-footer {{styles}}" ng-controller="ass.ctrl.footer" ass-move-away-on-long-page>
+    <footer id="footer" class="ass-footer {{styles}}" ng-controller="ass.ctrl.footer">
       <div class="ass-footer-inner" ng-bind-html="content"></div>
     </footer>
   </section>
