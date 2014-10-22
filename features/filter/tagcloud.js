@@ -1,8 +1,9 @@
 'use strict';
 var _ = require('lodash');
 
-var links = {},
-    tagId = 0;
+var links = {};
+var tagId = 0;
+var Tag, TagCloud;
 
 function Tag(name, linkedItem, cloud) {
   this.id = tagId++;

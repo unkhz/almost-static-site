@@ -1,4 +1,3 @@
-/*global angular*/
 'use strict';
 
 var _ = require('lodash');

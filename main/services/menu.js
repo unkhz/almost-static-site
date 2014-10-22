@@ -78,7 +78,7 @@ module.exports = [
 
       // Possibly include child pages that really are not in the family tree
       if ( page.bastards ) {
-        angular.forEach(page.bastards, function(childId, ord){
+        angular.forEach(page.bastards, function(childId){
           var child = page.menu.pagesById[childId];
           page.children.push(child);
           page.childrenById[child.id] = child;

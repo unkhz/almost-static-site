@@ -13,7 +13,7 @@ module.exports = [
             pel.style.minHeight = h + 'px';
           }
         }
-        function updateScope(e) {
+        function updateScope() {
           // Wait for the reflow and set parent height
           for ( var i = 0; i < 5; i++ ) {
             $timeout(setParentHeight,i*200);
