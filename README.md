@@ -107,5 +107,5 @@ subpages        | Include child pages with their own set of features
 includes        | Include the contents of child pages in the content area below this page (with anchors)
 filter          | Like includes, but with tag cloud filter selection menu
 filter.params   | Params array defines the parameters to create tag cloud filters for
-
+*.initialLimit  | Initial limit of includes, after which new includes are added based on scroll position
 

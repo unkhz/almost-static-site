@@ -36,7 +36,8 @@ function FilterCtrl(config, menu, $scope, $rootScope) {
     filteredIncludes = allIncludes.concat();
 
     // Include only child page before transition
-    $scope.includes = _.first(allIncludes, isSubpage ? Infinity : 1);
+    $scope.limit = isSubpage ? Infinity : $scope.feature.initialLimit || 1;
+    $scope.includes = _.first(allIncludes, $scope.limit);
   }
 
   // When user scrolls or view updates, we check if we need to add more content to the page
@@ -56,7 +57,8 @@ function FilterCtrl(config, menu, $scope, $rootScope) {
     var newValue = $rootScope.assBroadcastScrollPosition;
     if ( newValue >= 0 && $scope.includes.length < filteredIncludes.length ) {
       // Limit
-      $scope.includes = _.first(filteredIncludes, $scope.includes.length + 1);
+      $scope.limit += 1;
+      $scope.includes = _.first(filteredIncludes, $scope.limit);
       $scope.isNotFullyDisplayed = $scope.includes.length < filteredIncludes.length;
     }
   }
