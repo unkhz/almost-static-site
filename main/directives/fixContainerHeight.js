@@ -9,18 +9,22 @@ module.exports = [
         function setParentHeight() {
           var pel = el[0].parentNode;
           var h = el[0].offsetHeight;
-          if ( h ) {
+          var ph = pel.style.minHeight;
+          if ( h > 0 && h + 'px' !== ph ) {
             pel.style.minHeight = h + 'px';
           }
         }
-        function updateScope() {
-          // Wait for the reflow and set parent height
-          for ( var i = 0; i < 5; i++ ) {
-            $timeout(setParentHeight,i*200);
+        // Wait for the content to be appended and set parent height
+        function waitAndSet() {
+          var i;
+          var times = [0,200,400,700,1000,1500,2000];
+          var len = times.length;
+          for ( i = 0; i < len; i++ ) {
+            $timeout(setParentHeight,times[i]);
           }
         }
-        $scope.$on('ass-page-data-applied', updateScope);
-        $window.addEventListener('resize', updateScope);
+        $scope.$on('ass-page-data-applied', waitAndSet);
+        $window.addEventListener('resize', setParentHeight);
       }
     };
   }
