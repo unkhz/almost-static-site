@@ -1,6 +1,5 @@
 @import '../../node_modules/zurb-foundation-scss-npm/scss/foundation';
 $fa-font-path: 'assets';
-@import '../../node_modules/font-awesome/scss/font-awesome.scss';
 @import '../../node_modules/font-awesome/scss/_mixins.scss';
 @import '../../node_modules/font-awesome/scss/_variables.scss';
 
@@ -31,6 +30,6 @@ body {
   overflow:hidden;
   min-height:100%;
   height:auto;
-  box-sizing: border-box;
   -webkit-box-sizing: border-box;
+  box-sizing: border-box;
 }

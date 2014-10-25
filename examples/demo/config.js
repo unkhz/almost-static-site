@@ -9,7 +9,8 @@ var buildtimeConfig = {
     debug: true,
     appModule: 'demoApp',
     stylesheets: [
-      'main.css'
+      'main.css',
+      'icons.css'
     ],
     scripts: [
       'main.js'

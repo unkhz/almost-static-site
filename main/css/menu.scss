@@ -23,16 +23,16 @@ $ass-submenu-background-color-active: #eeeeee;
 
 .ass-menu li {
   display:inline-block;
-  box-sizing:border-box;
   -webkit-box-sizing: border-box;
+  box-sizing:border-box;
   margin:0;
   padding:0;
   a {
     text-align:center;
     transition: background-color 0.33s ease;
     display:block;
-    box-sizing:border-box;
     -webkit-box-sizing: border-box;
+    box-sizing:border-box;
     width:100%;
     padding: $ass-menu-padding;
     text-decoration: none;

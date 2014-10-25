@@ -8,7 +8,8 @@ var buildtimeConfig = {
   client: {
     debug: false,
     stylesheets: [
-      runtimeConfig.baseUrl + 'main.css'
+      runtimeConfig.baseUrl + 'main.css',
+      runtimeConfig.baseUrl + 'icons.css'
     ],
     scripts: [
       runtimeConfig.baseUrl + 'main.js'

@@ -11,7 +11,8 @@ var gulp = require('gulp'),
     _ = require('lodash'),
     path = require('path'),
     filter = require('gulp-filter'),
-    concat = require('gulp-concat');
+    concat = require('gulp-concat'),
+    addsrc = require('gulp-add-src');
 
 if ( !argv.site ) {
   gutil.log('Please define the site to be rendered with the --site option');
@@ -177,6 +178,10 @@ gulp.task('styles', function() {
   ])
   // Concat before compile, so that includes are available in dynamic styles
   .pipe(concat('main.css'))
+  // Add separate files at this point E.g build icons separately to circumvent IE's rule limit
+  .pipe(addsrc([
+    target.paths.mainModule + '/css/icons.scss'
+  ]))
   .pipe(sass({
     // The onerror handler prevents Gulp from crashing when you make a mistake in your SASS
     onError: function(err){

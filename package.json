@@ -17,6 +17,7 @@
     "font-awesome": "git://github.com/FortAwesome/Font-Awesome",
     "glob": "^4.0.5",
     "gulp": "^3.8.7",
+    "gulp-add-src": "^0.1.1",
     "gulp-autoprefixer": "0.0.9",
     "gulp-browserify": "^0.5.0",
     "gulp-concat": "^2.4.1",
