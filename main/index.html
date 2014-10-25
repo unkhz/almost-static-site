@@ -5,15 +5,18 @@
   <title><%=client.title%></title>
   <meta charset="utf-8"/>
   <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, minimal-ui"/>
-  <%for ( i in client.stylesheets ) {
+  <%for ( var i in client.stylesheets ) {
   %><link href="<%=client.url(client.stylesheets[i])%>" rel="stylesheet" type="text/css"><%
   }%>
   <script>var ASS_BOOTSTRAP={};<%for ( key in client.bootstraps ) {
      %>ASS_BOOTSTRAP['<%=key%>']=<%=
       JSON.stringify(client.bootstraps[key]).replace(/</g, '\\x3C') ||  "null" %>;<%
   }%></script>
-  <%for ( i in client.scripts ) {
+  <%for ( var i in client.scripts ) {
   %><script src="<%=client.url(client.scripts[i])%>"></script><%
+  }%>
+  <%for ( var i in client.inlineScripts ) {
+  %><script><%=client.inlineScripts[i]%></script><%
   }%>
 </head>
 <body ng-class="bodyStyles">
