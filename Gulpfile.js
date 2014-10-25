@@ -42,8 +42,8 @@ function initConfig() {
     if ( stat && stat.isFile() ) {
       target = require('./' + configFile);
       target.configFile = './' + configFile;
+      site = path.dirname(target.configFile);
       gutil.log('Using configuration in ', target.configFile);
-      site = path.dirname(site);
       return true;
     }
   });
