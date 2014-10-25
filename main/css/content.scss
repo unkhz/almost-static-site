@@ -1,0 +1,15 @@
+.ass-content {
+  transition: min-height 0.33s ease-out;
+  .ass-content-inner {
+    // fix markdown code blocks breaking on foundation
+    pre {
+      @include panel();
+      code {
+        background: transparent none;
+        border:0 none;
+        margin:0;
+        padding:0;
+      }
+    }
+  }
+}

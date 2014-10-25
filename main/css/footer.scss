@@ -1,20 +1,17 @@
 .ass-footer {
-  box-sizing:border-box;
-  -webkit-box-sizing: border-box;
-  .ass-footer-inner {
-    transition: background-color 0.33s ease;
-    padding:1rem;
-  }
   position:absolute;
   bottom:0;
   left:0;
   width:100%;
   height:$ass-footer-height;
-  transition: transform $ass-transition-duration-quick linear;
-  &.is-invisible {
-    opacity:0;
-  }
-  &.is-away {
-    transform: translateY($ass-footer-height);
+  box-sizing:border-box;
+  -webkit-box-sizing: border-box;
+
+  .ass-footer-inner {
+    transition: background-color 0.33s ease;
+    padding:1rem;
+    background-color:#eeeeee;
+    width:100%;
+    height:100%;
   }
 }

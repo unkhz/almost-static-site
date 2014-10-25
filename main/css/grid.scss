@@ -2,7 +2,7 @@
 // default content area centered 960px
 .ass-header-inner,
 .ass-menu-inner,
-.ass-content-inner {
+.ass-content-features {
   max-width: rem-calc(960);
   margin: auto;
 }
@@ -12,7 +12,7 @@
   .ass-header-inner {
     padding: rem-calc(20) rem-calc(8);
   }
-  .ass-content-inner,
+  .ass-content-features,
   .ass-footer-inner {
     padding: rem-calc(10);
   }
@@ -23,7 +23,7 @@
   .ass-header-inner {
     padding: rem-calc(40);
   }
-  .ass-content-inner,
+  .ass-content-features,
   .ass-footer-inner {
     padding: rem-calc(40);
   }

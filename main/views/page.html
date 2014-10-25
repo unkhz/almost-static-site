@@ -1,7 +1,9 @@
-<div
-  ng-init="next=this"
-  ng-repeat="feature in features | orderBy:'ord'"
-  ng-controller="feature.controller"
-  ng-include="template"
-  class="ass-page-feature ass-feature-{{feature.featureId}}"
-></div>
+<div class="ass-content-features">
+  <div
+    ng-init="next=this"
+    ng-repeat="feature in features | orderBy:'ord'"
+    ng-controller="feature.controller"
+    ng-include="template"
+    class="ass-page-feature ass-feature-{{feature.featureId}}"
+  ></div>
+</div>

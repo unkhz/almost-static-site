@@ -11,6 +11,8 @@ $ass-footer-height: 20rem;
 
 // Import app components
 @import 'grid';
+@import 'header';
+@import 'content';
 @import 'footer';
 @import 'menu';
 
@@ -26,44 +28,9 @@ body {
   padding:0;
   position:relative;
   padding-bottom: $ass-footer-height;
+  overflow:hidden;
   min-height:100%;
   height:auto;
   box-sizing: border-box;
   -webkit-box-sizing: border-box;
 }
-
-.ass-header {
-  transition: background-color 0.33s ease;
-  background-color:white;
-  box-sizing:border-box;
-  -webkit-box-sizing: border-box;
-  * {
-    margin-top:0;
-    margin-bottom:0;
-  }
-}
-
-.ass-footer-inner {
-  transition: background-color 0.33s ease;
-  background-color:#eeeeee;
-  width:100%;
-  height:100%;
-}
-
-.ass-content {
-  transition: min-height 0.33s ease-out;
-}
-
-.ass-content-inner {
-  // fix markdown code blocks breaking on foundation
-  pre {
-    @include panel();
-    code {
-      background: transparent none;
-      border:0 none;
-      margin:0;
-      padding:0;
-    }
-  }
-}
-
