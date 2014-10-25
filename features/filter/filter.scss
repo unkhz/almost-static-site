@@ -1,3 +1,12 @@
+@keyframes ass-feature-filter-rotating {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .ass-feature-filter-selected {
   min-height:3rem;
 }
@@ -25,6 +34,13 @@
 .ass-feature-filter-loader {
   padding:5rem;
   font-size:200%;
+  .ass-feature-filter-loader-spinner {
+    font-size:300%;
+    text-align:center;
+    opacity:0.2;
+    animation: ass-feature-filter-rotating 2s linear infinite;
+    -webkit-animation: ass-feature-filter-rotating 2s linear infinite;
+  }
 }
 
 @media print {

@@ -1,15 +1,22 @@
-.ass-feature-includes {
+.ass-feature-subpages {
 
-  .ass-feature-includes-loader {
+  .ass-feature-subpages-loader {
     padding:5rem;
     font-size:200%;
+    .ass-feature-subpages-loader-spinner {
+      font-size:300%;
+      text-align:center;
+      opacity:0.2;
+      animation: ass-feature-includes-rotating 2s linear infinite;
+      -webkit-animation: ass-feature-includes-rotating 2s linear infinite;
+    }
   }
 
   @media print {
-    .ass-feature-includes-content {
+    .ass-feature-subpages-content {
       width:100%;
     }
-    .ass-feature-includes-loader {
+    .ass-feature-subpages-loader {
       display:none;
     }
   }
