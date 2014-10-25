@@ -8,10 +8,12 @@ module.exports = [
       link: function($scope, el) {
         function setParentHeight() {
           var pel = el[0].parentNode;
-          var h = el[0].offsetHeight;
-          var ph = pel.style.minHeight;
-          if ( h > 0 && h + 'px' !== ph ) {
-            pel.style.minHeight = h + 'px';
+          if ( pel ) {
+            var h = el[0].offsetHeight;
+            var ph = pel.style.minHeight;
+            if ( h > 0 && h + 'px' !== ph ) {
+              pel.style.minHeight = h + 'px';
+            }
           }
         }
         // Wait for the content to be appended and set parent height
