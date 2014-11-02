@@ -6,18 +6,7 @@ var runtimeConfig = prod.client.bootstraps.runtimeConfig;
 
 var buildtimeConfig = {
   client: _.extend(prod.client, {
-    debug: true,
-    appModule: 'demoApp',
-    stylesheets: [
-      'main.css',
-      'icons.css'
-    ],
-    scripts: [
-      'main.js'
-    ],
-    bootstraps: {
-      runtimeConfig: runtimeConfig
-    }
+    debug: true
   }),
   paths: prod.paths,
   server: _.extend(prod.server, {
