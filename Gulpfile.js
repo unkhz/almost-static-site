@@ -41,10 +41,10 @@ function initConfig() {
       var stat = fs.lstatSync(configFile);
     } catch(err) {}
     if ( stat && stat.isFile() ) {
-      target = require('./' + configFile);
-      target.configFile = './' + configFile;
+      gutil.log('Using configuration in ', configFile);
+      target = require(configFile);
+      target.configFile = configFile;
       site = path.dirname(target.configFile);
-      gutil.log('Using configuration in ', target.configFile);
       return true;
     }
   });
@@ -244,11 +244,14 @@ gulp.task('server', ['build'], function() {
 // MENU
 var yaml = require('gulp-yaml');
 var markdown = require('gulp-markdown');
+var marked = require('marked');
 var frontMatter = require('gulp-front-matter');
 var entityConvert = require('gulp-entity-convert');
 var through = require('through2');
 var reduceStream = require('through2-reduce');
 var File = require('vinyl');
+
+marked.setOptions(target.markdown);
 
 gulp.task('menu', function(done){
   var mdFilter = filter('**/*.md');
@@ -268,7 +271,7 @@ gulp.task('menu', function(done){
     remove: true
   }))
   .pipe(entityConvert())
-  .pipe(markdown({}))
+  .pipe(markdown(target.markdown))
 
   // Frontmatter + HTML -> JSON
   .pipe(through.obj(function (file, enc, next) {
@@ -296,8 +299,15 @@ gulp.task('menu', function(done){
     var input={};
     input = JSON.parse(file.contents.toString());
     input.url = path.relative(target.paths.dist, file.path);
-    //delete input.content;
     input.id = input.id || 'page-'+menu.pages.length;
+    if ( input.contentFromFile ) {
+      input.content = fs.readFileSync(input.contentFromFile).toString();
+      if ( !input.content ) {
+        throw new gutil.PluginError('menu', 'Invalid contentFromFile reference ' + input.contentFromFile);
+      } else {
+        input.content = marked(input.content);
+      }
+    }
     menu.pages.forEach(function(p){
       if ( p.id === input.id ) {
         throw new gutil.PluginError('menu', 'Duplicate id in Page datatabase when parsing page ' + file.path);

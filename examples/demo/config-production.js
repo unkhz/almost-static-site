@@ -41,6 +41,10 @@ var buildtimeConfig = {
   styles: {
     enableMinify: true
   },
+  markdown: {
+    gfm: true,
+    tables: true
+  },
   browserify: {
     detectGlobals: true,
     debug: false,

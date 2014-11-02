@@ -29,7 +29,8 @@ var buildtimeConfig = {
   }),
   styles: {
     enableMinify: false
-  },
+  }
+  markdown: prod.markdown,
   browserify: _.extend(prod.browserify, {
     insertGlobals: true,
     debug: true,
