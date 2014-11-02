@@ -15,6 +15,10 @@ Almost Static Site is my boilerplate for creating quick and dirty (M)EAN sites t
   * Markdown w/ front matter YAML
   * LiveReload
 
+## Demo
+
+[almost-static-site.khz.fi](http://almost-static-site.khz.fi)
+
 ## Usage
 
     npm install -g gulp
