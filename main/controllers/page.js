@@ -17,7 +17,7 @@ module.exports = [
       $scope.$emit('ass-page-data-applied');
     }
     function updateAnalytics() {
-      if ( ga ) {
+      if ( undefined !== window.ga ) {
         ga('send', 'pageview', {
           'page': location.href,
             'title': menu.activePage.title
