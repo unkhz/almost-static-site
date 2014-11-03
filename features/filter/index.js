@@ -43,7 +43,7 @@ function FilterCtrl(config, menu, $scope, $rootScope) {
   // When user scrolls or view updates, we check if we need to add more content to the page
   function updateFilter(){
     // Filter
-    filteredIncludes = TagCloud.selectedTagNames && TagCloud.selectedTagNames.length === 0 ?
+    filteredIncludes = !TagCloud.selectedTagNames || TagCloud.selectedTagNames.length === 0 ?
       allIncludes :
       _.filter(allIncludes, function(page) {
         return _.every($scope.tagClouds, function(cloud){
