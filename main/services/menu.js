@@ -78,9 +78,9 @@ module.exports = [
 
     Page.prototype.initialize = function initialize() {
       var page=this;
-      var url = page.id,
-      p = page,
-      level = 0;
+      var url = page.id;
+      var p = page;
+      var level = 0;
       while ( p.parent ) {
         url = p.parent.id + '/' + url;
         p = p.parent;
@@ -88,7 +88,7 @@ module.exports = [
       }
       page.level = level;
       page.rootPage = p;
-      page.url = page.isFrontPage ? '' : config.href(url);
+      page.url = page.isFrontPage ? config.href('') : config.href(url);
       // Convert menu features (String) into FeatureImplementation instances
       if ( page.features && page.features.length ) {
         page.features = features.createImplementations(page, page.features);

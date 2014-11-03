@@ -33,7 +33,6 @@
 
 .ass-feature-filter-loader {
   padding:5rem;
-  font-size:200%;
   .ass-feature-filter-loader-spinner {
     font-size:300%;
     text-align:center;
@@ -66,7 +65,8 @@
 }
 
 @media #{$medium-up} {
-  .ass-feature-filter-content {
+  .ass-feature-filter-content,
+  .ass-feature-filter-loader {
     display:inline-block;
     vertical-align:top;
     width:67%;

@@ -13,15 +13,15 @@
   </div>
 </div>
 
-<div ng-if="isNotFullyDisplayed" class="ass-feature-filter-loader">
-  <div class="ass-feature-filter-loader-spinner">
-    <i class="fa fa-circle-o-notch"></i>
-  </div>
-</div>
-
 <div class="ass-feature-filter-menu">
   <div ng-repeat="cloud in tagClouds track by cloud.name" ass-transition-direction="rtl" ass-transition-speed="quick">
     <h2>Filter by {{cloud.name}}</h2>
     <a ng-repeat="tag in cloud.tags track by tag.id" href="" class="ass-tag {{cloud.name}}" ng-click="cloud.toggle(tag); updateFilter();" ass-transition-element ng-class="{'is-selected':tag.isSelected}">{{tag.name}}</a>
+  </div>
+</div>
+
+<div ng-if="isNotFullyDisplayed" class="ass-feature-filter-loader">
+  <div class="ass-feature-filter-loader-spinner">
+    <i class="fa fa-circle-o-notch"></i>
   </div>
 </div>
