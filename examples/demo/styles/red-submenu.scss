@@ -2,6 +2,9 @@
   > .ass-submenu {
     li a {
       background-color:#f8d8d8;
+      &:hover {
+        background-color: darken(#f8d8d8, 3%);
+      }
     }
     li.active a {
       background-color:#bb8888;
