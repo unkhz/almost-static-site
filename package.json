@@ -57,5 +57,5 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Juhani Pelli <juhani.pelli@gmail.com> (https://github.com/unkhz/)",
-  "license": "ISC"
+  "license": "MIT"
 }
