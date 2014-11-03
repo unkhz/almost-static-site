@@ -60,17 +60,6 @@ module.exports = [
       if ( page.parent ) {
         page.parent.children.push(page);
         page.parent.childrenById[page.id] = page;
-        var url = page.id,
-            p = page,
-            level = 0;
-        while ( p.parent ) {
-          url = p.parent.id + '/' + url;
-          p = p.parent;
-          level++;
-        }
-        page.level = level;
-        page.rootPage = p;
-        page.url = page.isFrontPage ? '' : config.href(url);
       } else {
         page.rootPage = page;
         page.level = 0;
@@ -84,10 +73,22 @@ module.exports = [
           page.childrenById[child.id] = child;
         });
       }
+      page._isDefined = true;
     };
 
     Page.prototype.initialize = function initialize() {
       var page=this;
+      var url = page.id,
+      p = page,
+      level = 0;
+      while ( p.parent ) {
+        url = p.parent.id + '/' + url;
+        p = p.parent;
+        level++;
+      }
+      page.level = level;
+      page.rootPage = p;
+      page.url = page.isFrontPage ? '' : config.href(url);
       // Convert menu features (String) into FeatureImplementation instances
       if ( page.features && page.features.length ) {
         page.features = features.createImplementations(page, page.features);
@@ -211,7 +212,7 @@ module.exports = [
 
           // Sort root pages
           menu.rootPages.sort(function(a,b){
-            return a.ord > b.ord;
+            return a.ord > b.ord ? 1 : a.ord === b.ord ? 0 : -1;
           });
 
           // 4th pass, fetch page content

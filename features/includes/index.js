@@ -19,7 +19,7 @@ function IncludesCtrl(config, menu, $scope, $rootScope) {
       });
     }
     allIncludes.sort(function(a,b){
-      return a.ord < b.ord ? -1 : 1;
+      return a.ord > b.ord ? 1 : a.ord === b.ord ? 0 : -1;
     });
     $scope.limit = isSubpage ? Infinity : $scope.feature.initialLimit || 1;
     $scope.includes = _.first(allIncludes, $scope.limit);

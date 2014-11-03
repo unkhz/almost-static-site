@@ -18,6 +18,9 @@ module.exports = [
             styles: page.stylesClassName
           });
         });
+        levels.sort(function(a,b){
+          return a.id > b.id ? 1 : a.id === b.id ? 0 : -1;
+        });
         $scope.levels = levels;
         $scope.styles = menu.activePage.styles ? 'ass-style-' + menu.activePage.styles.join(' ass-style-') : '';
       }
