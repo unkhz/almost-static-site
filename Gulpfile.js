@@ -44,7 +44,18 @@ function logErrorAndNotify(e) {
 
 // Build Configuration
 function initConfig() {
-  [site+'.js', site+'/config.js', site+'config.js', site].some(function(configFile) {
+  [
+    // Check under the working directory
+    path.join(process.cwd(), site + '.js'),
+    path.join(process.cwd(), site, 'config.js'),
+    path.join(process.cwd(), site),
+
+    // Check under the directory where gulp was started
+    path.join(process.env.INIT_CWD, site + '.js'),
+    path.join(process.env.INIT_CWD, site, 'config.js'),
+    path.join(process.env.INIT_CWD, site)
+  ]
+  .some(function(configFile) {
     var stat;
     try {
       stat = fs.lstatSync(configFile);
