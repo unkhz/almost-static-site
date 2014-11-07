@@ -3,7 +3,7 @@
 
 require('angular');
 var _ = require('lodash');
-var TagCloud = require('./TagCloud');
+var TagCloud = require('./tagcloud');
 
 
 var deps = ['config', 'menu', '$scope', '$rootScope'];

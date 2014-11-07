@@ -6,12 +6,11 @@ var gulp = require('gulp'),
     notifier = new require('node-notifier')(),
     template = require('gulp-template'),
     glob = require('glob'),
-    fs = require('fs')
+    fs = require('fs'),
     Q = require('q'),
     _ = require('lodash'),
     path = require('path'),
     filter = require('gulp-filter'),
-    concat = require('gulp-concat'),
     addsrc = require('gulp-add-src');
 
 if ( !argv.site ) {
@@ -42,7 +41,7 @@ function initConfig() {
     } catch(err) {}
     if ( stat && stat.isFile() ) {
       gutil.log('Using configuration in ', configFile);
-      target = require(configFile);
+      target = require(path.resolve(configFile));
       target.configFile = configFile;
       site = path.dirname(target.configFile);
       return true;
