@@ -1,17 +1,26 @@
-var gulp = require('gulp'),
-    gutil = require('gulp-util'),
-    concat = require('gulp-concat'),
-    rimraf = require('rimraf'),
-    argv = require('yargs').argv,
-    notifier = new require('node-notifier')(),
-    template = require('gulp-template'),
-    glob = require('glob'),
-    fs = require('fs'),
-    Q = require('q'),
-    _ = require('lodash'),
-    path = require('path'),
-    filter = require('gulp-filter'),
-    addsrc = require('gulp-add-src');
+'use strict';
+
+var gulp = require('gulp');
+var gutil = require('gulp-util');
+var concat = require('gulp-concat');
+var rimraf = require('rimraf');
+var argv = require('yargs').argv;
+var notifier = new require('node-notifier')();
+var template = require('gulp-template');
+//var glob = require('glob');
+var fs = require('fs');
+//var Q = require('q');
+//var _ = require('lodash');
+var path = require('path');
+var filter = require('gulp-filter');
+var addsrc = require('gulp-add-src');
+var liveReload = require('gulp-livereload');
+var liveReloadServer = require('tiny-lr')();
+var connectLiveReload = require('connect-livereload');
+var express = require('express');
+var through = require('through2');
+var reduceStream = require('through2-reduce');
+var File = require('vinyl');
 
 if ( !argv.site ) {
   gutil.log('Please define the site to be rendered with the --site option');
@@ -36,8 +45,9 @@ function logErrorAndNotify(e) {
 // Build Configuration
 function initConfig() {
   [site+'.js', site+'/config.js', site+'config.js', site].some(function(configFile) {
+    var stat;
     try {
-      var stat = fs.lstatSync(configFile);
+      stat = fs.lstatSync(configFile);
     } catch(err) {}
     if ( stat && stat.isFile() ) {
       gutil.log('Using configuration in ', configFile);
@@ -54,7 +64,10 @@ function initConfig() {
 }
 initConfig();
 gulp.task('config', initConfig);
-gulp.watch([target.configFile], ['config']);
+gulp.watch([
+  'Gulpfile.js',
+  target.configFile
+], ['lint', 'config']);
 
 // Clean
 gulp.task('clean', function() {
@@ -65,6 +78,8 @@ gulp.task('clean', function() {
 var jshint = require('gulp-jshint');
 gulp.task('lint', function() {
   return gulp.src([
+    'Gulpfile.js',
+    target.configFile,
     target.paths.mainModule + '/**/*.js',
     target.paths.features + '/**/*.js'
   ])
@@ -91,7 +106,7 @@ gulp.task('browserify', ['lint'], function() {
   }
 
   stream.pipe(gulp.dest(target.paths.dist))
-  .on('error', logErrorAndNotify)
+  .on('error', logErrorAndNotify);
   if ( target.server.enableLiveReload ) {
     stream.pipe(liveReload(liveReloadServer));
   }
@@ -128,6 +143,7 @@ gulp.watch([
 
 // Index template and partials
 gulp.task('index', ['templates', 'menu'], function() {
+  var stream;
   target.client.url = function(suffix) {
     return  target.server.baseUrl + suffix.replace(/^\//,'');
   };
@@ -212,11 +228,6 @@ gulp.watch([
 
 
 // Server
-var liveReload = require('gulp-livereload'),
-    liveReloadServer = require('tiny-lr')(),
-    connectLiveReload = require('connect-livereload'),
-    express = require('express');
-
 var server = express();
 server.use(target.server.baseUrl, express.static(target.paths.dist));
 
@@ -246,13 +257,9 @@ var markdown = require('gulp-markdown');
 var marked = require('marked');
 var frontMatter = require('gulp-front-matter');
 var entityConvert = require('gulp-entity-convert');
-var through = require('through2');
-var reduceStream = require('through2-reduce');
-var File = require('vinyl');
-
 marked.setOptions(target.markdown);
 
-gulp.task('menu', function(done){
+gulp.task('menu', function(){
   var mdFilter = filter('**/*.md');
   var yamlFilter = filter('**/*.yaml');
   var stream = gulp.src(['**/*.yaml', '**/*.md'], {cwd:target.paths.pages})
@@ -321,10 +328,11 @@ gulp.task('menu', function(done){
     var builds = [];
     if ( input.features ) {
       input.features.forEach(function(f){
-        var feature = typeof f === 'string' ? {id:f} : f,
-            fn = './features/' + feature.id + '/build.js';
+        var stat;
+        var feature = typeof f === 'string' ? {id:f} : f;
+        var fn = './features/' + feature.id + '/build.js';
         try {
-          var stat = fs.lstatSync(fn);
+          stat = fs.lstatSync(fn);
         } catch(err) {}
         if ( stat && stat.isFile() ) {
           var build = require(fn);
@@ -358,7 +366,7 @@ gulp.task('menu', function(done){
 gulp.watch([target.paths.pages + '/**/*.*'], ['menu']);
 
 // Generic tasks
-gulp.task('build', ['clean', 'assets', 'styles', 'templates', 'menu', 'index', 'browserify'])
+gulp.task('build', ['clean', 'assets', 'styles', 'templates', 'menu', 'index', 'browserify']);
 gulp.task('dist', ['build'], function(){
   process.exit(0);
 });
