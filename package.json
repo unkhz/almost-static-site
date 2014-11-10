@@ -1,6 +1,6 @@
 {
   "name": "almost-static-site",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "repository": {
     "type": "git",
     "url": "https://github.com/unkhz/almost-static-site"
@@ -14,7 +14,6 @@
     "connect-livereload": "^0.4.0",
     "express": "^4.8.5",
     "font-awesome": "git://github.com/FortAwesome/Font-Awesome",
-    "glob": "^4.0.5",
     "gulp": "^3.8.7",
     "gulp-add-src": "^0.1.1",
     "gulp-autoprefixer": "0.0.9",
@@ -35,7 +34,6 @@
     "lodash": "^2.4.1",
     "marked": "^0.3.2",
     "node-notifier": "^3.1.3",
-    "q": "^1.0.1",
     "rimraf": "^2.2.8",
     "through2": "^0.6.1",
     "through2-reduce": "^0.2.3",
@@ -45,18 +43,35 @@
     "foundation": "zurb/foundation"
   },
   "devDependencies": {
+    "glob": "^4.0.5",
+    "q": "^1.0.1"
   },
-  "description": "Almost Static Site is my boilerplate for creating quick and dirty (M)EAN sites that use static YAML/Markdown files instead of MongoDB as a database. Gulp build converts the YAML files into JSON that are served with Express for the web application. Foundation (SCSS version) is used as the UI framework.",
+  "description": "Single page app generator for quick and dirty sites that are almost static. I.e. (M)EAN sites that use static YAML/Markdown files instead of MongoDB as a database.",
+  "keywords": [
+    "spa",
+    "static",
+    "generator",
+    "framework",
+    "angular",
+    "foundation",
+    "sass",
+    "documentation",
+    "markdown",
+    "yaml",
+    "front-matter",
+    "browserify",
+    "commonjs",
+    "gulp"
+  ],
   "bugs": {
     "url": "https://github.com/unkhz/almost-static-site/issues"
   },
-  "homepage": "https://github.com/unkhz/almost-static-site",
+  "homepage": "http://almost-static-site.khz.fi/",
   "main": "Gulpfile.js",
   "directories": {
     "example": "examples"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Juhani Pelli <juhani.pelli@gmail.com> (https://github.com/unkhz/)",
   "license": "MIT"
