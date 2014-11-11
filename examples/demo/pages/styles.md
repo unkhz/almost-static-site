@@ -22,7 +22,7 @@ This page demonstrates the possibility to define styles that affect the differen
 
 The whole page is colored with *gloomy* style, defined in *api/styles/gloomy.scss* with the following SCSS:
 
-```javascript
+```scss
   .ass-style-gloomy {
     &.ass-menu ul li a {
       background-color:#e3e3f7;
