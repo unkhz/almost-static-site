@@ -26,19 +26,19 @@ npm install -g gulp
 npm install
 ```
 
-Build and server are run with default gulp task. Only thing you have to define is the site configuration (and data) to be used for the build. That is done with --site option.
+Build and server are run with default gulp task. The only thing you have to define is the site module to be built. That is done with --site option.
 
 ```bash
 gulp --site example/demo
 ```
 
-The server port is configured in the configuration file of the specified site e.g. example/demo/config.js.
+The server port is configured in the configuration file of the specified site module e.g. example/demo/config.js.
 
 ```bash
 open http://localhost:5000/
 ```
 
-You may want to use another configuration. The site configuration defaults to config.js inside the site folder. If a file is specified instead of the folder, it will be used as the configuration module.
+You may want to use another configuration. The build will first try to read the option as the path to the configuration file. If that does not work, it will default to using file config.js inside the folder.
 
 ```bash
 gulp --site example/demo/config-production.js
@@ -55,7 +55,7 @@ gulp --site example/demo/config-production.js
 
 ### Main module
 
-Main module takes care of building the page frame and menus.
+Main module takes care of building the page frame and menus and switching content based on user interaction with the menu.
 
 #### Main module folder structure
 
@@ -77,18 +77,18 @@ Main module takes care of building the page frame and menus.
     index.html      Main SPA HTML file. Head content is defined in the
                     site module configuration file.
       #app          App container
-        #header     Contains _site specific content_
+        #header     Contains *site specific content*
         #menu       Navigation menus are automatically built based
-                    on the _site spacific pages_.
-        #content    Contains _site specific pages_
-        #footer     Contains _site specific content_
+                    on the *site spacific pages*.
+        #content    Contains *site specific pages*
+        #footer     Contains *site specific content*
 ```
 
 ### Site module
 
 Site module is the module that will be written by you, the developer. You can freely decide the folder structure, but the DOM structure is locked except for the specific content areas that will be filled with site data. The visual style of the whole structure can be completely overridden in site module CSS.
 
-All site module content is defined as individual pages. Header is a page, footer is a page and all of the includes in the exampl/demo are pages. Each YAML and Markdown file inside the site module's pages path (configurable) defines one of these pages. The following configuration parameters can be used.
+All site module content is defined as individual pages. Header is a page, footer is a page and all of the includes in the example/demo are pages. Each YAML and Markdown file inside the site module's pages path (configurable) defines one of these pages. The following configuration parameters can be used.
 
 Page Parameter  | Description
 --------------- | ------------
@@ -107,7 +107,7 @@ contentFromFile | Load content from a separate file
 
 ### Feature modules
 
-All specific functionality, apart from the main DOM structure and menus is isolated into feature modules. The generator contains are a few basic features, but the idea is that modules filling a site specific purpose can and should be written and used locally.
+All specific functionality, apart from the main DOM structure and menus is isolated into feature modules. The generator contains a few basic features, but the idea is that modules filling a site specific purpose can and should be written and used locally.
 
 Feature         | Description
 --------------- | ------------
