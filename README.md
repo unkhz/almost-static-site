@@ -77,11 +77,12 @@ Main module takes care of building the page frame and menus and switching conten
     index.html      Main SPA HTML file. Head content is defined in the
                     site module configuration file.
       #app          App container
-        #header     Contains *site specific content*
+        #header     Contains a site specific page
         #menu       Navigation menus are automatically built based
-                    on the *site spacific pages*.
-        #content    Contains *site specific pages*
-        #footer     Contains *site specific content*
+                    on the site spacific pages.
+        #content    Contains site specific pages depending on the
+                    selected menu item.
+        #footer     Contains a site specific page
 ```
 
 ### Site module
