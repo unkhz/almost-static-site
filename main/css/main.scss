@@ -1,4 +1,4 @@
-@import '../../node_modules/zurb-foundation/scss/foundation';
+@import '../../node_modules/zurb-foundation-5/scss/foundation';
 $fa-font-path: 'assets';
 @import '../../node_modules/font-awesome/scss/_mixins.scss';
 @import '../../node_modules/font-awesome/scss/_variables.scss';
@@ -6,7 +6,7 @@ $fa-font-path: 'assets';
 $ass-footer-height: 20rem;
 
 // Include boilerplate styles
-@import 'ass-main';
+@import './ass-main';
 
 // Import app components
 @import 'grid';
