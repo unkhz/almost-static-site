@@ -268,15 +268,15 @@ var entityConvert = require('gulp-entity-convert');
 marked.setOptions(target.markdown);
 
 gulp.task('menu', function(){
-  var mdFilter = filter('**/*.md');
-  var yamlFilter = filter('**/*.yaml');
+  var mdFilter = filter('**/*.md', {restore: true});
+  var yamlFilter = filter('**/*.yaml', {restore: true});
   var stream = gulp.src(['**/*.yaml', '**/*.md'], {cwd:target.paths.pages})
 
   // YAML -> JSON
   .pipe(yamlFilter)
   .pipe(yaml())
   .on('error', logErrorAndNotify)
-  .pipe(yamlFilter.restore())
+  .pipe(yamlFilter.restore)
 
   // Markdown -> HTML
   .pipe(mdFilter)
@@ -298,7 +298,7 @@ gulp.task('menu', function(){
     return next();
   }))
   .on('error', logErrorAndNotify)
-  .pipe(mdFilter.restore())
+  .pipe(mdFilter.restore)
 
   // JSON -> api/pages/*.json
   .pipe(gulp.dest(target.paths.dist + '/api/'))
