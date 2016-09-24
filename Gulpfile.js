@@ -207,13 +207,15 @@ gulp.task('styles', function() {
   .pipe(addsrc([
     siteConfig.paths.mainModule + '/css/icons.scss'
   ]))
-  .pipe(sass({
-    includePaths: [
-      siteConfig.paths.mainModule + '/css',
-      process.cwd() + '/node_modules',
-      siteConfig.rootPath,
-    ]
-  }))
+  .pipe(
+    sass({
+      includePaths: [
+        siteConfig.paths.mainModule + '/css',
+        process.cwd() + '/node_modules',
+        siteConfig.rootPath,
+      ]
+    }).on('error', logErrorAndNotify)
+  )
   .pipe(autoprefixer('last 2 versions', '> 1%', 'ie 8'))
   .on('error', logErrorAndNotify);
 
