@@ -205,7 +205,7 @@ gulp.task('styles', function() {
   .pipe(concat('main.css'))
   // Add separate files at this point E.g build icons separately to circumvent IE's rule limit
   .pipe(addsrc([
-    siteConfig.paths.mainModule + '/css/ass-icons.scss'
+    siteConfig.paths.mainModule + '/css/icons.scss'
   ]))
   .pipe(sass({
     includePaths: [
