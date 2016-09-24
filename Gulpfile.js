@@ -25,9 +25,8 @@ if ( !argv.site ) {
   process.exit(1);
 }
 
-var site = argv.site.replace(/\/$/, '');
 var db = {};
-var target;
+var siteConfig;
 
 function logErrorAndNotify(e) {
   notifier.notify({
@@ -40,17 +39,17 @@ function logErrorAndNotify(e) {
 }
 
 // Build Configuration
-function initConfig() {
+function initConfig(sitePathOrConfig) {
   [
     // Check under the working directory
-    path.join(process.cwd(), site + '.js'),
-    path.join(process.cwd(), site, 'config.js'),
-    path.join(process.cwd(), site),
+    path.join(process.cwd(), sitePathOrConfig + '.js'),
+    path.join(process.cwd(), sitePathOrConfig, 'config.js'),
+    path.join(process.cwd(), sitePathOrConfig),
 
     // Check under the directory where gulp was started
-    path.join(process.env.INIT_CWD, site + '.js'),
-    path.join(process.env.INIT_CWD, site, 'config.js'),
-    path.join(process.env.INIT_CWD, site)
+    path.join(process.env.INIT_CWD, sitePathOrConfig + '.js'),
+    path.join(process.env.INIT_CWD, sitePathOrConfig, 'config.js'),
+    path.join(process.env.INIT_CWD, sitePathOrConfig)
   ]
   .some(function(configFile) {
     var stat;
@@ -59,27 +58,29 @@ function initConfig() {
     } catch(err) {}
     if ( stat && stat.isFile() ) {
       gutil.log('Using configuration in ', configFile);
-      target = require(path.resolve(configFile));
-      target.configFile = configFile;
-      site = path.dirname(target.configFile);
+      siteConfig = require(path.resolve(configFile));
+      siteConfig.configFile = configFile;
+      siteConfig.rootPath = path.dirname(siteConfig.configFile);
       return true;
     }
   });
-  if ( !target || !target.paths ) {
-    gutil.log('Invalid site configuration in ', site);
+  if ( !siteConfig || !siteConfig.paths ) {
+    gutil.log('Invalid site configuration in ', sitePathOrConfig);
     process.exit(1);
   }
 }
-initConfig();
+initConfig(argv.site.replace(/\/$/, ''));
+
+// Config
 gulp.task('config', initConfig);
 gulp.watch([
   'Gulpfile.js',
-  target.configFile
+  siteConfig.configFile
 ], ['lint', 'config']);
 
 // Clean
 gulp.task('clean', function() {
-  rimraf.sync(target.paths.dist);
+  rimraf.sync(siteConfig.paths.dist);
 });
 
 // JSHint
@@ -87,9 +88,9 @@ var jshint = require('gulp-jshint');
 gulp.task('lint', function() {
   return gulp.src([
     'Gulpfile.js',
-    target.configFile,
-    target.paths.mainModule + '/**/*.js',
-    target.paths.features + '/**/*.js'
+    siteConfig.configFile,
+    siteConfig.paths.mainModule + '/**/*.js',
+    siteConfig.paths.features + '/**/*.js',
   ])
   .pipe(jshint())
   .on('error', logErrorAndNotify)
@@ -101,29 +102,29 @@ var browserify = require('gulp-browserify');
 var uglify = require('gulp-uglify');
 gulp.task('browserify', ['lint'], function() {
   var stream = gulp.src([
-    target.paths.mainJS
+    siteConfig.paths.mainJS
   ])
   .pipe(browserify())
   .on('error', logErrorAndNotify)
   .pipe(concat('main.js'))
   .on('error', logErrorAndNotify);
 
-  if ( target.browserify.enableUglify ) {
+  if ( siteConfig.browserify.enableUglify ) {
     stream.pipe(uglify())
     .on('error', logErrorAndNotify);
   }
 
-  stream.pipe(gulp.dest(target.paths.dist))
+  stream.pipe(gulp.dest(siteConfig.paths.dist))
   .on('error', logErrorAndNotify);
-  if ( target.server.enableLiveReload ) {
+  if ( siteConfig.server.enableLiveReload ) {
     stream.pipe(liveReload(liveReloadServer));
   }
   return stream;
 });
 gulp.watch([
-  target.paths.mainModule + '/**/*.js',
-  target.paths.features + '/**/*.js',
-  site + '/**/*.js',
+  siteConfig.paths.mainModule + '/**/*.js',
+  siteConfig.paths.features + '/**/*.js',
+  siteConfig.rootPath + '/**/*.js',
 ],[
   'lint',
   'browserify'
@@ -131,60 +132,61 @@ gulp.watch([
 
 // View partials
 gulp.task('templates', function() {
-  target.client.bootstraps.templates = {};
+  siteConfig.client.bootstraps.templates = {};
   return gulp.src([
-    target.paths.mainModule + '/**/*.html',
-    target.paths.features + '/**/*.html',
-    site + '/**/*.html'
+    siteConfig.paths.mainModule + '/**/*.html',
+    siteConfig.paths.features + '/**/*.html',
+    siteConfig.rootPath + '/**/*.html'
   ])
   .pipe(through.obj(function (file, enc, next) {
     var fn = path.relative('./', file.path);
-    target.client.bootstraps.templates[fn] = file.contents.toString();
+    siteConfig.client.bootstraps.templates[fn] = file.contents.toString();
     next();
   }));
 });
 gulp.watch([
-  target.paths.mainModule + '/**/*.html',
-  target.paths.features + '/**/*.html',
-  site + '/**/*.html'
+  siteConfig.paths.mainModule + '/**/*.html',
+  siteConfig.paths.features + '/**/*.html',
+  siteConfig.rootPath + '/**/*.html'
 ], ['index']);
 
 // Index template and partials
 gulp.task('index', ['templates', 'menu'], function() {
   var stream;
-  target.client.url = function(suffix) {
-    return  target.server.baseUrl + suffix.replace(/^\//,'');
+  siteConfig.client.url = function(suffix) {
+    return  siteConfig.server.baseUrl + suffix.replace(/^\//,'');
   };
 
   // Get bootstrapped content from DB
-  target.client.footer = db.footer;
-  target.client.header = db.header;
+  siteConfig.client.footer = db.footer;
+  siteConfig.client.header = db.header;
 
   // Process
-  stream = gulp.src([target.paths.mainHTML])
-  .pipe(template(target))
+  stream = gulp.src([siteConfig.paths.mainHTML])
+  .pipe(template(siteConfig))
   .on('error', logErrorAndNotify)
-  .pipe(gulp.dest(target.paths.dist));
-  if ( target.server.enableLiveReload ) {
+  .pipe(gulp.dest(siteConfig.paths.dist));
+  if ( siteConfig.server.enableLiveReload ) {
     stream.pipe(liveReload(liveReloadServer));
   }
   return stream;
 });
-gulp.watch([target.paths.mainHTML], ['index']);
+gulp.watch([siteConfig.paths.mainHTML], ['index']);
 
+// Assets
 gulp.task('assets', function() {
   var stream = gulp.src([
-    target.paths.assets + '/**/*.*',
+    siteConfig.paths.assets + '/**/*.*',
     'node_modules/font-awesome/fonts/*.*'
   ])
   .on('error', logErrorAndNotify)
-  .pipe(gulp.dest(target.paths.dist + '/assets'));
-  if ( target.server.enableLiveReload ) {
+  .pipe(gulp.dest(siteConfig.paths.dist + '/assets'));
+  if ( siteConfig.server.enableLiveReload ) {
     stream.pipe(liveReload(liveReloadServer));
   }
   return stream;
 });
-gulp.watch([target.paths.assets + '/**/*.*'], ['assets']);
+gulp.watch([siteConfig.paths.assets + '/**/*.*'], ['assets']);
 
 
 // SASS
@@ -194,42 +196,42 @@ var cssmin = require('gulp-cssmin');
 // Styles task
 gulp.task('styles', function() {
   var stream = gulp.src([
-    target.paths.mainModule + '/css/main.scss',
-    target.paths.features + '/**/*.scss',
-    target.paths.styles + '/**/*.scss',
-    site + '/**/*.scss',
+    siteConfig.paths.mainModule + '/css/main.scss',
+    siteConfig.paths.features + '/**/*.scss',
+    siteConfig.paths.styles + '/**/*.scss',
+    siteConfig.rootPath + '/**/*.scss',
   ])
   // Concat before compile, so that includes are available in dynamic styles
   .pipe(concat('main.css'))
   // Add separate files at this point E.g build icons separately to circumvent IE's rule limit
   .pipe(addsrc([
-    target.paths.mainModule + '/css/ass-icons.scss'
+    siteConfig.paths.mainModule + '/css/ass-icons.scss'
   ]))
   .pipe(sass({
     includePaths: [
-      target.paths.mainModule + '/css',
+      siteConfig.paths.mainModule + '/css',
       process.cwd() + '/node_modules',
+      siteConfig.rootPath,
     ]
   }))
   .pipe(autoprefixer('last 2 versions', '> 1%', 'ie 8'))
   .on('error', logErrorAndNotify);
 
-  if ( target.styles.enableMinify ) {
+  if ( siteConfig.styles.enableMinify ) {
     stream.pipe(cssmin())
     .on('error', logErrorAndNotify);
   }
 
-  stream.pipe(gulp.dest(target.paths.dist));
-  if ( target.server.enableLiveReload ) {
+  stream.pipe(gulp.dest(siteConfig.paths.dist));
+  if ( siteConfig.server.enableLiveReload ) {
     stream.pipe(liveReload(liveReloadServer));
   }
   return stream;
 });
 gulp.watch([
-  target.paths.mainModule + '/**/*.scss',
-  target.paths.features + '/**/*.scss',
-  target.paths.styles + '/**/*.scss',
-  site + '/**/*.scss',
+  siteConfig.paths.mainModule + '/**/*.scss',
+  siteConfig.paths.features + '/**/*.scss',
+  siteConfig.paths.styles + '/**/*.scss',
 ], [
   'styles'
 ]);
@@ -237,24 +239,24 @@ gulp.watch([
 
 // Server
 var server = express();
-server.use(target.server.baseUrl, express.static(target.paths.dist));
+server.use(siteConfig.server.baseUrl, express.static(siteConfig.paths.dist));
 
-if ( target.server.enableLiveReload ) {
-  server.use(connectLiveReload({port: target.liveReloadPort}));
+if ( siteConfig.server.enableLiveReload ) {
+  server.use(connectLiveReload({port: siteConfig.liveReloadPort}));
 }
 
-if ( target.server.enablePushState ) {
-  server.all(target.server.baseUrl + '[^.]+', function(req, res) {
+if ( siteConfig.server.enablePushState ) {
+  server.all(siteConfig.server.baseUrl + '[^.]+', function(req, res) {
     res.sendFile('index.html', {
-      root: target.paths.dist
+      root: siteConfig.paths.dist
     });
   });
 }
 
 gulp.task('server', ['build'], function() {
-  server.listen(target.server.port);
-  if ( target.server.enableLiveReload ) {
-    liveReloadServer.listen(target.server.liveReloadPort);
+  server.listen(siteConfig.server.port);
+  if ( siteConfig.server.enableLiveReload ) {
+    liveReloadServer.listen(siteConfig.server.liveReloadPort);
   }
 });
 
@@ -265,12 +267,12 @@ var markdown = require('gulp-markdown');
 var marked = require('marked');
 var frontMatter = require('gulp-front-matter');
 var entityConvert = require('gulp-entity-convert');
-marked.setOptions(target.markdown);
+marked.setOptions(siteConfig.markdown);
 
 gulp.task('menu', function(){
   var mdFilter = filter('**/*.md', {restore: true});
   var yamlFilter = filter('**/*.yaml', {restore: true});
-  var stream = gulp.src(['**/*.yaml', '**/*.md'], {cwd:target.paths.pages})
+  var stream = gulp.src(['**/*.yaml', '**/*.md'], {cwd:siteConfig.paths.pages})
 
   // YAML -> JSON
   .pipe(yamlFilter)
@@ -285,7 +287,7 @@ gulp.task('menu', function(){
     remove: true
   }))
   .pipe(entityConvert())
-  .pipe(markdown(target.markdown))
+  .pipe(markdown(siteConfig.markdown))
 
   // Frontmatter + HTML -> JSON
   .pipe(through.obj(function (file, enc, next) {
@@ -301,7 +303,7 @@ gulp.task('menu', function(){
   .pipe(mdFilter.restore)
 
   // JSON -> api/pages/*.json
-  .pipe(gulp.dest(target.paths.dist + '/api/'))
+  .pipe(gulp.dest(siteConfig.paths.dist + '/api/'))
 
   // menu.json
   .pipe(through.obj(function (file, enc, next) {
@@ -312,7 +314,7 @@ gulp.task('menu', function(){
   .pipe(reduceStream({objectMode: true}, function (menu, file) {
     var input={};
     input = JSON.parse(file.contents.toString());
-    input.url = path.relative(target.paths.dist, file.path);
+    input.url = path.relative(siteConfig.paths.dist, file.path);
     input.id = input.id || 'page-'+menu.pages.length;
     if ( input.contentFromFile ) {
       input.content = fs.readFileSync(input.contentFromFile).toString();
@@ -365,13 +367,13 @@ gulp.task('menu', function(){
     return next();
   }))
   .on('error', logErrorAndNotify)
-  .pipe(gulp.dest(target.paths.dist + '/api/'));
-  if ( target.server.enableLiveReload ) {
+  .pipe(gulp.dest(siteConfig.paths.dist + '/api/'));
+  if ( siteConfig.server.enableLiveReload ) {
     stream.pipe(liveReload(liveReloadServer));
   }
   return stream;
 });
-gulp.watch([target.paths.pages + '/**/*.*'], ['menu']);
+gulp.watch([siteConfig.paths.pages + '/**/*.*'], ['menu']);
 
 // Generic tasks
 gulp.task('build', ['clean', 'assets', 'styles', 'templates', 'menu', 'index', 'browserify']);
@@ -380,6 +382,6 @@ gulp.task('dist', ['build'], function(){
 });
 
 // Target specific tasks
-Object.keys(target.tasks).forEach(function(name){
-  gulp.task(name, target.tasks[name]);
+Object.keys(siteConfig.tasks).forEach(function(name){
+  gulp.task(name, siteConfig.tasks[name]);
 });
