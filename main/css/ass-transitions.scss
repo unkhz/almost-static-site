@@ -11,12 +11,14 @@ $ass-transition-duration-slow: 0.66s;
 [ass-transition-direction=fade] [ass-transition-element] {
   transition: opacity $ass-transition-duration-slow linear;
   opacity:1;
+  &.ng-enter-prepare,
   &.ng-enter {
     opacity:0;
   }
   &.ng-enter-active {
     opacity:1;
   }
+  &.ng-leave-prepare,
   &.ng-leave {
     opacity:1;
   }
@@ -43,12 +45,14 @@ $ass-transition-duration-slow: 0.66s;
 
 [ass-transition-direction=rtl] [ass-transition-element] {
   transform:translateX(0%);
+  &.ng-enter-prepare,
   &.ng-enter {
     transform:translateX(100%);
   }
   &.ng-enter-active {
     transform:translateX(0%);
   }
+  &.ng-leave-prepare,
   &.ng-leave {
     transform:translateX(0%);
   }
@@ -59,12 +63,14 @@ $ass-transition-duration-slow: 0.66s;
 
 [ass-transition-direction=ltr] [ass-transition-element] {
   transform:translateX(0%);
+  &.ng-enter-prepare,
   &.ng-enter {
     transform:translateX(-100%);
   }
   &.ng-enter-active {
     transform:translateX(0%);
   }
+  &.ng-leave-prepare,
   &.ng-leave {
     transform:translateX(0%);
   }
@@ -75,12 +81,14 @@ $ass-transition-duration-slow: 0.66s;
 
 [ass-transition-direction=ttb] [ass-transition-element] {
   transform:translateY(0%);
+  &.ng-enter-prepare,
   &.ng-enter {
     transform:translateY(-100%);
   }
   &.ng-enter-active {
     transform:translateY(0%);
   }
+  &.ng-leave-prepare,
   &.ng-leave {
     transform:translateY(0%);
   }
@@ -91,12 +99,14 @@ $ass-transition-duration-slow: 0.66s;
 
 [ass-transition-direction=btt] [ass-transition-element] {
   transform:translateY(0%);
+  &.ng-enter-prepare,
   &.ng-enter {
     transform:translateY(-100%);
   }
   &.ng-enter-active {
     transform:translateY(0%);
   }
+  &.ng-leave-prepare,
   &.ng-leave {
     transform:translateY(0%);
   }
