@@ -1,19 +1,16 @@
-@import '../../node_modules/zurb-foundation-5/scss/foundation';
+@import 'zurb-foundation-5/scss/foundation';
 $fa-font-path: 'assets';
-@import '../../node_modules/font-awesome/scss/_mixins.scss';
-@import '../../node_modules/font-awesome/scss/_variables.scss';
-
-$ass-footer-height: 20rem;
+@import 'font-awesome/scss/_mixins.scss';
+@import 'font-awesome/scss/_variables.scss';
 
 // Include boilerplate styles
-@import './ass-main';
-
-// Import app components
-@import 'grid';
-@import 'header';
-@import 'content';
-@import 'footer';
-@import 'menu';
+@import 'ass-variables';
+@import 'ass-transitions';
+@import 'ass-grid';
+@import 'ass-header';
+@import 'ass-content';
+@import 'ass-footer';
+@import 'ass-menu';
 
 html {
   margin:0;

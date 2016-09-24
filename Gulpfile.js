@@ -203,13 +203,13 @@ gulp.task('styles', function() {
   .pipe(concat('main.css'))
   // Add separate files at this point E.g build icons separately to circumvent IE's rule limit
   .pipe(addsrc([
-    target.paths.mainModule + '/css/icons.scss'
+    target.paths.mainModule + '/css/ass-icons.scss'
   ]))
   .pipe(sass({
-    // The onerror handler prevents Gulp from crashing when you make a mistake in your SASS
-    onError: function(err){
-      logErrorAndNotify({plugin:'sass', message: err});
-    }
+    includePaths: [
+      target.paths.mainModule + '/css',
+      process.cwd() + '/node_modules',
+    ]
   }))
   .pipe(autoprefixer('last 2 versions', '> 1%', 'ie 8'))
   .on('error', logErrorAndNotify);
