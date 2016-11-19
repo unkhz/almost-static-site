@@ -41,6 +41,11 @@ function logErrorAndNotify(e) {
 // Build Configuration
 function initConfig(sitePathOrConfig) {
   [
+    // Check exact path
+    sitePathOrConfig + '.js',
+    path.join(sitePathOrConfig, 'config.js'),
+    sitePathOrConfig,
+
     // Check under the working directory
     path.join(process.cwd(), sitePathOrConfig + '.js'),
     path.join(process.cwd(), sitePathOrConfig, 'config.js'),
@@ -49,7 +54,7 @@ function initConfig(sitePathOrConfig) {
     // Check under the directory where gulp was started
     path.join(process.env.INIT_CWD, sitePathOrConfig + '.js'),
     path.join(process.env.INIT_CWD, sitePathOrConfig, 'config.js'),
-    path.join(process.env.INIT_CWD, sitePathOrConfig)
+    path.join(process.env.INIT_CWD, sitePathOrConfig),
   ]
   .some(function(configFile) {
     var stat;
@@ -72,7 +77,9 @@ function initConfig(sitePathOrConfig) {
 initConfig(argv.site.replace(/\/$/, ''));
 
 // Config
-gulp.task('config', initConfig);
+gulp.task('config', function(){
+  initConfig(argv.site.replace(/\/$/, ''));
+});
 gulp.watch([
   'Gulpfile.js',
   siteConfig.configFile
